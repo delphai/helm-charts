@@ -10,3 +10,12 @@ spec:
     - protocol: TCP
       port: {{ .Values.port }}
       targetPort: {{ .Values.port }}
+      name: grpc
+    - protocol: TCP
+      port: {{ .Values.gatewayPort }}
+      targetPort: {{ .Values.gatewayPort }}
+      name: gateway
+    - protocol: TCP
+      port: {{ .Values.authPort }}
+      targetPort: {{ .Values.authPort }}
+      name: auth

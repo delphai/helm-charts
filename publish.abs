@@ -2,11 +2,12 @@
 charts = `find -maxdepth 1 -type d`
   .lines()
   .filter(f(dir) {
-    dir != '.'
+    dir != '.' && dir != './.git'
   })
   .map(f(dir) {
     return dir.replace('./', '')
   })
+
 charts_length = charts.len()
 subscriptions = [
   {

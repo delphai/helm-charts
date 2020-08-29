@@ -5,6 +5,12 @@ metadata:
   namespace: {{ .Release.Namespace }}
 
 spec:
+  replicas: {{ .Values.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -14,8 +20,47 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
+      automountServiceAccountToken: true
       containers:
-        - image: '{{ .Values.imageName }}:{{ .Values.imageTag }}'
+        - imagePullPolicy: Always
+          image: 'delphai{{ .Values.delphaiEnvironment }}.azurecr.io/{{ .Values.imageName }}:{{ .Values.imageTag }}'
           name: {{ .Release.Name }}
+          env:
+            - name: DELPHAI_ENVIRONMENT
+              value: {{ .Values.delphaiEnvironment }}
           ports:
             - containerPort: {{ .Values.port }}
+        {{- if eq .Values.deployGateway true}}
+        - image: 'delphai{{ .Values.delphaiEnvironment }}.azurecr.io/{{ .Values.imageName }}:{{ .Values.imageTag }}'
+          name: "{{ .Release.Name }}-gateway"
+          command:
+            [
+              "./gateway",
+              "--grpc-server-endpoint=localhost:{{ .Values.port }}",
+              "--gateway-port={{ .Values.gatewayPort }}",
+            ]
+          ports:
+            - containerPort: {{.Values.gatewayPort }}
+        {{- end }}
+        {{- if and (eq .Values.deployGateway true) (eq .Values.authRequired true) }}
+        - image: quay.io/louketo/louketo-proxy
+          name: "{{ .Release.Name }}-auth"
+          env:
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-gateway-client-secret
+                  key: client-secret
+          args:
+            [
+              "--listen=0.0.0.0:{{ .Values.authPort }}",
+              "--upstream-url=http://localhost:{{ .Values.gatewayPort }}",
+              "--discovery-url=https://auth.{{ .Values.domain }}/auth/realms/delphai",
+              "--client-id=delphai-gateway",
+              "--client-secret=${CLIENT_SECRET}",
+              "--no-redirects=true",
+              "--enable-authorization-header"
+            ]
+          ports:
+            - containerPort: {{ .Values.authPort }}
+        {{- end }}
