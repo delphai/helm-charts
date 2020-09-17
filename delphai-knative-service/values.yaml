@@ -1,0 +1,4 @@
+image: kennethreitz/httpbin
+port: 8080
+isPublic: true
+domain: delphai.black
