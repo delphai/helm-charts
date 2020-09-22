@@ -15,7 +15,7 @@ spec:
         - uri:
             prefix: '/{{ .Release.Name }}'
       rewrite:
-        uri: '/'
+        uri: ''
         authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
       route:
         - destination:
