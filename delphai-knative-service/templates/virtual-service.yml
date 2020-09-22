@@ -13,9 +13,9 @@ spec:
   http:
     - match:
         - uri:
-            prefix: '/{{ .Release.Name }}'
+            prefix: '/{{ .Release.Name }}/'
       rewrite:
-        uri: ''
+        uri: '/'
         authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
       route:
         - destination:
