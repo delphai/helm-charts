@@ -1,4 +1,5 @@
 image: kennethreitz/httpbin
-port: 8080
+gatewayPort: 7070
+grpcPort: 8080
 isPublic: true
 domain: delphai.black

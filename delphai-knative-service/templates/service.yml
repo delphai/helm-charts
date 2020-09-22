@@ -8,5 +8,24 @@ spec:
     spec:
       containers:
         - image: {{ .Values.image }}
+          env:
+            - name: DELPHAI_ENVIRONMENT
+              value: development
           ports:
-            - containerPort: {{ .Values.port }}
+            - containerPort: {{ .Values.gatewayPort }}
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-grpc
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    spec:
+      containers:
+        - image: {{ .Values.image }}
+          env:
+            - name: DELPHAI_ENVIRONMENT
+              value: development
+          ports:
+            - containerPort: {{ .Values.grpcPort }}
