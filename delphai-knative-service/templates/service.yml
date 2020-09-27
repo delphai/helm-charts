@@ -10,7 +10,7 @@ spec:
         - image: {{ .Values.image }}
           env:
             - name: DELPHAI_ENVIRONMENT
-              value: development
+              value: {{ .Values.delphaiEnvironment }}
           ports:
             - containerPort: {{ .Values.gatewayPort }}
 ---
@@ -26,6 +26,6 @@ spec:
         - image: {{ .Values.image }}
           env:
             - name: DELPHAI_ENVIRONMENT
-              value: development
+              value: {{ .Values.delphaiEnvironment }}
           ports:
             - containerPort: {{ .Values.grpcPort }}
