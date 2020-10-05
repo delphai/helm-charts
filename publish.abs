@@ -1,5 +1,5 @@
 # subscriptions = `az account list --all`.json()
-charts = `find -maxdepth 1 -type d`
+charts = `cd ./charts && find -maxdepth 1 -type d`
   .lines()
   .filter(f(dir) {
     dir != '.' && dir != './.git'
@@ -32,12 +32,12 @@ for subscription in subscriptions {
   exec('helm registry login delphai${subscription_name}.azurecr.io --username delphai${subscription_name} --password ${acr_password}')
   print_space()
   for chart in charts {    
-    chart_name = `cat ./${chart}/Chart.yaml | yq .name -r`
-    chart_version = `cat ./${chart}/Chart.yaml | yq .version -r`
+    chart_name = `cat ./charts/${chart}/Chart.yaml | yq .name -r`
+    chart_version = `cat ./charts/${chart}/Chart.yaml | yq .version -r`
     echo('publishing ${chart_name}:${chart_version} to ${subscription_name}')
     echo()
     chart_id = 'delphai${subscription_name}.azurecr.io/helm/${chart_name}:${chart_version}'
-    exec('helm chart save ./${chart} ${chart_id}')
+    exec('helm chart save ./charts/${chart} ${chart_id}')
     exec('helm chart push ${chart_id}')
     print_space()
   }
