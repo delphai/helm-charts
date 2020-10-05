@@ -1,0 +1,24 @@
+apiVersion: v1
+entries:
+  delphai-grpc-service:
+  - apiVersion: v2
+    created: "2020-10-05T19:47:35.403178256Z"
+    description: delphai grpc service
+    digest: 2995f522216bb67e50d9f182ce27029508adb980cda5d4a82db62df741086b1d
+    name: delphai-grpc-service
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-grpc-service-0.1.2/delphai-grpc-service-0.1.2.tgz
+    version: 0.1.2
+  delphai-knative-service:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2020-10-05T19:47:35.54378643Z"
+    description: delphai knative service
+    digest: 01ac88d07ee9964a8a59c8d927b08730d95b92ef41042aff72695cee04239c1d
+    name: delphai-knative-service
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.2/delphai-knative-service-0.1.2.tgz
+    version: 0.1.2
+generated: "2020-10-05T19:47:35.191038314Z"
