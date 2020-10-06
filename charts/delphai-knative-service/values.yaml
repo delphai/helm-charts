@@ -4,3 +4,4 @@ grpcPort: 8080
 isPublic: true
 domain: delphai.black
 delphaiEnvironment: development
+concurrency: 10

@@ -5,6 +5,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/target: {{ .Values.concurrency }}
     spec:
       containers:
         - image: {{ .Values.image }}
@@ -21,6 +24,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/target: {{ .Values.concurrency }}
     spec:
       containers:
         - image: {{ .Values.image }}
