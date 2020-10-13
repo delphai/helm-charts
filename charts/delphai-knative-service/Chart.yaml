@@ -1,6 +1,6 @@
 apiVersion: v2
-name: delphai-knative-service
-description: delphai knative service
-type: application
-version: 0.1.8
 appVersion: 1.16.0
+description: delphai knative service
+name: delphai-knative-service
+type: application
+version: 0.1.9
