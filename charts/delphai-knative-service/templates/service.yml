@@ -36,4 +36,5 @@ spec:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
           ports:
-            - containerPort: {{ .Values.httpPort }}
+            - name: h2c
+              containerPort: {{ .Values.grpcPort }}
