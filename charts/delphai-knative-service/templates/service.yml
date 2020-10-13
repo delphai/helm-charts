@@ -22,8 +22,6 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-grpc
   namespace: {{ .Release.Namespace }}
-  labels:
-    serving.knative.dev/visibility: cluster-local
 spec:
   template:
     metadata:
