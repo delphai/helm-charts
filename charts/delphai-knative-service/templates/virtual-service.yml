@@ -17,10 +17,16 @@ spec:
   http:
     - match:
         - uri:
-            prefix: '/{{ .Release.Name }}/'
+            {{ if .Values.isUi }}
+            prefix: '/'
+            {{ else }}
+            prefix: '/{{ .Release.Name }}'
+            {{ end }}
+      {{ if not .Values.isUi }}
       rewrite:
         uri: '/'
         authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
+      {{ end }}
       route:
         - destination:
             host: istio-ingressgateway.istio-system.svc.cluster.local
