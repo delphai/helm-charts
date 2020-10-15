@@ -4,6 +4,9 @@ kind: VirtualService
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
+  {{ if .Values.isUi }}
+  external-dns.alpha.kubernetes.io/target: in.${domain}
+  {{ end }}
 spec:
   # This is the gateway shared in knative service mesh.
   gateways:
