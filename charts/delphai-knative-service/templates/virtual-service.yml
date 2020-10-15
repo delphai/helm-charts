@@ -9,7 +9,11 @@ spec:
   gateways:
     - knative-ingress-gateway.knative-serving.svc.cluster.local
   hosts:
+    {{ if .Values.isUi }}
+    - {{ .Release.Namespace }}.{{ .Values.domain }}
+    {{ else }}
     - api.{{ .Values.domain }}
+    {{ end }}
   http:
     - match:
         - uri:
