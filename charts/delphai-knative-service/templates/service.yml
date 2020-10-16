@@ -11,7 +11,6 @@ spec:
     spec:
       containers:
         - image: {{ .Values.image }}
-          imagePullPolicy: Always
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
@@ -33,7 +32,6 @@ spec:
     spec:
       containers:
         - image: {{ .Values.image }}
-          imagePullPolicy: Always
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
