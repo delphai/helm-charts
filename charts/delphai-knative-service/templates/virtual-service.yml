@@ -23,8 +23,13 @@ spec:
             {{ if .Values.isUi }}
             prefix: '/'
             {{ else }}
-            prefix: '/{{ .Release.Name }}'
+            prefix: '/{{ .Release.Name }}/'
             {{ end }}
+        {{ if not .Values.isUi }}
+        # required because of https://github.com/istio/istio/issues/8076
+        - uri:
+            exact: '/{{ .Release.Name }}'
+        {{ end }}
       {{ if not .Values.isUi }}
       rewrite:
         uri: '/'
