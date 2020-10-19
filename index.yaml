@@ -161,4 +161,15 @@ entries:
     urls:
     - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.2/delphai-knative-service-0.1.2.tgz
     version: 0.1.2
+  delphai-with-ui:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2020-10-19T09:24:53.021848522Z"
+    description: A Helm chart for Kubernetes
+    digest: b42c088cc84a8e272aeee84e2563d7df9e517fd6ab1ea64f2d293e1f5cce33b6
+    name: delphai-with-ui
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-with-ui-0.1.0/delphai-with-ui-0.1.0.tgz
+    version: 0.1.0
 generated: "2020-10-05T19:47:35.191038314Z"
