@@ -15,5 +15,8 @@ spec:
       containers:
         - image: {{ .Values.image }}
           name: {{ .Release.Name }}
+          env:
+            - name: DELPHAI_ENVIRONMENT
+              value: {{ .Values.delphaiEnvironment }}
           ports:
             - containerPort: {{ .Values.httpPort }}
