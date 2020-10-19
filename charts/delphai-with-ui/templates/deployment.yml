@@ -16,4 +16,4 @@ spec:
         - image: {{ .Values.image }}
           name: {{ .Release.Name }}
           ports:
-            - containerPort: {{ .Values.appPort }}
+            - containerPort: {{ .Values.httpPort }}
