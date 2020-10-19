@@ -1,0 +1,4 @@
+image: kennethreitz/httpbin
+appPort: 80
+domain: delphai.black
+replicas: 3
