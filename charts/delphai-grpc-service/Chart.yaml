@@ -2,4 +2,4 @@ apiVersion: v2
 name: delphai-grpc-service
 description: delphai grpc service
 type: application
-version: 0.1.2
+version: 0.1.3
