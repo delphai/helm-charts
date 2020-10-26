@@ -30,6 +30,7 @@ spec:
       annotations:
         autoscaling.knative.dev/target: '{{ .Values.concurrency }}'
     spec:
+      timeoutSeconds: 600
       containers:
         - image: {{ .Values.image }}
           env:
