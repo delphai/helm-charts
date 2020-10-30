@@ -29,9 +29,6 @@ spec:
     metadata:
       annotations:
         autoscaling.knative.dev/target: '{{ .Values.concurrency }}'
-        {{ if .Values.isRunner }}
-        autoscaling.knative.dev/minScale: '1'
-        {{ end }}
     spec:
       timeoutSeconds: 600
       containers:
