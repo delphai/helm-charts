@@ -230,6 +230,16 @@ entries:
     urls:
     - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.2/delphai-knative-service-0.1.2.tgz
     version: 0.1.2
+  delphai-microservice:
+  - apiVersion: v2
+    created: "2020-11-02T14:01:41.195745858Z"
+    description: delphai microservice
+    digest: 6d7cbf7c495fbf99a03cbf694c404bf9b4093e472d43e7b70ee20bdf173b61fb
+    name: delphai-microservice
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-microservice-0.1.1/delphai-microservice-0.1.1.tgz
+    version: 0.1.1
   delphai-scraping:
   - apiVersion: v2
     appVersion: 1.16.0
