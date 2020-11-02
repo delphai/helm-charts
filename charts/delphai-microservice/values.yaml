@@ -1,6 +1,7 @@
 delphaiEnvironment: development
 imageName: translation
 imageTag: latest
+imageSHA: image_sha
 port: 8080
 gatewayPort: 7000
 authPort: 9000

@@ -23,7 +23,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - imagePullPolicy: Always
-          image: 'delphai{{ .Values.delphaiEnvironment }}.azurecr.io/{{ .Values.imageName }}:{{ .Values.imageTag }}'
+          image: {{ .Values.imageSHA }}
           name: {{ .Release.Name }}
           env:
             - name: DELPHAI_ENVIRONMENT
