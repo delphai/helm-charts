@@ -30,8 +30,8 @@ spec:
               value: {{ .Values.delphaiEnvironment }}
           ports:
             - containerPort: {{ .Values.port }}
-        {{- if eq .Values.deployGateway true}}
-        - image: 'delphai{{ .Values.delphaiEnvironment }}.azurecr.io/{{ .Values.imageName }}:{{ .Values.imageTag }}'
+        {{- if eq .Values.deployGateway true }}
+        - image: {{ .Values.imageSHA }}
           name: "{{ .Release.Name }}-gateway"
           command:
             [
