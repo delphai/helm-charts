@@ -7,4 +7,4 @@ isRunner: false
 domain: delphai.black
 delphaiEnvironment: development
 concurrency: 100
-fileShares: []
+fileShares: '[]'

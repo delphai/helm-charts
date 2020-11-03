@@ -35,7 +35,7 @@ spec:
     spec:
       timeoutSeconds: 600
       volumes:
-        {{- range .Values.fileShares }}
+        {{- range .Values.fileShares | toPrettyJson }}
         - name: {{ .name }}
           azureFile:
             secretName: azure-storage
@@ -45,7 +45,7 @@ spec:
       containers:
         - image: {{ .Values.image }}
           volumeMounts:
-            {{- .Values.fileShares }}
+            {{- .Values.fileShares | toPrettyJson }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
             {{- end }}
