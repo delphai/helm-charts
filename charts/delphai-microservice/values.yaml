@@ -1,7 +1,5 @@
 delphaiEnvironment: development
-imageName: translation
-imageTag: latest
-imageSHA: image_sha
+image: image_sha
 httpPort: 7070
 grpcPort: 8080
 replicas: 3

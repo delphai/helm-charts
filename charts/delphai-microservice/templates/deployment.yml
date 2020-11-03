@@ -31,7 +31,7 @@ spec:
         {{- end }}
       containers:
         - imagePullPolicy: Always
-          image: {{ .Values.imageSHA }}
+          image: {{ .Values.image }}
           name: {{ .Release.Name }}
           volumeMounts:
             {{- range .Values.fileShares }}
