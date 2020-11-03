@@ -21,6 +21,14 @@ spec:
         app: {{ .Release.Name }}
     spec:
       automountServiceAccountToken: true
+      volumes:
+        {{- range .Values.fileShares }}
+        - name: {{ .name }}
+          azureFile:
+            secretName: azure-storage
+            shareName: {{ .name }}
+            readOnly: true
+        {{- end }}
       containers:
         - imagePullPolicy: Always
           image: {{ .Values.imageSHA }}
@@ -39,6 +47,11 @@ spec:
               "--grpc-server-endpoint=localhost:{{ .Values.port }}",
               "--gateway-port={{ .Values.gatewayPort }}",
             ]
+          volumeMounts:
+            {{- range .Values.fileShares }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end }}
           ports:
             - containerPort: {{.Values.gatewayPort }}
         {{- end }}

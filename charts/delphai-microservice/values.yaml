@@ -9,3 +9,4 @@ replicas: 3
 deployGateway: true
 authRequired: true
 domain: delphai.black
+fileShares: []
