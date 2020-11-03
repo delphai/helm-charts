@@ -1,4 +1,3 @@
-{{- if .Values.deployGateway }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -14,9 +13,4 @@ spec:
           - path: "/{{ .Release.Name }}/(.*)"
             backend:
               serviceName: {{ .Release.Name }}
-              {{ if eq .Values.authRequired true }}
-              servicePort: {{ .Values.authPort }}
-              {{ else }}
-              servicePort: {{ .Values.gatewayPort }}
-              {{ end }}
-{{- end }}
+              servicePort: {{ .Values.port }}

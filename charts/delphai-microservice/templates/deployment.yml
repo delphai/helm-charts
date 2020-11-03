@@ -33,47 +33,13 @@ spec:
         - imagePullPolicy: Always
           image: {{ .Values.imageSHA }}
           name: {{ .Release.Name }}
-          env:
-            - name: DELPHAI_ENVIRONMENT
-              value: {{ .Values.delphaiEnvironment }}
-          ports:
-            - containerPort: {{ .Values.port }}
-        {{- if eq .Values.deployGateway true }}
-        - image: {{ .Values.imageSHA }}
-          name: "{{ .Release.Name }}-gateway"
-          command:
-            [
-              "./gateway",
-              "--grpc-server-endpoint=localhost:{{ .Values.port }}",
-              "--gateway-port={{ .Values.gatewayPort }}",
-            ]
           volumeMounts:
             {{- range .Values.fileShares }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
             {{- end }}
-          ports:
-            - containerPort: {{.Values.gatewayPort }}
-        {{- end }}
-        {{- if and (eq .Values.deployGateway true) (eq .Values.authRequired true) }}
-        - image: quay.io/louketo/louketo-proxy
-          name: "{{ .Release.Name }}-auth"
           env:
-            - name: CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: keycloak-gateway-client-secret
-                  key: client-secret
-          args:
-            [
-              "--listen=0.0.0.0:{{ .Values.authPort }}",
-              "--upstream-url=http://localhost:{{ .Values.gatewayPort }}",
-              "--discovery-url=https://auth.{{ .Values.domain }}/auth/realms/delphai",
-              "--client-id=delphai-gateway",
-              "--client-secret=${CLIENT_SECRET}",
-              "--no-redirects=true",
-              "--enable-authorization-header"
-            ]
+            - name: DELPHAI_ENVIRONMENT
+              value: {{ .Values.delphaiEnvironment }}
           ports:
-            - containerPort: {{ .Values.authPort }}
-        {{- end }}
+            - containerPort: {{ .Values.port }}
