@@ -7,8 +7,9 @@ spec:
   selector:
     app: {{ .Release.Name }}
   ports:
-    - protocol: TCP
+    - name: http
       port: {{ .Values.httpPort }}
       targetPort: {{ .Values.httpPort }}
-    - port: {{ .Values.grpcPort }}
+    - name: h2c
+      port: {{ .Values.grpcPort }}
       targetPort: {{ .Values.grpcPort }}
