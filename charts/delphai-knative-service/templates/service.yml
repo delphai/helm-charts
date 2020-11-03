@@ -45,7 +45,7 @@ spec:
       containers:
         - image: {{ .Values.image }}
           volumeMounts:
-            {{- .Values.fileShares | toPrettyJson }}
+            {{- range .Values.fileShares | toPrettyJson }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
             {{- end }}
