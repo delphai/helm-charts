@@ -1,40 +1,16 @@
-{{ if .Values.isPublic }}
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Release.Name}}
   namespace: {{ .Release.Namespace }}
-  {{ if .Values.isUi }}
-  external-dns.alpha.kubernetes.io/target: in.${domain}
-  {{ end }}
+  annotations:
+    kubernetes.io/ingress.class: istio
 spec:
-  hosts:
-    {{ if .Values.isUi }}
-    - {{ .Release.Name }}.{{ .Values.domain }}
-    {{ else }}
-    - api.{{ .Values.domain }}
-    {{ end }}
-  http:
-    - match:
-        - uri:
-            {{ if .Values.isUi }}
-            prefix: '/'
-            {{ else }}
-            prefix: '/{{ .Release.Name }}/'
-            {{ end }}
-        {{ if not .Values.isUi }}
-        # required because of https://github.com/istio/istio/issues/8076
-        - uri:
-            exact: '/{{ .Release.Name }}'
-        {{ end }}
-      {{ if not .Values.isUi }}
-      rewrite:
-        uri: '/'
-        authority: {{ .Release.Name }}.{{ .Release.Namespace }}
-      {{ end }}
-      route:
-        - destination:
-            host: {{ .Release.Name }}.{{ .Release.Namespace }}
-            port:
-              number: {{ .Values.httpPort }}
-{{ end }}
+  rules:
+    - host: "api.{{ .Values.domain }}"
+      http:
+        paths:
+          - path: "/{{ .Release.Name }}*"
+            backend:
+              serviceName: {{ .Release.Name }}
+              servicePort: {{ .Values.httpPort }}
