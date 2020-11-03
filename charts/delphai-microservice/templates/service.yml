@@ -8,5 +8,7 @@ spec:
     app: {{ .Release.Name }}
   ports:
     - protocol: TCP
-      port: {{ .Values.port }}
-      targetPort: {{ .Values.port }}
+      port: {{ .Values.httpPort }}
+      targetPort: {{ .Values.httpPort }}
+    - port: {{ .Values.grpcPort }}
+      targetPort: {{ .Values.grpcPort }}
