@@ -8,6 +8,7 @@ spec:
     metadata:
       annotations:
         autoscaling.knative.dev/target: '{{ .Values.concurrency }}'
+        autoscaling.knative.dev/minScale: '{{ .Values.minScale }}'
     spec:
       containers:
         - image: {{ .Values.image }}
