@@ -22,26 +22,26 @@ spec:
     spec:
       automountServiceAccountToken: true
       volumes:
-        {{- range $fileShare := .Values.fileShares }}
-          {{ if $fileShare not eq "" }}
+        {{ if $fileShare not eq "" }}
+          {{- range $fileShare := .Values.fileShares }}  
         - name: {{ $fileShare }}
           azureFile:
             secretName: azure-storage
             shareName: {{ $fileShare }}
             readOnly: true
-          {{ end }}
-        {{- end }}
+          {{- end }}
+        {{ end }}
       containers:
         - imagePullPolicy: Always
           image: {{ .Values.image }}
           name: {{ .Release.Name }}
           volumeMounts:
-            {{- range $fileShare := .Values.fileShares }}
-              {{ if $fileShare not eq "" }}
+          {{ if $fileShare not eq "" }}
+            {{- range $fileShare := .Values.fileShares }}   
             - name: {{ $fileShare }}
               mountPath: /app/data/{{ $fileShare }}
-              {{ end }}
             {{- end }}
+          {{ end }}
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
