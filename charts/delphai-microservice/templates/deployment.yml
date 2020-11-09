@@ -36,7 +36,7 @@ spec:
           volumeMounts:
             {{- range $fileShare := .Values.fileShares }}
             - name: {{ $fileShare }}
-              mountPath: {{ .Values.mountPath }}
+              mountPath: /app/data
             {{- end }}
           env:
             - name: DELPHAI_ENVIRONMENT
