@@ -22,7 +22,7 @@ spec:
     spec:
       automountServiceAccountToken: true
       volumes:
-        {{ if not eq (len .Values.fileShares) 0 }}
+        {{ if .Values.fileShares }}
           {{- range $fileShare := .Values.fileShares }}  
         - name: {{ $fileShare }}
           azureFile:
@@ -36,7 +36,7 @@ spec:
           image: {{ .Values.image }}
           name: {{ .Release.Name }}
           volumeMounts:
-          {{ if not eq (len .Values.fileShares) 0 }}
+          {{ if .Values.fileShares }}
             {{- range $fileShare := .Values.fileShares }}   
             - name: {{ $fileShare }}
               mountPath: /app/data/{{ $fileShare }}
