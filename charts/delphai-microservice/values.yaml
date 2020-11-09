@@ -6,6 +6,6 @@ isUi: false
 isPublic: true
 replicas: 3
 domain: delphai.black
+mountPath: /app/data
 fileShares:
     - name: h
-mountPath: /app/data
