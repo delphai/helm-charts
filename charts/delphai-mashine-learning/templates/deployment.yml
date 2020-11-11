@@ -35,11 +35,11 @@ spec:
           name: {{ .Release.Name }}
           resources:
             requests:
-                memory: "240Mi"
-                cpu: "500m"
-            limits:
                 memory: "1000Mi"
-                cpu: "500m"
+                cpu: "300m"
+            limits:
+                memory: "3000Mi"
+                cpu: "1000m"
           volumeMounts:
           {{ if ne ( len .Values.fileShares) 0 }}
             {{- range $fileShare := .Values.fileShares }}   
