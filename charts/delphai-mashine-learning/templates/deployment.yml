@@ -6,7 +6,10 @@ metadata:
 spec:
   replicas: {{ .Values.replicas }}
   strategy:
-    type: ReplicaSet
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: {{ .Release.Name }}
