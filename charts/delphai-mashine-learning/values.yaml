@@ -1,0 +1,6 @@
+domain: delphai.red
+image: image
+httpPort: 7070
+replicas: 1
+mountPath: /app/data
+fileShares: []

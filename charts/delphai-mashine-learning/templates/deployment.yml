@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicas }}
+  strategy:
+    type: ReplicaSet
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      automountServiceAccountToken: true
+      volumes:
+        {{ if ne ( len .Values.fileShares) 0 }}
+          {{- range $fileShare := .Values.fileShares }}  
+        - name: {{ $fileShare }}
+          azureFile:
+            secretName: azure-storage
+            shareName: {{ $fileShare }}
+            readOnly: true
+          {{- end }}
+        {{ end }}
+      containers:
+        - imagePullPolicy: Always
+          image: {{ .Values.image }}
+          name: {{ .Release.Name }}
+          resources:
+            requests:
+                memory: "240Mi"
+                cpu: "500m"
+            limits:
+                memory: "1000Mi"
+                cpu: "500m"
+          volumeMounts:
+          {{ if ne ( len .Values.fileShares) 0 }}
+            {{- range $fileShare := .Values.fileShares }}   
+            - name: {{ $fileShare }}
+              mountPath: /app/data/{{ $fileShare }}
+            {{- end }}
+          {{ end }}
+          env:
+            - name: DELPHAI_ENVIRONMENT
+              value: {{ .Values.delphaiEnvironment }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.httpPort }}
