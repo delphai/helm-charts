@@ -290,6 +290,16 @@ entries:
     urls:
     - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.2/delphai-knative-service-0.1.2.tgz
     version: 0.1.2
+  delphai-mashine-learning:
+  - apiVersion: v2
+    created: "2020-11-11T15:31:06.695590233Z"
+    description: delphai mashine larning deployment chart
+    digest: a150389669a8493daf83d872aa3b464542821d18eee2c8ea12504502b9560b49
+    name: delphai-mashine-learning
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-mashine-learning-0.1.0/delphai-mashine-learning-0.1.0.tgz
+    version: 0.1.0
   delphai-microservice:
   - apiVersion: v2
     created: "2020-11-09T18:35:51.102027089Z"
