@@ -33,21 +33,8 @@ spec:
         autoscaling.knative.dev/minScale: '{{ .Values.minScale }}'
     spec:
       timeoutSeconds: 600
-      volumes:
-        {{- range .Values.fileShares }}
-        - name: {{ .name }}
-          azureFile:
-            secretName: azure-storage
-            shareName: {{ .name }}
-            readOnly: true
-        {{- end }}
       containers:
         - image: {{ .Values.image }}
-          volumeMounts:
-            {{- range .Values.fileShares }}
-            - name: {{ .name }}
-              mountPath: {{ .mountPath }}
-            {{- end }}
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}

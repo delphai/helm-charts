@@ -1,0 +1,11 @@
+services = `kubectl get ksvc --all-namespaces -o json`.json().items
+num_services = len(services)
+echo('found ${num_services} services')
+for service in services {
+  service_name = service.metadata.name
+  namespace = service.metadata.namespace
+  if !service_name.suffix('-grpc') {
+    echo('scaling ${service_name}')
+    exec('helm upgrade ${service_name} -n ${service_name} delphai/delphai-knative-service')
+  }
+}
