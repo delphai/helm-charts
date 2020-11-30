@@ -5,17 +5,12 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     kubernetes.io/ingress.class: istio
-  {{ if lt ( len .Values.domains ) 2 }} 
-    external-dns.alpha.kubernetes.io/target: in.{{ .Values.domains }}
-  {{ else if lt ( len .Values.domains ) 3 }}
-    external-dns.alpha.kubernetes.io/target: in.{{ .Values.domains[0] }}
-  {{ end }}
-
+    external-dns.alpha.kubernetes.io/target: in.{{ .Values.domain }}
 spec:
   rules:
     {{ if ne ( len .Values.domains ) 0 }}
-      {{- range $domain := .Values.domains }}
-    - host: {{ .Release.Name }}.{{ $domain }}
+      {{- range $d := .Values.domains }}
+    - host: {{ .Release.Name }}.{{ $d }}
       http:
         paths:
           - backend:

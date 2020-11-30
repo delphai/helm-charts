@@ -1,5 +1,6 @@
 image: kennethreitz/httpbin
 httpPort: 80
 domains: []
+domain: delphai.black
 replicas: 3
 delphaiEnvironment: development
