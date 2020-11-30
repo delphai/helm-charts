@@ -40,4 +40,24 @@ spec:
             host: {{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local
             port:
               number: {{ .Values.httpPort }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name }}-grpc-public
+  namespace: {{ .Release.Name }}
+spec:
+  # This is the gateway shared in knative service mesh.
+  gateways:
+    - knative-ingress-gateway.knative-serving.svc.cluster.local
+  hosts:
+    - {{ .Release.Name }}.grpc.delphai.red
+  http:
+    - rewrite:
+        authority: {{ .Release.Name }}-grpc-public.{{ .Release.Name }}.internal
+      route:
+        - destination:
+            host: istio-ingressgateway.istio-system.svc.cluster.local
+            port:
+              number: 80
 {{ end }}

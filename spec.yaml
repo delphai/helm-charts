@@ -1,5 +1,0 @@
-spec:
-  template:
-    metadata:
-      annotations:
-        'autoscaling.knative.dev/minScale': '1'
