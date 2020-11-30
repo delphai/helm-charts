@@ -4,30 +4,19 @@ kind: VirtualService
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
-  annotations:
   {{ if .Values.isUi }}
-  {{ if gt ( len .Values.domains ) 1 }} 
-    external-dns.alpha.kubernetes.io/target: in.{{ .Values.domains[0] }}
-  {{ else if if lt ( len .Values.domains ) 1 }}
-    external-dns.alpha.kubernetes.io/target: in.{{ .Values.domains }}
+  external-dns.alpha.kubernetes.io/target: in.${domain}
   {{ end }}
-  {{ end }}
-
 spec:
   # This is the gateway shared in knative service mesh.
   gateways:
     - knative-ingress-gateway.knative-serving.svc.cluster.local
   hosts:
-   {{ if ne ( len .Values.domains ) 0 }}
-      {{- range $domain := .Values.domains }}
-        {{ if .Values.isUi }}
-    - {{ .Release.Name }}.{{ $domain }}
+    {{ if .Values.isUi }}
+    - {{ .Release.Name }}.{{ .Values.domain }}
     {{ else }}
-    - api.{{ $domain }}
-         {{ end }}
-        {{ -end }}
-      {{ end }}
-    
+    - api.{{ .Values.domain }}
+    {{ end }}
   http:
     - match:
         - uri:

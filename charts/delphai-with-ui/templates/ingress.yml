@@ -8,14 +8,9 @@ metadata:
     external-dns.alpha.kubernetes.io/target: in.{{ .Values.domain }}
 spec:
   rules:
-    {{ if ne ( len .Values.domains ) 0 }}
-      {{- range $d := .Values.domains }}
-    - host: {{ .Release.Name }}.{{ $d }}
+    - host: {{ .Release.Name }}.{{ .Values.domain }}
       http:
         paths:
           - backend:
               serviceName: {{ .Release.Name }}
               servicePort: {{ .Values.httpPort }}
-      {{- end }}
-    {{ end }}
-    
