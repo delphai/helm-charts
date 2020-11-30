@@ -22,6 +22,16 @@ entries:
   delphai-knative-service:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2020-11-30T23:55:53.129331518Z"
+    description: delphai knative service
+    digest: dfdd4d5747547afc330aef18d3dd45a77ae9d8315aebb4811c9b59a1b317b11b
+    name: delphai-knative-service
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.35/delphai-knative-service-0.1.35.tgz
+    version: 0.1.35
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2020-11-30T17:30:53.374390213Z"
     description: delphai knative service
     digest: e37ece92f87eedabcbeecdb28a6d0225f66ff8088db4d9552662a85a497417b5
@@ -338,6 +348,15 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-mashine-learning-0.1.0/delphai-mashine-learning-0.1.0.tgz
     version: 0.1.0
   delphai-microservice:
+  - apiVersion: v2
+    created: "2020-11-30T23:55:53.402393957Z"
+    description: delphai microservice
+    digest: 016cc71df093d544e438ae798fef9de27826349cbaaae92f87b2ced6b20b4d5e
+    name: delphai-microservice
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-microservice-0.1.27/delphai-microservice-0.1.27.tgz
+    version: 0.1.27
   - apiVersion: v2
     created: "2020-11-30T17:30:53.6435309Z"
     description: delphai microservice
