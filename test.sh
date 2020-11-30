@@ -6,6 +6,7 @@ REPO_NAME=delphai-ui
 REPO_SLUG=feat-multiple-domains
 IMAGE=delphaireview.azurecr.io/delphai-ui:feat-multiple-domains@sha256:5c01cff6fc5d1861825a72711c4e7a3cd6c9886443143c3945fa4a1207277389
 HTTPPORT=80
+DOMAIN=delpha.red
 DOMAINS='{delpha.red,delphai.blue}'
 IS_UI=true
 IS_MICROSERVICE=false
