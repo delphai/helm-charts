@@ -16,6 +16,6 @@ spec:
           - backend:
               serviceName: {{ .Release.Name }}
               servicePort: {{ .Values.httpPort }}
-    {{ -end }}
+      {{- end }}
     {{ end }}
     
