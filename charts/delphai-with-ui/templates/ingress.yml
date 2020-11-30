@@ -5,11 +5,12 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     kubernetes.io/ingress.class: istio
-    {{ if ne ( len .Values.domains ) 0 }}
-      {{- range $domain := .Values.domains }}
-    external-dns.alpha.kubernetes.io/target: in.{{ $domain }}
-      {{ end }}
-    {{ -end }}
+  {{ if gt ( len .Values.domains ) 1 }} 
+    external-dns.alpha.kubernetes.io/target: in.{{ .Values.domains[0] }}
+  {{ else if if lt ( len .Values.domains ) 1 }}
+    external-dns.alpha.kubernetes.io/target: in.{{ .Values.domains }}
+  {{ end }}
+
 spec:
   rules:
     {{ if ne ( len .Values.domains ) 0 }}
