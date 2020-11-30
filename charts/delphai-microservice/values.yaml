@@ -5,6 +5,6 @@ grpcPort: 8080
 isUi: false
 isPublic: true
 replicas: 3
-domain: delphai.black
+domains: []
 mountPath: /app/data
 fileShares: []

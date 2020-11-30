@@ -5,18 +5,26 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   {{ if .Values.isUi }}
-  external-dns.alpha.kubernetes.io/target: in.${domain}
+    {{ if ne ( len .Values.domains ) 0 }}
+      {{- range $domain := .Values.domains }}
+  external-dns.alpha.kubernetes.io/target: in.{{ $domain }}
+      {{- end }}
+    {{ end }}
   {{ end }}
 spec:
   # This is the gateway shared in knative service mesh.
   gateways:
     - knative-ingress-gateway.knative-serving.svc.cluster.local
   hosts:
-    {{ if .Values.isUi }}
-    - {{ .Release.Name }}.{{ .Values.domain }}
+    {{ if ne ( len .Values.domains ) 0 }}
+      {{- range $domain := .Values.domains }}
+        {{ if .Values.isUi }}
+    - {{ .Release.Name }}.{{ $domain }}
     {{ else }}
-    - api.{{ .Values.domain }}
-    {{ end }}
+    - api.{{ $domain }}
+        {{ end }}
+      {{ end }}
+    {{ -end }}
   http:
     - match:
         - uri:

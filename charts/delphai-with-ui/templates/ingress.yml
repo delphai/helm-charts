@@ -5,12 +5,20 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     kubernetes.io/ingress.class: istio
-    external-dns.alpha.kubernetes.io/target: in.{{ .Values.domain }}
+    {{ if ne ( len .Values.domains ) 0 }}
+      {{- range $domain := .Values.domains }}
+    external-dns.alpha.kubernetes.io/target: in.{{ $domain }}
+      {{ end }}
+    {{ -end }}
 spec:
   rules:
-    - host: {{ .Release.Name }}.{{ .Values.domain }}
+    {{ if ne ( len .Values.domains ) 0 }}
+      {{- range $domain := .Values.domains }}
+    - host: {{ .Release.Name }}.{{ $domain }}
       http:
         paths:
           - backend:
               serviceName: {{ .Release.Name }}
               servicePort: {{ .Values.httpPort }}
+    {{ end }}
+    {{ -end }}

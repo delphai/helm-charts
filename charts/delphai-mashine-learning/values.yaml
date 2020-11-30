@@ -1,4 +1,4 @@
-domain: delphai.red
+domain: []
 image: image
 httpPort: 7070
 replicas: 1
