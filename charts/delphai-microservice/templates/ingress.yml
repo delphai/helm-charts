@@ -51,7 +51,7 @@ spec:
   gateways:
     - knative-ingress-gateway.knative-serving.svc.cluster.local
   hosts:
-    - {{ .Release.Name }}.grpc.delphai.red
+    - {{ .Release.Name }}.grpc.{{ .Values.domain }}
   http:
     - rewrite:
         authority: {{ .Release.Name }}-grpc-public.{{ .Release.Name }}.internal
