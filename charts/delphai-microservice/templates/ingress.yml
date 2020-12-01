@@ -47,6 +47,8 @@ metadata:
   name: {{ .Release.Name }}-grpc-public
   namespace: {{ .Release.Name }}
 spec:
+  gateways:
+    - grpc-gateway.istio-system.svc.cluster.local
   hosts:
     - {{ .Release.Name }}.grpc.{{ .Values.domain }}
   http:
