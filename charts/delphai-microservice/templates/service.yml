@@ -10,6 +10,6 @@ spec:
     - name: http
       port: {{ .Values.httpPort }}
       targetPort: {{ .Values.httpPort }}
-    - name: h2c
+    - name: grpc-port
       port: {{ .Values.grpcPort }}
       targetPort: {{ .Values.grpcPort }}
