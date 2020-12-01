@@ -47,15 +47,10 @@ metadata:
   name: {{ .Release.Name }}-grpc-public
   namespace: {{ .Release.Name }}
 spec:
-  # This is the gateway shared in knative service mesh.
-  gateways:
-    - knative-ingress-gateway.knative-serving.svc.cluster.local
   hosts:
     - {{ .Release.Name }}.grpc.{{ .Values.domain }}
   http:
-    - rewrite:
-        authority: {{ .Release.Name }}-grpc-public.{{ .Release.Name }}.internal
-      route:
+    - route:
         - destination:
             host: {{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local
             port:
