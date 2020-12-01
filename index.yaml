@@ -349,6 +349,15 @@ entries:
     version: 0.1.0
   delphai-microservice:
   - apiVersion: v2
+    created: "2020-12-01T00:31:47.546783307Z"
+    description: delphai microservice
+    digest: f2acc79651472dc4d427229637dc824b1a5d4a0d193ba77ca3b247706b5dcc57
+    name: delphai-microservice
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-microservice-0.1.29/delphai-microservice-0.1.29.tgz
+    version: 0.1.29
+  - apiVersion: v2
     created: "2020-12-01T00:17:05.411143557Z"
     description: delphai microservice
     digest: ec6650a80112631122c297259a5e9c54af88831507f6f42f8bfb70b8d553cbca
