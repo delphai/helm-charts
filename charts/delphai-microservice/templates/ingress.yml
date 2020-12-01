@@ -57,7 +57,7 @@ spec:
         authority: {{ .Release.Name }}-grpc-public.{{ .Release.Name }}.internal
       route:
         - destination:
-            host: istio-ingressgateway.istio-system.svc.cluster.local
+            host: {{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local
             port:
-              number: 80
+              number: {{ .Values.grpcPort }}
 {{ end }}
