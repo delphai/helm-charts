@@ -12,10 +12,22 @@ spec:
   gateways:
     - knative-ingress-gateway.knative-serving.svc.cluster.local
   hosts:
+    {{ if gt (len $.Values.domains ) 0 }}
+    {{- range $d := .Values.domains }}
+    {{ if .Values.isUi }}
+    - {{ .Release.Name }}.{{ $d }}
+    {{ else }}
+    - api.{{ $d }}
+    {{ end }}
+    {{- end }}
+    {{ end }}
+
+    {{ if eq (len $.Values.domains ) 0 }}
     {{ if .Values.isUi }}
     - {{ .Release.Name }}.{{ .Values.domain }}
     {{ else }}
     - api.{{ .Values.domain }}
+    {{ end }}
     {{ end }}
   http:
     - match:
@@ -50,7 +62,14 @@ spec:
   gateways:
     - istio-system/grpc-gateway
   hosts:
+    {{ if gt (len $.Values.domains ) 0 }}
+    {{- range $d := .Values.domains }}
+    - {{ .Release.Name }}.grpc.{{ $d }}
+    {{- end }}
+    {{ end }}
+    {{ if eq (len $.Values.domains ) 0 }}
     - {{ .Release.Name }}.grpc.{{ .Values.domain }}
+    {{ end }}
   http:
     - route:
         - destination:
