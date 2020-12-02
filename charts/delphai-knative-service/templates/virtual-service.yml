@@ -12,22 +12,10 @@ spec:
   gateways:
     - knative-ingress-gateway.knative-serving.svc.cluster.local
   hosts:
-    {{ if gt (len $.Values.domains ) 0 }}
-    {{- range $d := .Values.domains }}
-    {{ if .Values.isUi }}
-    - {{ .Release.Name }}.{{ $d }}
-    {{ else }}
-    - api.{{ $d }}
-    {{ end }}
-    {{- end }}
-    {{ end }}
-
-    {{ if eq (len $.Values.domains ) 0 }}
     {{ if .Values.isUi }}
     - {{ .Release.Name }}.{{ .Values.domain }}
     {{ else }}
     - api.{{ .Values.domain }}
-    {{ end }}
     {{ end }}
   http:
     - match:
@@ -45,13 +33,13 @@ spec:
       {{ if not .Values.isUi }}
       rewrite:
         uri: '/'
-        authority: {{ .Release.Name }}.{{ .Release.Namespace }}
+        authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
       {{ end }}
       route:
         - destination:
-            host: {{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local
+            host: istio-ingressgateway.istio-system.svc.cluster.local
             port:
-              number: {{ .Values.httpPort }}
+              number: 80
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -59,21 +47,17 @@ metadata:
   name: {{ .Release.Name }}-grpc-public
   namespace: {{ .Release.Namespace }}
 spec:
+  # This is the gateway shared in knative service mesh.
   gateways:
-    - istio-system/grpc-gateway
+    - knative-ingress-gateway.knative-serving.svc.cluster.local
   hosts:
-    {{ if gt (len $.Values.domains ) 0 }}
-    {{- range $d := .Values.domains }}
-    - {{ .Release.Name }}.grpc.{{ $d }}
-    {{- end }}
-    {{ end }}
-    {{ if eq (len $.Values.domains ) 0 }}
     - {{ .Release.Name }}.grpc.{{ .Values.domain }}
-    {{ end }}
   http:
-    - route:
+    - rewrite:
+        authority: {{ .Release.Name }}-grpc-public.{{ .Release.Name }}.internal
+      route:
         - destination:
-            host: {{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local
+            host: istio-ingressgateway.istio-system.svc.cluster.local
             port:
-              number: {{ .Values.grpcPort }}
+              number: 80
 {{ end }}

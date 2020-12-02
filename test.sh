@@ -1,10 +1,12 @@
 #! /usr/bin/env bash
 set -e
-kubectx delphai-development
+kubectx delphai-staging
 
-RELEASE_NAME=delphai-ui-test
-REPO_NAME=delphai-ui-test
-IMAGE=delphaistaging.azurecr.io/delphai-ui@sha256:be812a130f8dd9a470b8d9dd6332a0ab549cefecd0bfd4feef49fc7faa6dd214
+RELEASE_NAME=query-resolution
+
+REPO_NAME=query-resolution
+
+IMAGE=delphaistaging.azurecr.io/query-resolution@sha256:da99cb425632a4f7eca5b1f3dcd8e131f165aa476d76e2358749b57184ac6555
 
 kubectl create namespace ${REPO_NAME} --output yaml --dry-run=client | kubectl apply -f -
 kubectl patch serviceaccount default --namespace ${REPO_NAME} -p "{\"imagePullSecrets\": [{\"name\": \"acr-credentials\"}]}"
@@ -12,9 +14,9 @@ DOMAIN=$(kubectl get secret domain -o json --namespace default | jq .data.domain
 DOMAINS=""
 helm upgrade --install --atomic  --reset-values\
     ${RELEASE_NAME} \
-    ./charts/delphai-with-ui \
+    ./charts/delphai-knative-service \
     --namespace=${REPO_NAME} \
-    --set httpPort=80 \
     --set domain=${DOMAIN} \
-    --set domains=${DOMAINS} \
-    --set delphaiEnvironment=development
+    --set image=${IMAGE} \
+    --set domains="" \
+    --set delphaiEnvironment=staging
