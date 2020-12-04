@@ -1,0 +1,46 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  gateways:
+    - knative-ingress-gateway.knative-serving.svc.cluster.local
+  hosts:
+    - models.{{ .Values.domain }}
+  http:
+    - match:
+        - uri:
+            prefix: '/{{ .Release.Name }}/'
+        # required because of https://github.com/istio/istio/issues/8076
+        - uri:
+            exact: '/{{ .Release.Name }}
+      rewrite:
+        uri: '/'
+        authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
+      route:
+        - destination:
+            host: istio-ingressgateway.istio-system.svc.cluster.local
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name }}-grpc-public
+  namespace: {{ .Release.Namespace }}
+spec:
+  # This is the gateway shared in knative service mesh.
+  gateways:
+    - knative-ingress-gateway.knative-serving.svc.cluster.local
+  hosts:
+    - {{ .Release.Name }}.grpc.{{ .Values.domain }}
+  http:
+    - rewrite:
+        authority: {{ .Release.Name }}-grpc-public.{{ .Release.Name }}.internal
+      route:
+        - destination:
+            host: istio-ingressgateway.istio-system.svc.cluster.local
+            port:
+              number: 80
+
