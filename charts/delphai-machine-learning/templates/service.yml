@@ -15,6 +15,7 @@ spec:
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
+          args: ["--workers","1", "--enable-microbatch"]
           ports:
             - containerPort: {{ .Values.httpPort }}
 ---

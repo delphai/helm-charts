@@ -18,5 +18,5 @@ helm upgrade --install --atomic  --reset-values\
     --set domain=${DOMAIN} \
     --set image=${IMAGE} \
     --set httpPort=5000 \
-    --set domains="" \
-    --set delphaiEnvironment=common
+    --set delphaiEnvironment=common \
+    --set minScale=0
