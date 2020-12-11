@@ -11,19 +11,37 @@ spec:
   
    {{ if gt (len $.Values.domains ) 0 }}
     {{- range $d := .Values.domains }}
+      {{ if $.Values.subdomain }}
+    - host: {{ $.Values.subdomain }}.{{ $d }}
+      http:
+      paths:
+        - backend:
+            serviceName: {{ $.Release.Name }}
+            servicePort: {{ $.Values.httpPort }}
+      {{ else }}
     - host: {{ $.Release.Name }}.{{ $d }}
       http:
         paths:
           - backend:
               serviceName: {{ $.Release.Name }}
               servicePort: {{ $.Values.httpPort }}
+      {{ end }}
     {{- end }}
   {{ end }}
   {{ if eq (len $.Values.domains ) 0 }}
+    {{ if $.Values.subdomain }}
+    - host: {{ $.Values.subdomain }}.{{ .Values.domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ $.Release.Name }}
+              servicePort: {{ $.Values.httpPort }}
+    {{ else }}
     - host: {{ $.Release.Name }}.{{ .Values.domain }}
       http:
         paths:
           - backend:
               serviceName: {{ $.Release.Name }}
               servicePort: {{ $.Values.httpPort }}
+    {{ end }}
   {{ end }}
