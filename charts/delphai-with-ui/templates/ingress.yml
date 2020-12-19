@@ -14,10 +14,10 @@ spec:
       {{ if $.Values.subdomain }}
     - host: {{ $.Values.subdomain }}.{{ $d }}
       http:
-      paths:
-        - backend:
-            serviceName: {{ $.Release.Name }}
-            servicePort: {{ $.Values.httpPort }}
+        paths:
+          - backend:
+              serviceName: {{ $.Release.Name }}
+              servicePort: {{ $.Values.httpPort }}
       {{ else }}
     - host: {{ $.Release.Name }}.{{ $d }}
       http:
