@@ -1,10 +1,6 @@
 image: kennethreitz/httpbin
 httpPort: 7070
-grpcPort: 8080
-isPublic: true
-isUi: false
 domain: delphai.black
-domains: ""
-delphaiEnvironment: development
+delphaiEnvironment: ML
 concurrency: 100
 minScale: 1
