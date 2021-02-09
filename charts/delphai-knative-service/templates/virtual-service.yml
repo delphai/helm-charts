@@ -54,7 +54,7 @@ spec:
     - {{ .Release.Name }}.grpc.{{ .Values.domain }}
   http:
     - rewrite:
-        authority: {{ .Release.Name }}-grpc-public.{{ .Release.Name }}.internal
+        authority: {{ .Release.Name }}-grpc-public.{{ .Release.Namespace }}.internal
       route:
         - destination:
             host: istio-ingressgateway.istio-system.svc.cluster.local
