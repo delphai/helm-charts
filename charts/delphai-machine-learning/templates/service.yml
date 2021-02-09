@@ -14,7 +14,7 @@ spec:
         autoscaling.knative.dev/target: "10"
         # Disable scale to zero with a minScale of 1.
         autoscaling.knative.dev/minScale: "1"
-        # Limit scaling to 100 pods.
+        # Limit scaling to 30 pods.
         autoscaling.knative.dev/maxScale: "30"
     spec:
       containers:
@@ -22,6 +22,6 @@ spec:
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
-          args: ["--workers","1", "--enable-microbatch"]
+          args: ["--workers","3", "--enable-microbatch"]
           ports:
             - containerPort: {{ .Values.httpPort }}
