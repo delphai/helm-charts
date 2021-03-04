@@ -22,6 +22,16 @@ entries:
   delphai-knative-service:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-03-04T11:56:03.288222025Z"
+    description: delphai knative service
+    digest: d4deae6544c7236fbb859e3ea467a80932b0d555268d35e4578acd58c3acbb13
+    name: delphai-knative-service
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.50/delphai-knative-service-0.1.50.tgz
+    version: 0.1.50
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-03-02T16:01:09.1106699Z"
     description: delphai knative service
     digest: de141d81bcd8493684fb48fa6d35b4fda043bc7ba802738ec9a8aac804f19f36
