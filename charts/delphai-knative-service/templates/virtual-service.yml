@@ -40,9 +40,9 @@ spec:
             host: istio-ingressgateway.istio-system.svc.cluster.local
             port:
               number: 80
-      retries:
-        attempts: 10
-        perTryTimeout: 3s
+      # retries:
+      #   attempts: 5
+      #   perTryTimeout: 20s
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -63,7 +63,7 @@ spec:
             host: istio-ingressgateway.istio-system.svc.cluster.local
             port:
               number: 80
-      retries:
-        attempts: 10
-        perTryTimeout: 3s
+      # retries:
+      #   attempts: 5
+      #   perTryTimeout: 20s
 {{ end }}
