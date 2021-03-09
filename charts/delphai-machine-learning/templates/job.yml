@@ -1,0 +1,25 @@
+{{ if .Values.train }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: {{ .Release.Name }}
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ .Values.image }}
+        imagePullPolicy: Always
+        {{ if .Values.gpu }}
+        resources:
+          limits:
+           nvidia.com/gpu: 1
+        {{ end }}
+      restartPolicy: OnFailure      
+{{ end }}
