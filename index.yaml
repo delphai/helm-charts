@@ -461,6 +461,16 @@ entries:
     urls:
     - https://github.com/delphai/helm-charts/releases/download/delphai-machine-learning-0.1.5/delphai-machine-learning-0.1.5.tgz
     version: 0.1.5
+  delphai-machine-learning-for-training:
+  - apiVersion: v2
+    created: "2021-03-22T09:51:49.962486066Z"
+    description: delphai mashine larning deployment chart to train models
+    digest: a650250166be456838ba80819ff4470496b73693bf4b201b326637128af3daa0
+    name: delphai-machine-learning-for-training
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-machine-learning-for-training-0.1.0/delphai-machine-learning-for-training-0.1.0.tgz
+    version: 0.1.0
   delphai-mashine-learning:
   - apiVersion: v2
     created: "2020-11-11T16:25:23.151558333Z"
