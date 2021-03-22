@@ -2,11 +2,11 @@
 set -e
 kubectx delphai-hybrid
 
-RELEASE_NAME=train-model-gpu
+RELEASE_NAME=ml-utils
 
-REPO_NAME=train-model-gpu
+REPO_NAME=ml-utils
 
-IMAGE=delphaicommon.azurecr.io/train-model-gpu:latest
+IMAGE=delphaicommon.azurecr.io/ml-utils:latest
 
 kubectl create namespace ${REPO_NAME} --output yaml --dry-run=client | kubectl apply -f -
 kubectl patch serviceaccount default --namespace ${REPO_NAME} -p "{\"imagePullSecrets\": [{\"name\": \"acr-credentials\"}]}"
