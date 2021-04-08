@@ -1,3 +1,4 @@
+
 name: destroy-review
 
 on: [delete]
@@ -7,19 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set environment varaibles
-        shell: bash
-        run: |
-          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | iconv -t ascii//TRANSLIT | sed -r s/[^a-zA-Z0-9]+/-/g | sed -r s/^-+\|-+$//g | tr A-Z a-z)"
-          echo "##[set-output name=repo;]$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")"
-        id: env
+      - run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
       - uses: rlespinasse/github-slug-action@v3.x
       - name: Uninstall
-        run: | 
+        run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
           az login --service-principal --username ${{ secrets.ARM_CLIENT_ID_REVIEW }} --password ${{ secrets.ARM_CLIENT_SECRET_REVIEW }} --tenant ${{ secrets.ARM_TENANT_ID_REVIEW }}
           az aks get-credentials -n delphai-review -g tf-cluster
           sudo snap install helm --classic
           helm repo add delphai https://delphai.github.io/helm-charts && helm repo update
-          helm uninstall ${{ steps.env.outputs.repo }}-${{ steps.env.outputs.branch }} -n ${{ steps.env.outputs.repo }}
-      
+          helm uninstall ${{ env.REPOSITORY_NAME }}-${{ env.GITHUB_EVENT_REF_SLUG }} -n ${{ env.REPOSITORY_NAME }}
