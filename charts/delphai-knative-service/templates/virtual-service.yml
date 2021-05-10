@@ -4,45 +4,27 @@ kind: VirtualService
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
-  {{ if .Values.isUi }}
-  external-dns.alpha.kubernetes.io/target: in.${domain}
-  {{ end }}
 spec:
   # This is the gateway shared in knative service mesh.
   gateways:
     - knative-ingress-gateway.knative-serving.svc.cluster.local
-  hosts:
-    {{ if .Values.isUi }}
-    - {{ .Release.Name }}.{{ .Values.domain }}
-    {{ else }}
+  hosts: 
     - api.{{ .Values.domain }}
-    {{ end }}
   http:
     - match:
-        - uri:
-            {{ if .Values.isUi }}
-            prefix: '/'
-            {{ else }}
-            prefix: '/{{ .Release.Name }}/'
-            {{ end }}
-        {{ if not .Values.isUi }}
+        - uri:         
+            prefix: '/{{ .Release.Name }}/'       
         # required because of https://github.com/istio/istio/issues/8076
         - uri:
             exact: '/{{ .Release.Name }}'
-        {{ end }}
-      {{ if not .Values.isUi }}
       rewrite:
         uri: '/'
         authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
-      {{ end }}
       route:
         - destination:
             host: istio-ingressgateway.istio-system.svc.cluster.local
             port:
               number: 80
-      # retries:
-      #   attempts: 5
-      #   perTryTimeout: 20s
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -63,7 +45,4 @@ spec:
             host: istio-ingressgateway.istio-system.svc.cluster.local
             port:
               number: 80
-      # retries:
-      #   attempts: 5
-      #   perTryTimeout: 20s
 {{ end }}

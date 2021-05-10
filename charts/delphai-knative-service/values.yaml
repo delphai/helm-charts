@@ -2,11 +2,7 @@ image: kennethreitz/httpbin
 httpPort: 7070
 grpcPort: 8080
 isPublic: true
-isUi: false
-isRunner: false
 domain: delphai.black
-domains: ""
 delphaiEnvironment: development
 concurrency: 100
 minScale: 1
-fileSahres: []

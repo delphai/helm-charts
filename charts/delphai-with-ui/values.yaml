@@ -4,4 +4,4 @@ domain: delphai.black
 domains: ""
 replicas: 3
 delphaiEnvironment: development
-subdomain: 
+subdomain: sub
