@@ -4,5 +4,4 @@ domain: delphai.black
 delphaiEnvironment: ML
 concurrency: 100
 minScale: 1
-train: false
 gpu: false
