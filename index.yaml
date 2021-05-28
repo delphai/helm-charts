@@ -22,6 +22,16 @@ entries:
   delphai-knative-service:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-05-28T11:06:21.013126139Z"
+    description: delphai knative service
+    digest: 34e029d9389c1b7cd6e738e8671b1f8e483666344a68924c45c4e9f104410b41
+    name: delphai-knative-service
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.52/delphai-knative-service-0.1.52.tgz
+    version: 0.1.52
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-03-04T11:56:03.288222025Z"
     description: delphai knative service
     digest: d4deae6544c7236fbb859e3ea467a80932b0d555268d35e4578acd58c3acbb13
@@ -372,6 +382,15 @@ entries:
     version: 0.1.2
   delphai-machine-learning:
   - apiVersion: v2
+    created: "2021-05-28T11:06:21.201162511Z"
+    description: delphai mashine larning deployment chart
+    digest: 5d8ccd8967029f0a95cf144b129ddb1e4e0ad557cc4923ee53d0b8dcbd397864
+    name: delphai-machine-learning
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-machine-learning-0.2.6/delphai-machine-learning-0.2.6.tgz
+    version: 0.2.6
+  - apiVersion: v2
     created: "2021-03-09T13:28:43.264096356Z"
     description: delphai mashine larning deployment chart
     digest: 31c85eeabc7e833c802ebd2633aeafc65241278e635dc8b7e30a1dce882dd39f
@@ -509,6 +528,15 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-mashine-learning-0.1.0/delphai-mashine-learning-0.1.0.tgz
     version: 0.1.0
   delphai-microservice:
+  - apiVersion: v2
+    created: "2021-05-28T11:06:21.384109359Z"
+    description: delphai microservice
+    digest: 37164d79fa42a30235bb536a220ca76c256a57aa759b185c6190be733c8a164b
+    name: delphai-microservice
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-microservice-0.1.35/delphai-microservice-0.1.35.tgz
+    version: 0.1.35
   - apiVersion: v2
     created: "2020-12-02T14:12:19.504068854Z"
     description: delphai microservice
@@ -800,6 +828,16 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-scraping-0.0.1/delphai-scraping-0.0.1.tgz
     version: 0.0.1
   delphai-with-ui:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-05-28T11:06:21.579243264Z"
+    description: A Helm chart for Kubernetes
+    digest: ff0c5d064e132e5647c31dbe2c4d68d93469030aea38dc31b87be37e7835a321
+    name: delphai-with-ui
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-with-ui-0.1.16/delphai-with-ui-0.1.16.tgz
+    version: 0.1.16
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2020-12-19T00:12:02.212030975Z"
