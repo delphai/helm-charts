@@ -13,7 +13,7 @@ spec:
         autoscaling.knative.dev/class: kpa.autoscaling.knative.dev
         autoscaling.knative.dev/metric: concurrency
         autoscaling.knative.dev/target: '{{ .Values.concurrency }}'
-        autoscaling.knative.dev/minScale: '{{ .Values.minScale }}'.
+        autoscaling.knative.dev/minScale: '{{ .Values.minScale }}'
         autoscaling.knative.dev/maxScale: "30"
     spec:
       containers:
