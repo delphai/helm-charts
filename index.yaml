@@ -22,6 +22,16 @@ entries:
   delphai-knative-service:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-05-31T10:02:01.315469176Z"
+    description: delphai knative service
+    digest: 73ec2e5670b5016ddc720d6366394661cbc987af84c292230e14814febd7b7be
+    name: delphai-knative-service
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.53/delphai-knative-service-0.1.53.tgz
+    version: 0.1.53
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-05-28T11:06:21.013126139Z"
     description: delphai knative service
     digest: 34e029d9389c1b7cd6e738e8671b1f8e483666344a68924c45c4e9f104410b41
@@ -381,6 +391,15 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.2/delphai-knative-service-0.1.2.tgz
     version: 0.1.2
   delphai-machine-learning:
+  - apiVersion: v2
+    created: "2021-05-31T10:02:01.547228262Z"
+    description: delphai mashine larning deployment chart
+    digest: 69482aa9d90c72ba1df93bf9759af9c91f69702ba76c0e1de96f35b49c8a1468
+    name: delphai-machine-learning
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-machine-learning-0.2.7/delphai-machine-learning-0.2.7.tgz
+    version: 0.2.7
   - apiVersion: v2
     created: "2021-05-28T11:06:21.201162511Z"
     description: delphai mashine larning deployment chart
