@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
+  annotations:
+    delphai-subdomain: machine-learning
+    'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'true'
 spec:
   template:
     metadata:
