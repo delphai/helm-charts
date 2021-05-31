@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
+  annotations:
+    delphai-subdomain: api
+    'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'true'
 spec:
   template:
     metadata:
@@ -47,6 +50,9 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-grpc-public
   namespace: {{ .Release.Namespace }}
+  annotations:
+    delphai-subdomain: {{ .Release.Name }}.grpc
+    'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'false'
 spec:
   template:
     metadata:
