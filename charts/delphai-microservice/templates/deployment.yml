@@ -19,6 +19,8 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
+      imagePullSecrets:
+        - name: acr-credentials
       automountServiceAccountToken: true
       volumes:
         {{ if ne ( len .Values.fileShares) 0 }}
