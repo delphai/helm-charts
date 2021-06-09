@@ -14,7 +14,7 @@ jobs:
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
           az login --service-principal --username ${{ secrets.ARM_CLIENT_ID_REVIEW }} --password ${{ secrets.ARM_CLIENT_SECRET_REVIEW }} --tenant ${{ secrets.ARM_TENANT_ID_REVIEW }}
-          az aks get-credentials -n delphai-review -g tf-cluster
+          az aks get-credentials -n delphai-review -g tf-review-cluster
           sudo snap install helm --classic
           helm repo add delphai https://delphai.github.io/helm-charts && helm repo update
           helm uninstall ${{ env.REPOSITORY_NAME }}-${{ env.GITHUB_EVENT_REF_SLUG }} -n ${{ env.REPOSITORY_NAME }}
