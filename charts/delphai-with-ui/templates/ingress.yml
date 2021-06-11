@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     kubernetes.io/ingress.class: istio
-    {{ if nq .Values.delphaiEnvironment "review" }}
+    {{ if ne .Values.delphaiEnvironment "review" }}
     external-dns.alpha.kubernetes.io/target: in.{{ .Values.domain }}
     {{ end }}
 spec:
