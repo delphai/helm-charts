@@ -867,6 +867,16 @@ entries:
   delphai-with-ui:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-06-11T15:30:53.431127292Z"
+    description: A Helm chart for Kubernetes
+    digest: 6335ec1e491d62f4e019506eb5636d90c42da3bf3f5bd2c531008a1ddd34c2a8
+    name: delphai-with-ui
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-with-ui-0.1.21/delphai-with-ui-0.1.21.tgz
+    version: 0.1.21
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-06-11T15:19:11.13666857Z"
     description: A Helm chart for Kubernetes
     digest: 91d150a637c5dc61c45ffe0abc83e111833bb66cf826ae8a4740560f7493b5b7
