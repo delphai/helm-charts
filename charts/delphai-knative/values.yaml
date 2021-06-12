@@ -1,0 +1,11 @@
+image: kennethreitz/httpbin
+http:
+  enabled: false
+  port: 7070
+grpc:
+  enabled: true
+  port: 8080
+domain: delphai.black
+delphaiEnvironment: development
+concurrency: 100
+minScale: 1
