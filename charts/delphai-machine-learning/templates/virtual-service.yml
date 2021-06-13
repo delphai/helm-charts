@@ -6,7 +6,7 @@ metadata:
 spec:
   # This is the gateway shared in knative service mesh.
   gateways:
-    - knative-ingress-gateway.knative-serving.svc.cluster.local
+    - knative-serving/knative-ingress-gateway
   hosts:
     - models.{{ .Values.domain }}
   http:
