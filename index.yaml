@@ -53,6 +53,16 @@ entries:
   delphai-knative-service:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-06-13T18:15:35.895416996Z"
+    description: delphai knative service
+    digest: 4716e7dd10a31579ea65762899e8b0355322a65d352289f28f671f6e6d36606f
+    name: delphai-knative-service
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.54/delphai-knative-service-0.1.54.tgz
+    version: 0.1.54
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-05-31T10:02:01.315469176Z"
     description: delphai knative service
     digest: 73ec2e5670b5016ddc720d6366394661cbc987af84c292230e14814febd7b7be
@@ -423,6 +433,15 @@ entries:
     version: 0.1.2
   delphai-machine-learning:
   - apiVersion: v2
+    created: "2021-06-13T18:15:36.064563192Z"
+    description: delphai mashine larning deployment chart
+    digest: 3928250421594918f8c80e2e3e5d32a5ea4b61a0f1b87578be581e899a073a23
+    name: delphai-machine-learning
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-machine-learning-0.2.9/delphai-machine-learning-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v2
     created: "2021-05-31T10:52:24.884636343Z"
     description: delphai mashine larning deployment chart
     digest: 94d61397bdbdb610a524a049a21090671d4da78987ce9d5b3815c6575233d6f6
@@ -587,6 +606,15 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-mashine-learning-0.1.0/delphai-mashine-learning-0.1.0.tgz
     version: 0.1.0
   delphai-microservice:
+  - apiVersion: v2
+    created: "2021-06-13T18:15:36.269433657Z"
+    description: delphai microservice
+    digest: c950ab2e3ee91b23b286f167abeba3242a7c2517e229b3d6e3494dd22e6bb65b
+    name: delphai-microservice
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-microservice-0.1.37/delphai-microservice-0.1.37.tgz
+    version: 0.1.37
   - apiVersion: v2
     created: "2021-06-03T15:48:58.063047393Z"
     description: delphai microservice
