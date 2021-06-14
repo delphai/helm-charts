@@ -9,3 +9,6 @@ domain: delphai.black
 delphaiEnvironment: development
 concurrency: 100
 minScale: 1
+command: []
+args: []
+env: []
