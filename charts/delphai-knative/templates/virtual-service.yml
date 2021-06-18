@@ -9,7 +9,11 @@ spec:
   gateways:
     - knative-serving/knative-ingress-gateway
   hosts: 
-    - api.{{ .Values.domain }}
+  {{ if eq $.Values.delphaiEnvironment "ml" }}
+    - machine-learning.{{ .Values.domain }}
+  {{ else }}
+    - {{ .Release.Name }}.{{ .Values.domain }}
+  {{ end }}
   http:
     - match:
         - uri:         
