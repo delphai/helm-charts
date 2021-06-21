@@ -11,7 +11,7 @@ spec:
   {{ if eq $.Values.delphaiEnvironment "common" }}
     - models.{{ .Values.domain }}
   {{ else if eq $.Values.delphaiEnvironment "hybrid" }}
-    - machine-learning.{{ .Values.domain }}
+    - {{ .Release.Name }}.{{ .Values.domain }}
   {{ end }}
   http:
     - match:
@@ -24,7 +24,7 @@ spec:
         {{ if eq $.Values.delphaiEnvironment "common" }}
         authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
         {{ else if eq $.Values.delphaiEnvironment "hybrid" }}
-        authority: machine-learning.{{ .Values.domain }}
+        authority: {{ .Release.Name }}.{{ .Values.domain }}
         {{ end }}
       route:
         - destination:

@@ -9,7 +9,7 @@ spec:
   gateways:
     - knative-serving/knative-ingress-gateway
   hosts: 
-    - api.{{ .Values.domain }}
+    - {{ .Release.Name }}.{{ .Values.domain }}
   http:
     - match:
         - uri:         
@@ -19,7 +19,7 @@ spec:
             exact: '/{{ .Release.Name }}'
       rewrite:
         uri: '/'
-        authority: api.{{ .Values.domain }}
+        authority: {{ .Release.Name }}.{{ .Values.domain }}
       route:
         - destination:
             host: istio-ingressgateway.istio-system.svc.cluster.local
