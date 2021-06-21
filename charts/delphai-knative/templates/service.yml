@@ -40,13 +40,8 @@ metadata:
   name: {{ .Release.Name }}-http
   namespace: {{ .Release.Namespace }}
   annotations:
-    {{ if eq $.Values.delphaiEnvironment "ml" }}
-    delphai-subdomain: machine-learning
+    delphai-subdomain: api
     'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'true'
-    {{ else }}
-    delphai-subdomain: {{ .Release.Name }}
-    'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'true'
-    {{ end }}
 spec:
   template:
     metadata:

@@ -8,7 +8,11 @@ spec:
   gateways:
     - knative-serving/knative-ingress-gateway
   hosts:
+  {{ if eq $.Values.delphaiEnvironment "common" }}
     - models.{{ .Values.domain }}
+  {{ else if eq $.Values.delphaiEnvironment "hybrid" }}
+    - machine-learning.{{ .Values.domain }}
+  {{ end }}
   http:
     - match:
         - uri:
@@ -17,7 +21,11 @@ spec:
             exact: '/{{ .Release.Name }}'     
       rewrite:
         uri: '/'
-        authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal     
+        {{ if eq $.Values.delphaiEnvironment "common" }}
+        authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
+        {{ else if eq $.Values.delphaiEnvironment "hybrid" }}
+        authority: {{ .Release.Name }}.{{ .Release.Namespace }}
+        {{ end }}
       route:
         - destination:
             host: istio-ingressgateway.istio-system.svc.cluster.local
