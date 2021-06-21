@@ -9,11 +9,7 @@ spec:
   gateways:
     - knative-serving/knative-ingress-gateway
   hosts: 
-  {{ if eq $.Values.delphaiEnvironment "ml" }}
-    - machine-learning.{{ .Values.domain }}
-  {{ else }}
-    - {{ .Release.Name }}.{{ .Values.domain }}
-  {{ end }}
+    - api.{{ .Values.domain }}
   http:
     - match:
         - uri:         
@@ -23,7 +19,7 @@ spec:
             exact: '/{{ .Release.Name }}'
       rewrite:
         uri: '/'
-        authority: {{ .Release.Name }}.{{ .Values.domain }}
+        authority: api.{{ .Values.domain }}
       route:
         - destination:
             host: istio-ingressgateway.istio-system.svc.cluster.local

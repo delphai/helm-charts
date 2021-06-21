@@ -24,7 +24,7 @@ spec:
         {{ if eq $.Values.delphaiEnvironment "common" }}
         authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
         {{ else if eq $.Values.delphaiEnvironment "hybrid" }}
-        authority: {{ .Release.Name }}.{{ .Release.Namespace }}
+        authority: machine-learning.{{ .Values.domain }}
         {{ end }}
       route:
         - destination:
