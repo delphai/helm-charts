@@ -11,7 +11,7 @@ spec:
   {{ if eq $.Values.delphaiEnvironment "common" }}
     - models.{{ .Values.domain }}
   {{ else if eq $.Values.delphaiEnvironment "hybrid" }}
-    - {{ .Release.Name }}.{{ .Values.domain }}
+    - ml.{{ .Values.domain }}
   {{ end }}
   http:
     - match:

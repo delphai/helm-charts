@@ -9,7 +9,7 @@ spec:
   gateways:
     - knative-serving/knative-ingress-gateway
   hosts: 
-    - {{ .Release.Name }}.{{ .Values.domain }}
+    - api.{{ .Values.domain }}
   http:
     - match:
         - uri:         
