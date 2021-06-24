@@ -513,6 +513,15 @@ entries:
     version: 0.1.2
   delphai-machine-learning:
   - apiVersion: v2
+    created: "2021-06-24T07:53:04.893450463Z"
+    description: delphai mashine larning deployment chart
+    digest: 9a3199094825de39a7112a42940ad6e2500da006d0c4bd1a5b957a5c81d9ba45
+    name: delphai-machine-learning
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-machine-learning-0.3.4/delphai-machine-learning-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
     created: "2021-06-23T12:45:49.89795319Z"
     description: delphai mashine larning deployment chart
     digest: f42df17c8143243c09424689f7dbc731612d23f7b7c00a30b708bc9dbe21ccaa
