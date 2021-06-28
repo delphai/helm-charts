@@ -19,7 +19,11 @@ spec:
             exact: '/{{ .Release.Name }}'
       rewrite:
         uri: '/'
+        {{ if eq $.Values.delphaiEnvironment "review" }}
+        authority: {{ .Release.Name }}.{{ .Values.domain }}
+        {{ else }}
         authority: {{ .Release.Name }}.{{ .Release.Namespace }}.internal
+        {{ end }}
       route:
         - destination:
             host: istio-ingressgateway.istio-system.svc.cluster.local

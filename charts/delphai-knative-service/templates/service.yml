@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    delphai-subdomain: api
+    delphai-subdomain: {{ .Release.Name }}
     'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'true'
 spec:
   template:
