@@ -19,7 +19,9 @@ spec:
     - host: {{ $.Values.subdomain }}.{{ $d }}
       http:
         paths:
-          - backend:
+          - path: /
+            pathType: Prefix
+            backend:
               service:
                 name: {{ $.Release.Name }}
                 port:
@@ -28,7 +30,9 @@ spec:
     - host: {{ $.Release.Name }}.{{ $d }}
       http:
         paths:
-          - backend:
+          - path: /
+            pathType: Prefix
+            backend:
               service:
                 name: {{ $.Release.Name }}
                 port:
@@ -41,7 +45,9 @@ spec:
     - host: {{ $.Values.subdomain }}.{{ .Values.domain }}
       http:
         paths:
-          - backend:
+          - path: /
+            pathType: Prefix
+            backend:
               service:
                 name: {{ $.Release.Name }}
                 port: 
@@ -50,7 +56,9 @@ spec:
     - host: {{ $.Release.Name }}.{{ .Values.domain }}
       http:
         paths:
-          - backend:
+          - path: /
+            pathType: Prefix
+            backend:
               service:
                 name: {{ $.Release.Name }}
                 port:
