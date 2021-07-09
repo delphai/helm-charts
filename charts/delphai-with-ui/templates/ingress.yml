@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    kubernetes.io/ingress.class: istio
+    kubernetes.io/ingress.class: contour-external
     {{ if eq $.Values.delphaiEnvironment "review" }}
     external-dns.alpha.kubernetes.io/hostname: {{ .Release.Name }}.{{ .Values.domain }}
     {{ else }}
