@@ -7,8 +7,6 @@ metadata:
     kubernetes.io/ingress.class: istio
     {{ if eq $.Values.delphaiEnvironment "review" }}
     external-dns.alpha.kubernetes.io/hostname: {{ .Release.Name }}.{{ .Values.domain }}
-    {{ else }}
-    external-dns.alpha.kubernetes.io/target: in.{{ .Values.domain }}
     {{ end }}
 spec:
   rules:
