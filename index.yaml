@@ -22,6 +22,16 @@ entries:
   delphai-knative:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-07-12T20:16:54.574514305Z"
+    description: delphai knative service
+    digest: 277aa747f62ddb8cf9cbd80f08c7337a6729dbd2f721499307b05eb6f4a798e3
+    name: delphai-knative
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-knative-0.2.3/delphai-knative-0.2.3.tgz
+    version: 0.2.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-07-12T09:33:25.17043562Z"
     description: delphai knative service
     digest: 426cb11314555fef0ec71677bc8335adbe02bd4c92b974143ccd18eb21d6033b
@@ -1069,6 +1079,16 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-scraping-0.0.1/delphai-scraping-0.0.1.tgz
     version: 0.0.1
   delphai-with-ui:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-07-12T20:16:54.758664037Z"
+    description: A Helm chart for Kubernetes
+    digest: bcbd1e44f092830ca02b3d0065463db682a6395e94a5e4112a5cf733a04a8250
+    name: delphai-with-ui
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-with-ui-0.1.27/delphai-with-ui-0.1.27.tgz
+    version: 0.1.27
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-07-09T10:49:28.273033952Z"
