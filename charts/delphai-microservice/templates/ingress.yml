@@ -25,12 +25,12 @@ spec:
             exact: '/{{ .Release.Name }}'
       rewrite:
         uri: '/'
-        authority: {{ .Release.Name }}.{{ .Values.domain }}
+        authority: {{ .Release.Name }}.{{ .Release.Namespace }}
       route:
         - destination:
-            host: {{ .Release.Name }}.{{ .Values.domain }}.svc.cluster.local
+            host: {{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local
             port:
-              number: 80
+              number: {{ .Values.httpPort }}
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
