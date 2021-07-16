@@ -28,7 +28,7 @@ spec:
         authority: {{ .Release.Name }}.{{ .Values.domain }}
       route:
         - destination:
-            host: {{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local
+            host: {{ .Release.Name }}.{{ .Values.domain }}.svc.cluster.local
             port:
               number: 80
 ---
