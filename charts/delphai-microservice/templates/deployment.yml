@@ -27,7 +27,7 @@ spec:
           {{- range $fileShare := .Values.fileShares }}  
         - name: {{ $fileShare }}
           azureFile:
-            secretName: azure-storage
+            secretName: azure-storage-common
             shareName: {{ $fileShare }}
             readOnly: true
           {{- end }}
