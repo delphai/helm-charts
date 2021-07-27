@@ -37,6 +37,8 @@ kind: VirtualService
 metadata:
   name: {{ .Release.Name }}-grpc-public
   namespace: {{ .Release.Namespace }}
+  annotations:
+    'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'false'
 spec:
   gateways:
     - istio-system/grpc-gateway
