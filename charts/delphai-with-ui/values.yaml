@@ -5,3 +5,7 @@ domains: ""
 replicas: 3
 delphaiEnvironment: development
 subdomain: sub
+limitsCpu: 1000m
+limitsMemory: 500Mi
+requestsCpu: 100m
+requestsMemory: 100Mi

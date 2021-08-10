@@ -16,6 +16,13 @@ spec:
         - name: acr-credentials
       containers:
         - image: {{ .Values.image }}
+          resources:
+            limits:
+              cpu: {{ .Values.limitsCpu }}
+              memory: {{ .Values.limitsMemory }}
+            requests:
+              cpu: {{ .Values.requestsCpu }}
+              memory: {{ .Values.requestsMemory }}
           name: {{ .Release.Name }}
           imagePullPolicy: Always
           env:
