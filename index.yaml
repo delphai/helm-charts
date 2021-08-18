@@ -1133,6 +1133,17 @@ entries:
     urls:
     - https://github.com/delphai/helm-charts/releases/download/delphai-scraping-0.0.1/delphai-scraping-0.0.1.tgz
     version: 0.0.1
+  delphai-streaming:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-08-18T21:56:25.439036853Z"
+    description: delphai streaming with faust
+    digest: efa3ac92146ccda16ca4681e312214ff5c4b6e94adea7d36f9e1f2ba3b89fb83
+    name: delphai-streaming
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-streaming-0.1.0/delphai-streaming-0.1.0.tgz
+    version: 0.1.0
   delphai-with-ui:
   - apiVersion: v2
     appVersion: 1.16.0
