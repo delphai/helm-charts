@@ -1,19 +1,21 @@
 nameOverride: bakdata-streams-app
 replicaCount: 1
-image: streamsApp
+image: delphai.azurecr.io/new-funding-pipeline
 imageTag: latest
 imagePullPolicy: Always
 configurationEnvPrefix: "APP"
+labels:
+  pipeline: funding
 resources:
+  limits:
+    cpu: 1
+    memory: 256Mi
   requests:
     cpu: 200m
-    memory: 300Mi
-  limits:
-    cpu: 500m
-    memory: 2G
+    memory: 256Mi
 streams:
-  brokers: "kafka-kafka-bootstrap.kafka:9092"
-  schemaRegistryUrl: "http://schema-registry-cp-schema-registry:8081"
+  brokers: kafka-kafka-brokers.kafka:9092
+  schemaRegistryUrl: http://schema-registry-cp-schema-registry.kafka:8081
   staticMembership: false
   config: {}
 #    max.poll.records: 500
@@ -46,14 +48,14 @@ jmx:
     - ".*"
 
 autoscaling:
-  enabled: false
+  enabled: true
   # consumergroup: foo
-  # lagThreshold: "1000"
+  lagThreshold: "1000"
   pollingInterval: 30
   cooldownPeriod: 300
   offsetResetPolicy: earliest
   minReplicas: 0
-  # maxReplicas: 50
+  maxReplicas: 1
   # idleReplicas: 0
   ## all topics from streams.inputTopics and streams.extraInputTopics are automatically taken, so
   ## only use the 'topics' option for adding more topics, e.g., internal topics
@@ -85,11 +87,10 @@ prometheus:
   ## JMX Exporter Configuration
   ## ref: https://github.com/prometheus/jmx_exporter
   jmx:
-    enabled: true
-    image: solsson/kafka-prometheus-jmx-exporter@sha256
-    imageTag: 6f82e2b0464f50da8104acd7363fb9b995001ddff77d248379f8788e78946143
-    port: 5556
-
+    enabled: false
+    # image: solsson/kafka-prometheus-jmx-exporter@sha256
+    # imageTag: 6f82e2b0464f50da8104acd7363fb9b995001ddff77d248379f8788e78946143
+    # port: 5556
     ## Resources configuration for the JMX exporter container.
     ## See the `resources` documentation above for details.
     resources:
