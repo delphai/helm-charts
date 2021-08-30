@@ -1,32 +1,19 @@
 #! /usr/bin/env bash
 set -e
-kubectx delphai-hybrid
 
-REPO_NAME=news-event-classification-bentoml
+REPO_NAME=company-scraper
+APP_NAME=company-scraper
+declare -a STEPS=("main" "find-domain" "crawl" "scrape-page")
+IMAGE="delphai.azurecr.io/company-scraper:latest"
 
-
-IMAGE="delphai.azurecr.io/news-event-classification-bentoml:master"
-
-kubectl create namespace ${REPO_NAME} --output yaml --dry-run=client | kubectl apply -f -
-kubectl patch serviceaccount default --namespace ${REPO_NAME} -p "{\"imagePullSecrets\": [{\"name\": \"acr-credentials\"}]}"
-helm upgrade --install \
-            --wait \
-            --namespace ${REPO_NAME} \
-            ${REPO_NAME} \
-            ./charts/delphai-machine-learning \
-            --set image=${IMAGE} \
-            --set domain=delphai.red \
-            --set delphaiEnvironment=hybrid\
-            --set httpPort=5000 \
-            --set minScale=1 \
-            --set concurrency=30
-
-# helm template --namespace ${REPO_NAME} \
-#             ${REPO_NAME} \
-#             ./charts/delphai-machine-learning \
-#             --set image=${REPO_NAME} \
-#             --set domain=delphai.red \
-#             --set delphaiEnvironment=hybrid\
-#             --set httpPort=5000 \
-#             --set minScale=1 \
-#             --set concurrency=30 > x.yml
+for STEP in "${STEPS[@]}"
+do
+  helm upgrade --install \
+              --wait \
+              --namespace ${REPO_NAME} \
+              ${REPO_NAME}-${STEP} \
+              ./charts/delphai-streaming \
+              --set image=${IMAGE} \
+              --set appName=${APP_NAME} \
+              --set step=${STEP}
+done

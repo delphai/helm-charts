@@ -1,123 +1,23 @@
-nameOverride: bakdata-streams-app
+appName: company-scraper
+step: main
+image: delphai.azurecr.io/company-scraper:latest
+delphaiEnvironment: development
 replicaCount: 1
-image: delphai.azurecr.io/new-funding-pipeline
-imageTag: latest
-imagePullPolicy: Always
-configurationEnvPrefix: "APP"
-labels:
-  pipeline: funding
 resources:
-  limits:
-    cpu: 1
-    memory: 256Mi
   requests:
     cpu: 200m
-    memory: 256Mi
-streams:
-  brokers: kafka-kafka-brokers.kafka:9092
-  schemaRegistryUrl: http://schema-registry-cp-schema-registry.kafka:8081
-  staticMembership: false
-  config: {}
-#    max.poll.records: 500
-#    Note that YAML may convert large integers to scientific notation. Use Strings to avoid this.
-#    max.request.size: "1000000"
-#  inputTopics:
-#  - input
-#  - input2
-#  outputTopic: output
-#  errorTopic: error
-#  productive: true
-#
-#commandLine:
-#  MY_CLI_PARAM: "foo-bar"
-#
-#debug: false
-#
-env:
-#  MY_ENV_VARIABLE: foo-bar
-#
-#secrets:
-#  MY_SECRET: fo-bar
-
-## Monitoring
-## Kafka Connect JMX Settings
-## ref: https://kafka.apache.org/documentation/#connect_monitoring
-jmx:
-  port: 5555
-  metricRules:
-    - ".*"
-
+    memory: 300Mi
+  limits:
+    cpu: 500m
+    memory: 2G
 autoscaling:
-  enabled: true
-  # consumergroup: foo
-  lagThreshold: "1000"
-  pollingInterval: 30
+  pollingInterval: 10
   cooldownPeriod: 300
-  offsetResetPolicy: earliest
   minReplicas: 0
-  maxReplicas: 1
-  # idleReplicas: 0
-  ## all topics from streams.inputTopics and streams.extraInputTopics are automatically taken, so
-  ## only use the 'topics' option for adding more topics, e.g., internal topics
-  # topics:
-  #   - bar
-  #   - baz
-
-# tolerations:
-#   - key: "foo"
-#     operator: "Exists"
-#     effect: "NoSchedule"
-#   - key: "bar"
-#     operator: "Exists"
-#     effect: "NoSchedule"
-
-annotations: {}
-#  MY_ANNOTATION: "foo-bar"
-
-statefulSet: false
-
-javaOptions:
-  maxRAMPercentage: 75
-  others: []
-#   - "-XX:MinRAMPercentage=50.0"
-
-## Prometheus Exporter Configuration
-## ref: https://prometheus.io/docs/instrumenting/exporters/
-prometheus:
-  ## JMX Exporter Configuration
-  ## ref: https://github.com/prometheus/jmx_exporter
-  jmx:
-    enabled: false
-    # image: solsson/kafka-prometheus-jmx-exporter@sha256
-    # imageTag: 6f82e2b0464f50da8104acd7363fb9b995001ddff77d248379f8788e78946143
-    # port: 5556
-    ## Resources configuration for the JMX exporter container.
-    ## See the `resources` documentation above for details.
-    resources:
-      requests:
-        cpu: 100m
-        memory: 500Mi
-      limits:
-        cpu: 300m
-        memory: 2G
-# priorityClass
-#priorityClassName: ""
-
-# nodeAffinity:
-#   requiredDuringSchedulingIgnoredDuringExecution:
-#     nodeSelectorTerms:
-#     - matchExpressions:
-#       - key: foo
-#         operator: In
-#         values:
-#         - bar
-#         - baz
-#   preferredDuringSchedulingIgnoredDuringExecution:
-#   - weight: 1
-#     preference:
-#       matchExpressions:
-#       - key: foo
-#         operator: In
-#         values:
-#         - bar
-#         - baz
+  maxReplicas: 50
+  idleReplicas: 0
+  offsetResetPolicy: earliest
+  lagThreshold: "1000"
+streams:
+  brokers: kafka-kafka-bootstrap.kafka:9092
+env: {}
