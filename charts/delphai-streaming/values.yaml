@@ -13,11 +13,11 @@ resources:
 autoscaling:
   pollingInterval: 10
   cooldownPeriod: 300
-  minReplicas: 0
+  minReplicas: 1
   maxReplicas: 50
   idleReplicas: 0
   offsetResetPolicy: earliest
-  lagThreshold: "1000"
+  lagThreshold: "10"
 streams:
   brokers: kafka-kafka-bootstrap.kafka:9092
 env: {}
