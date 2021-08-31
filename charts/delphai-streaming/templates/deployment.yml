@@ -1,48 +1,48 @@
+{{- range $.Values.steps }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
+  name: "{{ $.Release.Name }}-{{ . }}"
+  namespace: {{ $.Release.Namespace }}
   annotations:
-    consumerGroup: "{{ .Values.appName }}.{{ .Values.step }}"
+    consumerGroup: "{{ $.Release.Name }}.{{ . }}"
   labels:
-    app: {{ .Values.appName }}
-    release: {{ .Release.Name }}
+    app: {{ $.Release.Name }}
+    release: "{{ $.Release.Name }}-{{ . }}"
 spec:
-  serviceName: {{ .Release.Name }}
-  replicas: {{ .Values.replicaCount }}
+  serviceName: "{{ $.Release.Name }}-{{ . }}"
+  replicas: {{ $.Values.replicaCount }}
   podManagementPolicy: Parallel
   selector:
     matchLabels:
-      app: {{ .Values.appName }}
-      release: {{ .Release.Name }}
+      app: {{ $.Release.Name }}
+      release: "{{ $.Release.Name }}-{{ . }}"
   template:
     metadata:
       annotations:
-        consumerGroup: "{{ .Values.appName }}.{{ .Values.step }}"
+        consumerGroup: "{{ $.Release.Name }}.{{ . }}"
       labels:
-        app: {{ .Values.appName }}
-        release: {{ .Release.Name }}
+        app: {{ $.Release.Name }}
+        release: "{{ $.Release.Name }}-{{ . }}"
     spec:
       containers:
-        - name: {{ .Values.appName }}
-          image: {{ .Values.image }}
+        - name: {{ $.Release.Name }}
+          image: {{ $.Values.image }}
           imagePullPolicy: 
           command:
             - python
             - /app/src/main.py
             - start
             - --steps
-            - {{ .Values.step }}
+            - {{ . }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml $.Values.resources | indent 12 }}
           env:
             - name: DELPHAI_ENVIRONMENT
-              value: {{ .Values.delphaiEnvironment }}
-            {{- range $key, $value := .Values.env }}
+              value: {{ $.Values.delphaiEnvironment }}
+            {{- range $key, $value := $.Values.env }}
             - name: {{ $key | quote }}
               value: {{ $value | quote }}
             {{- end }}
-            
-
-      
+---
+{{- end }}

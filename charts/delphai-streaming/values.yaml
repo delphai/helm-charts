@@ -1,5 +1,5 @@
-appName: company-scraper
-step: main
+steps:
+  - main
 image: delphai.azurecr.io/company-scraper:latest
 delphaiEnvironment: development
 replicaCount: 1

@@ -1,23 +1,26 @@
+{{- range $.Values.steps }}
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
+  name: "{{ $.Release.Name }}-{{ . }}"
+  namespace: {{ $.Release.Namespace }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: StatefulSet
-    name: {{ .Release.Name }}
-  pollingInterval: {{ .Values.autoscaling.pollingInterval }}
-  cooldownPeriod:  {{ .Values.autoscaling.cooldownPeriod }}
-  minReplicaCount: {{ .Values.autoscaling.minReplicas }}
-  maxReplicaCount: {{ .Values.autoscaling.maxReplicas }}
-  idleReplicaCount: {{ .Values.autoscaling.idleReplicas }}
+    name: "{{ $.Release.Name }}-{{ . }}"
+  pollingInterval: {{ $.Values.autoscaling.pollingInterval }}
+  cooldownPeriod:  {{ $.Values.autoscaling.cooldownPeriod }}
+  minReplicaCount: {{ $.Values.autoscaling.minReplicas }}
+  maxReplicaCount: {{ $.Values.autoscaling.maxReplicas }}
+  idleReplicaCount: {{ $.Values.autoscaling.idleReplicas }}
   triggers:
     - type: kafka
       metadata:
-        bootstrapServers: {{ .Values.streams.brokers }}
-        consumerGroup:  "{{ .Values.appName }}.{{ .Values.step }}"
-        topic: "{{ .Values.appName }}.{{ .Values.step }}"
-        lagThreshold: {{ .Values.autoscaling.lagThreshold | quote }}
-        offsetResetPolicy: {{ .Values.autoscaling.offsetResetPolicy }}
+        bootstrapServers: {{ $.Values.streams.brokers }}
+        consumerGroup:  "{{ $.Release.Name }}.{{ . }}"
+        topic: "{{ $.Release.Name }}.{{ . }}"
+        lagThreshold: {{ $.Values.autoscaling.lagThreshold | quote }}
+        offsetResetPolicy: {{ $.Values.autoscaling.offsetResetPolicy }}
+---
+{{- end}}
