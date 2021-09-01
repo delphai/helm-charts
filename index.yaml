@@ -22,6 +22,16 @@ entries:
   delphai-knative:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-09-01T23:09:30.51724268Z"
+    description: delphai knative service
+    digest: 0409f1285bfc8b39de4bf06dd2999c65b1c021b6ade39e40ac212b917e5761c2
+    name: delphai-knative
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-knative-0.2.8/delphai-knative-0.2.8.tgz
+    version: 0.2.8
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-09-01T22:55:42.203722037Z"
     description: delphai knative service
     digest: 3ddae85f673cb3f445b18f62ec82dd9b32c05d487d00c84ae4b648afbbcc0330
@@ -191,6 +201,16 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-knative-0.1.0/delphai-knative-0.1.0.tgz
     version: 0.1.0
   delphai-knative-service:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-09-01T23:09:30.707173484Z"
+    description: delphai knative service
+    digest: 15e87dca58a9cc80da39c11ba63ae3ba1a2e19f17181071cae3d417760fc7243
+    name: delphai-knative-service
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-knative-service-0.1.58/delphai-knative-service-0.1.58.tgz
+    version: 0.1.58
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-09-01T22:46:20.068992286Z"
@@ -603,6 +623,15 @@ entries:
     version: 0.1.2
   delphai-machine-learning:
   - apiVersion: v2
+    created: "2021-09-01T23:09:30.881574074Z"
+    description: delphai mashine larning deployment chart
+    digest: 3ec8d59de3a64224926f441efd49a11aaa4060852e4868fb5d66410b645ede5d
+    name: delphai-machine-learning
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-machine-learning-0.3.6/delphai-machine-learning-0.3.6.tgz
+    version: 0.3.6
+  - apiVersion: v2
     created: "2021-09-01T22:27:53.127753625Z"
     description: delphai mashine larning deployment chart
     digest: 1973c6d33a4b656fd4ba4c88fdaa3f164d4736e2fcd0ce333f8c10cfa86757c5
@@ -784,6 +813,15 @@ entries:
     version: 0.1.5
   delphai-machine-learning-for-training:
   - apiVersion: v2
+    created: "2021-09-01T23:09:31.061974508Z"
+    description: delphai mashine larning deployment chart to train models
+    digest: 8bf12addc719b7557e437f7e1c39c9b899db9e1d7a4bbf76108888231f07ad40
+    name: delphai-machine-learning-for-training
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-machine-learning-for-training-0.1.2/delphai-machine-learning-for-training-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     created: "2021-09-01T22:27:53.231453299Z"
     description: delphai mashine larning deployment chart to train models
     digest: 516371e3a944156951595e1ce813f84e62158bd6c480c530e9b89fcae3173a00
@@ -839,6 +877,15 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-mashine-learning-0.1.0/delphai-mashine-learning-0.1.0.tgz
     version: 0.1.0
   delphai-microservice:
+  - apiVersion: v2
+    created: "2021-09-01T23:09:31.241673737Z"
+    description: delphai microservice
+    digest: 04361bb333493721b5386bf28a6ca5519831a81e449a0db24d06c93c21fd32df
+    name: delphai-microservice
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-microservice-0.1.44/delphai-microservice-0.1.44.tgz
+    version: 0.1.44
   - apiVersion: v2
     created: "2021-09-01T22:27:53.372119437Z"
     description: delphai microservice
@@ -1211,6 +1258,16 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-scraping-0.0.1/delphai-scraping-0.0.1.tgz
     version: 0.0.1
   delphai-streaming:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-09-01T23:09:31.437455284Z"
+    description: delphai streaming with faust
+    digest: 7b820ba5c42d7a1093c8b382f9e4d79650808c529b1a126fb6de5f1f50fa3f53
+    name: delphai-streaming
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-streaming-0.1.7/delphai-streaming-0.1.7.tgz
+    version: 0.1.7
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-09-01T22:27:53.479856847Z"
