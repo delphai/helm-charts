@@ -12,6 +12,7 @@ spec:
       annotations:
         autoscaling.knative.dev/target: '{{ .Values.concurrency }}'
         autoscaling.knative.dev/minScale: '{{ .Values.minScale }}'
+        'prometheus.io/port': '9090'
     spec:
       containers:
         - image: {{ .Values.image }}
@@ -34,6 +35,7 @@ spec:
       annotations:
         autoscaling.knative.dev/target: '{{ .Values.concurrency }}'
         autoscaling.knative.dev/minScale: '{{ .Values.minScale }}'
+        'prometheus.io/port': '9090'
     spec:
       timeoutSeconds: 600
       containers:
