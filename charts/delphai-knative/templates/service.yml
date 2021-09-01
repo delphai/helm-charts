@@ -13,6 +13,7 @@ spec:
         'autoscaling.knative.dev/target': '{{ .Values.concurrency }}'
         'autoscaling.knative.dev/minScale': '{{ .Values.minScale }}'
         'prometheus.io/port': '9090'
+        'prometheus.io/scrape': 'true'
     spec:
       containers:
         - image: {{ .Values.image }}
@@ -47,6 +48,7 @@ spec:
         'autoscaling.knative.dev/target': '{{ .Values.concurrency }}'
         'autoscaling.knative.dev/minScale': '{{ .Values.minScale }}'
         'prometheus.io/port': '9090'
+        'prometheus.io/scrape': 'true'
     spec:
       containers:
         - image: {{ .Values.image }}
@@ -83,6 +85,7 @@ spec:
         'autoscaling.knative.dev/target': '{{ .Values.concurrency }}'
         'autoscaling.knative.dev/minScale': '{{ .Values.minScale }}'
         'prometheus.io/port': '9090'
+        'prometheus.io/scrape': 'true'
     spec:
       containers:
         - image: {{ .Values.image }}
