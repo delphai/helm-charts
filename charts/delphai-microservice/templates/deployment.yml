@@ -19,7 +19,8 @@ spec:
       labels:
         app: {{ .Release.Name }}
       annotations:
-        'prometheus.io/port': '9090'
+        'prometheus.io/port': '9191'
+        'prometheus.io/scrape': 'true'
     spec:
       imagePullSecrets:
         - name: acr-credentials
