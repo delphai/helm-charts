@@ -21,6 +21,7 @@ spec:
     metadata:
       annotations:
         consumerGroup: "{{ $.Release.Name }}.{{ . }}"
+        'prometheus.io/port': '9090'
       labels:
         app: {{ $.Release.Name }}
         release: "{{ $.Release.Name }}-{{ . }}"

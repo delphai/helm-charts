@@ -11,6 +11,8 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
+      annotations:
+        'prometheus.io/port': '9090'
     spec:
       containers:
       - name: {{ .Release.Name }}

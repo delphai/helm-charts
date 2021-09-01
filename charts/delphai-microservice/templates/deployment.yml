@@ -18,6 +18,8 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
+      annotations:
+        'prometheus.io/port': '9090'
     spec:
       imagePullSecrets:
         - name: acr-credentials
