@@ -17,7 +17,7 @@ autoscaling:
   maxReplicas: 50
   idleReplicas: 0
   offsetResetPolicy: earliest
-  lagThreshold: "100"
+  lagThreshold: "30"
 streams:
   brokers: kafka-kafka-bootstrap.kafka:9092
 env: {}
