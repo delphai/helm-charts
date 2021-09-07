@@ -25,4 +25,4 @@ spec:
         offsetResetPolicy: {{ $.Values.autoscaling.offsetResetPolicy }}
 ---
 {{- end }}
-{{- end}}
+{{- end }}
