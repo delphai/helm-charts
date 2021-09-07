@@ -1,5 +1,5 @@
 {{- range $.Values.steps }}
-{{- ne . "main" }}
+{{- if ne . "main" }}
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
