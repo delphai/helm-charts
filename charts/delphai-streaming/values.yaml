@@ -15,7 +15,7 @@ autoscaling:
   cooldownPeriod: 60
   minReplicas: 1
   maxReplicas: 50
-  idleReplicas: 1
+  idleReplicas: 0
   offsetResetPolicy: earliest
   lagThreshold: "30"
 streams:
