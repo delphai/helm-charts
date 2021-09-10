@@ -1260,6 +1260,16 @@ entries:
   delphai-streaming:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-09-10T06:29:58.940458849Z"
+    description: delphai streaming with faust
+    digest: 524c207629c28ad51626dd763181029f89df302c8be147f1e160a649eb691d9d
+    name: delphai-streaming
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-streaming-0.1.20/delphai-streaming-0.1.20.tgz
+    version: 0.1.20
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-09-10T02:08:05.915085218Z"
     description: delphai streaming with faust
     digest: 21489156f17ffac089a37222aa337a86b57b9209a80114528f9ea46c27b6d0c2
