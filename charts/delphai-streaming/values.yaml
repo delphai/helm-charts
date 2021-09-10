@@ -1,5 +1,3 @@
-steps:
-  - main
 image: delphai.azurecr.io/company-scraper:latest
 delphaiEnvironment: development
 replicaCount: 1
@@ -10,14 +8,15 @@ resources:
   limits:
     cpu: 500m
     memory: 2G
-autoscaling:
-  pollingInterval: 10
-  cooldownPeriod: 60
-  minReplicas: 4
-  maxReplicas: 128
-  idleReplicas: 0
-  offsetResetPolicy: earliest
-  lagThreshold: "50"
+steps: []
+#   - name: main
+#     pollingInterval: 10
+#     cooldownPeriod: 60
+#     minReplicas: 4
+#     maxReplicas: 128
+#     idleReplicas: 0
+#     offsetResetPolicy: earliest
+#     lagThreshold: "50"
 streams:
   brokers: kafka-kafka-bootstrap.kafka:9092
 env: {}

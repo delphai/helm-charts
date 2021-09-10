@@ -2,31 +2,31 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: "{{ $.Release.Name }}-{{ . }}"
+  name: "{{ $.Release.Name }}-{{ .name }}"
   namespace: {{ $.Release.Namespace }}
   annotations:
-    consumerGroup: "{{ $.Release.Name }}.{{ . }}"
+    consumerGroup: "{{ $.Release.Name }}.{{ .name }}"
   labels:
     app: {{ $.Release.Name }}
-    release: "{{ $.Release.Name }}-{{ . }}"
+    release: "{{ $.Release.Name }}-{{ .name }}"
     pipeline: {{ $.Release.Name }}
 spec:
-  serviceName: "{{ $.Release.Name }}-{{ . }}"
+  serviceName: "{{ $.Release.Name }}-{{ .name }}"
   replicas: {{ $.Values.replicaCount }}
   podManagementPolicy: Parallel
   selector:
     matchLabels:
       app: {{ $.Release.Name }}
-      release: "{{ $.Release.Name }}-{{ . }}"
+      release: "{{ $.Release.Name }}-{{ .name }}"
   template:
     metadata:
       annotations:
-        consumerGroup: "{{ $.Release.Name }}.{{ . }}"
+        consumerGroup: "{{ $.Release.Name }}.{{ .name }}"
         'prometheus.io/port': '9191'
         'prometheus.io/scrape': 'true'
       labels:
         app: {{ $.Release.Name }}
-        release: "{{ $.Release.Name }}-{{ . }}"
+        release: "{{ $.Release.Name }}-{{ .name }}"
         pipeline: {{ $.Release.Name }}
     spec:
       containers:
@@ -38,7 +38,7 @@ spec:
             - /app/src/main.py
             - start
             - --steps
-            - {{ . }}
+            - {{ .name }}
           resources:
 {{ toYaml $.Values.resources | indent 12 }}
           env:
