@@ -14,7 +14,7 @@ autoscaling:
   pollingInterval: 10
   cooldownPeriod: 60
   minReplicas: 4
-  maxReplicas: 50
+  maxReplicas: 128
   idleReplicas: 0
   offsetResetPolicy: earliest
   lagThreshold: "50"
