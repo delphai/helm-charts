@@ -4,9 +4,6 @@ image: delphai.azurecr.io/company-scraper:latest
 delphaiEnvironment: development
 replicaCount: 1
 resources:
-  requests:
-    cpu: 200m
-    memory: 300Mi
   limits:
     cpu: 500m
     memory: 2G
