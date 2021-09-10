@@ -9,6 +9,7 @@ metadata:
   labels:
     app: {{ $.Release.Name }}
     release: "{{ $.Release.Name }}-{{ . }}"
+    pipeline: {{ $.Release.Name }}
 spec:
   serviceName: "{{ $.Release.Name }}-{{ . }}"
   replicas: {{ $.Values.replicaCount }}
@@ -26,6 +27,7 @@ spec:
       labels:
         app: {{ $.Release.Name }}
         release: "{{ $.Release.Name }}-{{ . }}"
+        pipeline: {{ $.Release.Name }}
     spec:
       containers:
         - name: {{ $.Release.Name }}
