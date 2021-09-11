@@ -1,5 +1,4 @@
 {{- range $.Values.steps }}
-{{- if ne .name "main" }}
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
@@ -24,5 +23,4 @@ spec:
         lagThreshold: {{ .lagThreshold | quote }}
         offsetResetPolicy: {{ .offsetResetPolicy }}
 ---
-{{- end }}
 {{- end }}
