@@ -15,14 +15,19 @@ spec:
         'prometheus.io/port': '9191'
         'prometheus.io/scrape': 'true'
     spec:
+      tolerations:
+        - key: "kubernetes.azure.com/scalesetpriority"
+          operator: "Equal"
+          value: "spot"
+          effect: "NoSchedule"
       containers:
-      - name: {{ .Release.Name }}
-        image: {{ .Values.image }}
-        imagePullPolicy: Always
-        {{ if .Values.gpu }}
-        resources:
-          limits:
-           nvidia.com/gpu: {{ .Values.gpu_units }}
-        {{ end }}
+        - name: {{ .Release.Name }}
+          image: {{ .Values.image }}
+          imagePullPolicy: Always
+          {{ if .Values.gpu }}
+          resources:
+            limits:
+            nvidia.com/gpu: {{ .Values.gpu_units }}
+          {{ end }}
       restartPolicy: OnFailure      
 {{ end }}

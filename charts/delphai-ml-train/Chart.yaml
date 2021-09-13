@@ -2,4 +2,4 @@ apiVersion: v2
 name: delphai-machine-learning-for-training
 description: delphai mashine larning deployment chart to train models
 type: application
-version: 0.1.2
+version: 0.1.3

@@ -14,7 +14,13 @@ spec:
         'autoscaling.knative.dev/minScale': '{{ .Values.minScale }}'
         'prometheus.io/port': '9191'
         'prometheus.io/scrape': 'true'
+      
     spec:
+      tolerations:
+        - key: "kubernetes.azure.com/scalesetpriority"
+          operator: "Equal"
+          value: "spot"
+          effect: "NoSchedule"
       containers:
         - image: {{ .Values.image }}
           imagePullPolicy: Always
@@ -50,6 +56,11 @@ spec:
         'prometheus.io/port': '9191'
         'prometheus.io/scrape': 'true'
     spec:
+      tolerations:
+        - key: "kubernetes.azure.com/scalesetpriority"
+          operator: "Equal"
+          value: "spot"
+          effect: "NoSchedule"
       containers:
         - image: {{ .Values.image }}
           imagePullPolicy: Always
@@ -87,6 +98,11 @@ spec:
         'prometheus.io/port': '9191'
         'prometheus.io/scrape': 'true'
     spec:
+      tolerations:
+        - key: "kubernetes.azure.com/scalesetpriority"
+          operator: "Equal"
+          value: "spot"
+          effect: "NoSchedule"
       containers:
         - image: {{ .Values.image }}
           imagePullPolicy: Always
