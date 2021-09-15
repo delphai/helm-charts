@@ -1,0 +1,53 @@
+{{ if and (eq .Values.http.enabled true) (eq .Values.http.public true) }}
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  prefix: /{{ .Release.Name }}/
+  service: '{{ .Release.Name }}:{{ .Values.http.port }}'
+  host: api.{{ .Values.domain }}
+---
+{{ end }}
+{{ if and (eq .Values.grpc.enabled true) (eq .Values.grpc.public true) }}
+apiVersion: getambassador.io/v2
+kind: Host
+metadata:
+  name: {{ .Release.Name }}
+  name: {{ .Release.Namespace }}
+spec:
+  hostname: '{{ .Release.Name }}.grpc.{{ .Values.domain }}'
+  acmeProvider:
+    authority: none
+  requestPolicy:
+    insecure:
+      action: Route
+---
+{{ range .Values.grpc.services }}
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: {{ $.Release.Name }}-grpc-{{ . | kebabcase | replace "." "-" }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  grpc: true
+  host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
+  prefix: /{{ . }}/
+  rewrite: /{{ . }}/
+  service: '{{ $.Release.Name }}:{{ $.Values.grpc.port }}'
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: {{ $.Release.Name }}-grpc-web-{{ . | kebabcase | replace "." "-" }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  grpc: true
+  host: 'grpc.{{ $.Values.domain }}'
+  prefix: /{{ $.Release.Name }}/{{ . }}/
+  rewrite: /{{ . }}/
+  service: '{{ $.Release.Name }}:{{ $.Values.grpc.port }}'
+---
+{{ end }}
+{{ end }}

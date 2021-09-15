@@ -31,8 +31,10 @@ spec:
         - name: acr-credentials
       automountServiceAccountToken: true
       containers:
-        - imagePullPolicy: Always
-          image: {{ .Values.image }}
+        - image: {{ .Values.image }}
+          resources:
+{{ toYaml $.Values.resources | indent 12 }}
+          imagePullPolicy: Always
           name: {{ .Release.Name }}
           env:
             - name: DELPHAI_ENVIRONMENT
