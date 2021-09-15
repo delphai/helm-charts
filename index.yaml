@@ -1333,6 +1333,17 @@ entries:
     urls:
     - https://github.com/delphai/helm-charts/releases/download/delphai-scraping-0.0.1/delphai-scraping-0.0.1.tgz
     version: 0.0.1
+  delphai-service:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-09-15T01:08:44.2288166Z"
+    description: delphai service
+    digest: 44fbf61ddf03bed50167f049d9be98551980f8b4b9d7d4014ad50e553b1ea8f8
+    name: delphai-service
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-service-0.1.21/delphai-service-0.1.21.tgz
+    version: 0.1.21
   delphai-streaming:
   - apiVersion: v2
     appVersion: 1.16.0
