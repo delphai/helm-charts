@@ -2,13 +2,18 @@ image: delphai.azurecr.io/projects:latest
 domain: delphai.black
 minReplicas: 1
 delphaiEnvironment: development
+autoscaling:
+  enabled: true
+  pollingInterval: 30
+  cooldownPeriod: 30
+  idleReplicaCount: 0
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  threshold: 100
 resources:
   limits:
-    cpu: 200m
-    memory: 512Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 300m
+    memory: 1Gi
 http:
   enabled: true
   port: 7070
