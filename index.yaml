@@ -19,6 +19,17 @@ entries:
     urls:
     - https://github.com/delphai/helm-charts/releases/download/delphai-grpc-service-0.1.2/delphai-grpc-service-0.1.2.tgz
     version: 0.1.2
+  delphai-keda:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-09-15T01:49:32.129248359Z"
+    description: delphai service
+    digest: 4e715382b122977d6fcfbe59cb5c6f61eec96806cac990833a5d7c53818e0f62
+    name: delphai-keda
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-keda-0.1.22/delphai-keda-0.1.22.tgz
+    version: 0.1.22
   delphai-knative:
   - apiVersion: v2
     appVersion: 1.16.0
