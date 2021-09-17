@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    kubernetes.io/ingress.class: istio
+    kubernetes.io/ingress.class: ambassador
 spec:
   rules:
   
