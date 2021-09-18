@@ -22,6 +22,16 @@ entries:
   delphai-keda:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-09-18T04:42:36.103338801Z"
+    description: delphai service
+    digest: ae83c11cb6dc95278474a595bb802d370d10f3da38d70f0c9271154a0a6dfd0b
+    name: delphai-keda
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-keda-0.1.24/delphai-keda-0.1.24.tgz
+    version: 0.1.24
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-09-18T00:49:30.591112778Z"
     description: delphai service
     digest: 6e01d5b579a453fcb94f6a8988d21673542400518a3ed43efe40a36178a9996f
@@ -1366,6 +1376,16 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-service-0.1.21/delphai-service-0.1.21.tgz
     version: 0.1.21
   delphai-streaming:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-09-18T04:42:36.225514767Z"
+    description: delphai streaming with faust
+    digest: 92ae3ad8fd015c66c0fd94df96d3e9d77fca81c2f1b7580bd8042cdb3542d609
+    name: delphai-streaming
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-streaming-0.1.27/delphai-streaming-0.1.27.tgz
+    version: 0.1.27
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-09-13T00:14:41.325678517Z"
