@@ -10,10 +10,7 @@ autoscaling:
   minReplicaCount: 1
   maxReplicaCount: 10
   threshold: 100
-resources:
-  limits:
-    cpu: 300m
-    memory: 1Gi
+resources: {}
 http:
   enabled: true
   port: 7070
