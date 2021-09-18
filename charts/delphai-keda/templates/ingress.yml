@@ -15,7 +15,7 @@ apiVersion: getambassador.io/v2
 kind: Host
 metadata:
   name: {{ .Release.Name }}
-  name: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   hostname: '{{ .Release.Name }}.grpc.{{ .Values.domain }}'
   acmeProvider:
