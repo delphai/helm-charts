@@ -24,7 +24,7 @@ spec:
     app: {{ .Release.Name }}
   ports:
     - name: grpc-port
-      port: {{ .Values.grpc.port }}-grpc
+      port: {{ .Values.grpc.port }}
       targetPort: {{ .Values.grpc.port }}
 ---
 {{ end }}
