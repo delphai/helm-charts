@@ -37,30 +37,11 @@ spec:
   rewrite: /{{ . }}/
   service: '{{ $.Release.Name }}-grpc:80'
   cors:
-    origins:
-      - "*"
-    methods:
-      - GET
-      - PUT
-      - DELETE
-      - POST
-      - OPTIONS
-    headers:
-      - keep-alive
-      - user-agent
-      - cache-control
-      - content-type
-      - requested-status
-      - content-transfer-encoding
-      - x-accept-content-transfer-encoding
-      - x-accept-response-streaming
-      - access-control-request-headers
-      - x-user-agent
-      - x-grpc-web
-    exposed_headers:
-      - grpc-status
-      - grpc-message
-    max_age: "86400"
+    origins: '*'
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
+    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN"
+    credentials: true
+    max_age: 86400
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -74,30 +55,11 @@ spec:
   rewrite: /{{ . }}/
   service: '{{ $.Release.Name }}-grpc:80'
   cors:
-    origins:
-      - "*"
-    methods:
-      - GET
-      - PUT
-      - DELETE
-      - POST
-      - OPTIONS
-    headers:
-      - keep-alive
-      - user-agent
-      - cache-control
-      - content-type
-      - requested-status
-      - content-transfer-encoding
-      - x-accept-content-transfer-encoding
-      - x-accept-response-streaming
-      - access-control-request-headers
-      - x-user-agent
-      - x-grpc-web
-    exposed_headers:
-      - grpc-status
-      - grpc-message
-    max_age: "86400"
+    origins: '*'
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
+    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN"
+    credentials: true
+    max_age: 86400
 ---
 {{ end }}
 {{ end }}
