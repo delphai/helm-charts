@@ -41,7 +41,7 @@ spec:
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN"
     credentials: true
-    max_age: 86400
+    max_age: "86400"
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -59,7 +59,7 @@ spec:
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN"
     credentials: true
-    max_age: 86400
+    max_age: "86400"
 ---
 {{ end }}
 {{ end }}
