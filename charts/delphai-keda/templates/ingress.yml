@@ -35,7 +35,7 @@ spec:
   host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
   prefix: /{{ . }}/
   rewrite: /{{ . }}/
-  service: '{{ $.Release.Name }}:{{ $.Values.grpc.port }}'
+  service: '{{ $.Release.Name }}-grpc:{{ $.Values.grpc.port }}'
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -47,7 +47,7 @@ spec:
   host: 'grpc.{{ $.Values.domain }}'
   prefix: /{{ $.Release.Name }}/{{ . }}/
   rewrite: /{{ . }}/
-  service: '{{ $.Release.Name }}:{{ $.Values.grpc.port }}'
+  service: '{{ $.Release.Name }}-grpc:{{ $.Values.grpc.port }}'
 ---
 {{ end }}
 {{ end }}

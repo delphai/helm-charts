@@ -1,3 +1,4 @@
+{{ if .Values.http.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,14 +8,23 @@ spec:
   selector:
     app: {{ .Release.Name }}
   ports:
-    {{ if .Values.http.enabled }}
     - name: http
       port: {{ .Values.http.port }}
       targetPort: {{ .Values.http.port }}
-    {{ end }}
-    {{ if .Values.grpc.enabled }}
+---
+{{ end }}
+{{ if .Values.grpc.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-grpc
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: {{ .Release.Name }}
+  ports:
     - name: grpc-port
-      protocol: TCP
-      port: {{ .Values.grpc.port }}
+      port: {{ .Values.grpc.port }}-grpc
       targetPort: {{ .Values.grpc.port }}
-    {{ end }}
+---
+{{ end }}
