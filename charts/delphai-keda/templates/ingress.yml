@@ -39,7 +39,7 @@ spec:
   cors:
     origins: '*'
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
-    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN"
+    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web"
     credentials: true
     max_age: "86400"
 ---
@@ -57,7 +57,7 @@ spec:
   cors:
     origins: '*'
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
-    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN"
+    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web"
     credentials: true
     max_age: "86400"
 ---
