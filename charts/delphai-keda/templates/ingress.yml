@@ -8,6 +8,8 @@ spec:
   prefix: /{{ .Release.Name }}/
   service: '{{ .Release.Name }}:{{ .Values.http.port }}'
   host: {{ .Values.subdomain }}.{{ .Values.domain }}
+  allow_upgrade:
+    - websocket
 ---
 {{ end }}
 {{ if and (eq .Values.grpc.enabled true) (eq .Values.grpc.public true) }}
