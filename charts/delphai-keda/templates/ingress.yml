@@ -5,7 +5,11 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
+  {{ if .Values.subdomain }}
+  prefix: /
+  {{ else }}
   prefix: /{{ .Release.Name }}/
+  {{ end }}
   service: '{{ .Release.Name }}:{{ .Values.http.port }}'
   host: {{ .Values.subdomain }}.{{ .Values.domain }}
   allow_upgrade:
