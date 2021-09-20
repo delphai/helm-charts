@@ -5,7 +5,7 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  {{ if (ne .Values.subdomain "api")) }}
+  {{ if (ne .Values.subdomain "api") }}
   prefix: /
   {{ else }}
   prefix: /{{ .Release.Name }}/
