@@ -19,6 +19,17 @@ entries:
     urls:
     - https://github.com/delphai/helm-charts/releases/download/delphai-grpc-service-0.1.2/delphai-grpc-service-0.1.2.tgz
     version: 0.1.2
+  delphai-job:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-09-20T01:30:51.821609299Z"
+    description: delphai job
+    digest: 82e27f50b301d198c09bde5afc87cda117505f320488ac06fd1b2e1d5052b419
+    name: delphai-job
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-job-0.1.0/delphai-job-0.1.0.tgz
+    version: 0.1.0
   delphai-keda:
   - apiVersion: v2
     appVersion: 1.16.0
