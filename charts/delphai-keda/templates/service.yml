@@ -4,6 +4,10 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
+  {{ if .Values.subdomain }}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "{{ .Values.subdomain }}.{{ .Values.domain }}"
+  {{ end }}
 spec:
   selector:
     app: {{ .Release.Name }}
