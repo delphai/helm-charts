@@ -7,6 +7,7 @@ metadata:
   {{ if .Values.subdomain }}
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "{{ .Values.subdomain }}.{{ .Values.domain }}"
+    external-dns.alpha.kubernetes.io/target: api.{{ .Values.domain }}
   {{ end }}
 spec:
   selector:
