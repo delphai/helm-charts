@@ -2,6 +2,7 @@ image: delphai.azurecr.io/projects:latest
 domain: delphai.black
 minReplicas: 1
 delphaiEnvironment: development
+subdomain: api
 autoscaling:
   enabled: true
   pollingInterval: 30
