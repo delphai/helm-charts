@@ -1,0 +1,5 @@
+image: delphai.azurecr.io/projects:latest
+delphaiEnvironment: development
+autoscaling:
+  parallelism: 30
+  pollingInterval: 10

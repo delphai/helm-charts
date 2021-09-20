@@ -1,0 +1,37 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  jobTargetRef:
+    parallelism: {{ .Values.autoscaling.parallelism }}
+    completions: 1
+    activeDeadlineSeconds: 600
+    backoffLimit: 3
+    template:
+      spec:
+        containers:
+          - name: {{ .Release.Name }}
+            image: {{ .Values.image }}
+            env:
+              - name: DELPHAI_ENVIRONMENT
+                value: {{ .Values.delphaiEnvironment }}
+              - name: AZURE_STORAGE_CONNECTION_STRING
+                valueFrom:
+                  secretKeyRef:
+                    name: azure-storage
+                    key: connection-string
+
+  pollingInterval: {{ .Values.autoscaling.pollingInterval }}
+  successfulJobsHistoryLimit: 50
+  failedJobsHistoryLimit: 50
+  maxReplicaCount: {{ .Values.autoscaling.parallelism }}
+  scalingStrategy:
+    strategy: default
+  triggers:
+    - type: azure-queue
+      metadata:
+        queueName: {{ .Release.Name }}
+        queueLength: "10"
+        connectionFromEnv: AZURE_STORAGE_CONNECTION_STRING
