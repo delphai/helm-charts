@@ -3,3 +3,4 @@ delphaiEnvironment: development
 autoscaling:
   parallelism: 30
   pollingInterval: 10
+  queueLength: 1

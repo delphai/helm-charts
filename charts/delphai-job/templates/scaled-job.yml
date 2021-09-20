@@ -34,5 +34,5 @@ spec:
     - type: azure-queue
       metadata:
         queueName: {{ .Release.Name }}
-        queueLength: "10"
+        queueLength: "{{ .Values.autoscaling.queueLength }}"
         connectionFromEnv: AZURE_STORAGE_CONNECTION_STRING
