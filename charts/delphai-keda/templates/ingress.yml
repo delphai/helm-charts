@@ -21,6 +21,8 @@ kind: Host
 metadata:
   name: {{ .Release.Name }}-http
   namespace: {{ .Release.Namespace }}
+  annotations:
+    external-dns.ambassador-service: ambassador/ambassador
 spec:
   hostname: '{{ .Release.Name }}.{{ .Values.domain }}'
   acmeProvider:
