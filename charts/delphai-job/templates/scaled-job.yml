@@ -7,8 +7,8 @@ spec:
   jobTargetRef:
     parallelism: {{ .Values.autoscaling.parallelism }}
     completions: 1
-    activeDeadlineSeconds: 600
-    backoffLimit: 3
+    activeDeadlineSeconds: {{ .Values.deadline }}
+    backoffLimit: {{ .Values.retries }}
     template:
       spec:
         containers:

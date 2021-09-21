@@ -1,5 +1,7 @@
 image: delphai.azurecr.io/projects:latest
 delphaiEnvironment: development
+retries: 3
+deadline: 600
 autoscaling:
   parallelism: 30
   pollingInterval: 10
