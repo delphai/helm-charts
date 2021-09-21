@@ -24,7 +24,7 @@ metadata:
   annotations:
     external-dns.ambassador-service: ambassador/ambassador
 spec:
-  hostname: '{{ .Release.Name }}.{{ .Values.domain }}'
+  hostname: '{{ .Values.subdomain }}.{{ .Values.domain }}'
   acmeProvider:
     authority: none
   requestPolicy:
@@ -64,7 +64,7 @@ spec:
   cors:
     origins: '*'
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
-    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web"
+    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
 ---
@@ -82,7 +82,7 @@ spec:
   cors:
     origins: '*'
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
-    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web"
+    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
 ---
