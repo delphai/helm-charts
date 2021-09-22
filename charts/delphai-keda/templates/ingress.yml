@@ -5,7 +5,7 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  {{ if ne .Values.subdomain "api" }}
+  {{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
   prefix: /
   {{ else }}
   prefix: /{{ .Release.Name }}/
@@ -15,7 +15,7 @@ spec:
   allow_upgrade:
     - websocket
 ---
-{{ if ne .Values.subdomain "api" }}
+{{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
 apiVersion: getambassador.io/v2
 kind: Host
 metadata:
