@@ -17,5 +17,5 @@ spec:
       serverAddress: http://loki-prometheus-server.monitoring
       metricName: delphai_requests_per_sec
       threshold: '{{ .Values.autoscaling.threshold }}'
-      query: sum(delphai_request_count_total{app="{{ .Release.Name }}"})
+      query: sum(rate(delphai_request_count_total{app="{{ .Release.Name }}"}[2m]))
 {{ end }}
