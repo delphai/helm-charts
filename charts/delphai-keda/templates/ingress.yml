@@ -87,4 +87,40 @@ spec:
     max_age: "86400"
 ---
 {{ end }}
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: {{ $.Release.Name }}-grpc-reflection
+  namespace: {{ $.Release.Namespace }}
+spec:
+  grpc: true
+  host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
+  prefix: /grpc.reflection.v1alpha.ServerReflection/
+  rewrite: /grpc.reflection.v1alpha.ServerReflection/
+  service: '{{ $.Release.Name }}-grpc:80'
+  cors:
+    origins: '*'
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
+    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
+    credentials: true
+    max_age: "86400"
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: {{ $.Release.Name }}-grpc-health
+  namespace: {{ $.Release.Namespace }}
+spec:
+  grpc: true
+  host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
+  prefix: /grpc.health.v1.Health/
+  rewrite: /grpc.health.v1.Health/
+  service: '{{ $.Release.Name }}-grpc:80'
+  cors:
+    origins: '*'
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
+    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
+    credentials: true
+    max_age: "86400"
+---
 {{ end }}
