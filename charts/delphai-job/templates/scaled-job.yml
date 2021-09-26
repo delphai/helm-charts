@@ -11,6 +11,11 @@ spec:
     backoffLimit: {{ .Values.retries }}
     template:
       spec:
+        tolerations:
+          - key: "kubernetes.azure.com/scalesetpriority"
+            operator: "Equal"
+            value: "spot"
+            effect: "NoSchedule"
         containers:
           - name: {{ .Release.Name }}
             image: {{ .Values.image }}
