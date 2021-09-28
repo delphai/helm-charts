@@ -22,3 +22,4 @@ grpc:
   public: true
   services:
     - delphai.projects.Projects
+env: []
