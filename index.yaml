@@ -22,6 +22,16 @@ entries:
   delphai-job:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-09-28T22:09:35.202908741Z"
+    description: delphai job
+    digest: 5eff0deea0ef7085777e64360cbd91c98d12e51f1bcbef9e6e7b77ce6ac50067
+    name: delphai-job
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-job-0.1.5/delphai-job-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-09-26T00:35:30.430419094Z"
     description: delphai job
     digest: dafea33d5b5eb796aa6fa3fc4d10dd15e2ba1bde64e561524f6ce2480cf7b21e
