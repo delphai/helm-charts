@@ -27,6 +27,11 @@ spec:
           operator: "Equal"
           value: "spot"
           effect: "NoSchedule"
+        {{ if .Values.gpu }}
+        - key: "nvidia.com/gpu"
+          operator: "Exists"
+          effect: "NoSchedule"
+        {{ end }}
       imagePullSecrets:
         - name: acr-credentials
       automountServiceAccountToken: true

@@ -23,3 +23,4 @@ grpc:
   services:
     - delphai.projects.Projects
 env: []
+gpu: false
