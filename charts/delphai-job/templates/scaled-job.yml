@@ -10,6 +10,12 @@ spec:
     activeDeadlineSeconds: {{ .Values.deadline }}
     backoffLimit: {{ .Values.retries }}
     template:
+      metadata:
+        labels:
+          app: {{ .Release.Name }}
+        annotations:
+          'prometheus.io/port': '9191'
+          'prometheus.io/scrape': 'true'
       spec:
         tolerations:
           - key: "kubernetes.azure.com/scalesetpriority"
