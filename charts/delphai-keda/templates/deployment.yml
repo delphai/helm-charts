@@ -28,8 +28,9 @@ spec:
           value: "spot"
           effect: "NoSchedule"
         {{ if .Values.gpu }}
-        - key: "nvidia.com/gpu"
-          operator: "Exists"
+        - key: "sku"
+          operator: "Equal"
+          value: "gpu"
           effect: "NoSchedule"
         {{ end }}
       imagePullSecrets:
