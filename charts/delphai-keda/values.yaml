@@ -24,3 +24,5 @@ grpc:
     - delphai.projects.Projects
 env: []
 gpu: false
+mountPath: /app/data
+fileShares: []
