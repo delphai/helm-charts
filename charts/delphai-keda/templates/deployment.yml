@@ -36,12 +36,29 @@ spec:
       imagePullSecrets:
         - name: acr-credentials
       automountServiceAccountToken: true
+      volumes:
+        {{ if ne ( len .Values.fileShares) 0 }}
+          {{- range $fileShare := .Values.fileShares }}  
+        - name: {{ $fileShare }}
+          azureFile:
+            secretName: azure-storage-common
+            shareName: {{ $fileShare }}
+            readOnly: true
+          {{- end }}
+        {{ end }}
       containers:
         - image: {{ .Values.image }}
           resources:
 {{ toYaml $.Values.resources | indent 12 }}
           imagePullPolicy: Always
           name: {{ .Release.Name }}
+          volumeMounts:
+          {{ if ne ( len .Values.fileShares) 0 }}
+            {{- range $fileShare := .Values.fileShares }}   
+            - name: {{ $fileShare }}
+              mountPath: /app/data/{{ $fileShare }}
+            {{- end }}
+          {{ end }}
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
