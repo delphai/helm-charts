@@ -17,6 +17,14 @@ spec:
   timeout_ms: 60000
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
+  {{ if or (eq .Values.subdomain "api") (eq .Values.subdomain "ml") }}
+  cors:
+    origins: "*"
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
+    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
+    credentials: true
+    max_age: "86400"
+  {{ end }}
 ---
 {{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
 apiVersion: getambassador.io/v2
@@ -68,8 +76,8 @@ spec:
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
   cors:
-    origins: '*'
-    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
+    origins: "*"
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
@@ -89,8 +97,8 @@ spec:
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
   cors:
-    origins: '*'
-    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
+    origins: "*"
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
@@ -108,8 +116,8 @@ spec:
   rewrite: /grpc.reflection.v1alpha.ServerReflection/
   service: '{{ $.Release.Name }}-grpc:80'
   cors:
-    origins: '*'
-    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
+    origins: "*"
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
@@ -126,8 +134,8 @@ spec:
   rewrite: /grpc.health.v1.Health/
   service: '{{ $.Release.Name }}-grpc:80'
   cors:
-    origins: '*'
-    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS"
+    origins: "*"
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
