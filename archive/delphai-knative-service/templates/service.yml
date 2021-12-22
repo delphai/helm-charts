@@ -21,8 +21,13 @@ spec:
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
           ports:
             - containerPort: {{ .Values.httpPort }}
+{{ if .Values.grpcPort }}
 ---
 apiVersion: serving.knative.dev/v1
 kind: Service
@@ -47,6 +52,10 @@ spec:
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
           ports:
             - name: h2c
               containerPort: {{ .Values.grpcPort }}
@@ -75,6 +84,11 @@ spec:
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ .Values.delphaiEnvironment }}
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
           ports:
             - name: h2c
               containerPort: {{ .Values.grpcPort }}
+{{ end }}
