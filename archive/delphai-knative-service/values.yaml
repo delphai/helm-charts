@@ -7,3 +7,4 @@ delphaiEnvironment: development
 concurrency: 100
 minScale: 1
 env: []
+enable_cors: false
