@@ -1,4 +1,23 @@
-{{ if and (eq .Values.http.enabled true) (eq .Values.http.public true) }}
+{{ if and .Values.http.enabled .Values.http.public }}
+{{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
+---
+apiVersion: getambassador.io/v2
+kind: Host
+metadata:
+  name: {{ .Release.Name }}-http
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    external-dns.ambassador-service: ambassador/ambassador
+spec:
+  hostname: '{{ .Values.subdomain }}.{{ .Values.domain }}'
+  acmeProvider:
+    authority: none
+  requestPolicy:
+    insecure:
+      action: Route
+{{ end }}
+
+---
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
@@ -25,26 +44,10 @@ spec:
     credentials: true
     max_age: "86400"
   {{ end }}
----
-{{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
-apiVersion: getambassador.io/v2
-kind: Host
-metadata:
-  name: {{ .Release.Name }}-http
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    external-dns.ambassador-service: ambassador/ambassador
-spec:
-  hostname: '{{ .Values.subdomain }}.{{ .Values.domain }}'
-  acmeProvider:
-    authority: none
-  requestPolicy:
-    insecure:
-      action: Route
----
 {{ end }}
-{{ end }}
-{{ if and (eq .Values.grpc.enabled true) (eq .Values.grpc.public true) }}
+
+{{ if and .Values.grpc.enabled .Values.grpc.public }}
+---
 apiVersion: getambassador.io/v2
 kind: Host
 metadata:
@@ -59,8 +62,9 @@ spec:
   requestPolicy:
     insecure:
       action: Route
----
+
 {{ range .Values.grpc.services }}
+---
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
@@ -81,6 +85,7 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
+
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -102,8 +107,9 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
----
 {{ end }}
+
+---
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
@@ -121,6 +127,7 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
+
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -139,5 +146,4 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
----
 {{ end }}
