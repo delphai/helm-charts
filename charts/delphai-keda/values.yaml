@@ -16,6 +16,8 @@ http:
   enabled: true
   port: 7070
   public: true
+  publicWithOAuth: false
+  oAuthProxyPort: 37070
 grpc:
   enabled: true
   port: 8080

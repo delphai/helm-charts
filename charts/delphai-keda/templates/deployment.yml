@@ -72,3 +72,68 @@ spec:
               containerPort: {{ .Values.http.port }}
             - name: h2c
               containerPort: {{ .Values.grpc.port }}
+
+        {{ if and .Values.http.enabled .Values.http.public .Values.http.publicWithOAuth }}
+        - name: oauth2-proxy
+          image: "quay.io/oauth2-proxy/oauth2-proxy:v7.2.0"
+          args:
+            - '--email-domain=*'
+          env:
+          - name: OAUTH2_PROXY_HTTP_ADDRESS
+            value: 0.0.0.0:{{ .Values.http.oAuthProxyPort }}
+
+          - name: OAUTH2_PROXY_PROVIDER
+            value: "oidc"
+
+          - name: OAUTH2_PROXY_OIDC_ISSUER_URL
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-proxy
+                key: oidc-issuer-url
+
+          - name: OAUTH2_PROXY_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-proxy
+                key: client-id
+
+          - name: OAUTH2_PROXY_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-proxy
+                key: client-secret
+
+          - name: OAUTH2_PROXY_SCOPE
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-proxy
+                key: scope
+
+          - name: OAUTH2_PROXY_COOKIE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-proxy
+                key: cookie-secret
+
+          - name: OAUTH2_PROXY_SKIP_AUTH_ROUTES
+            value: "^/favicon\\.ico$"
+
+          - name: OAUTH2_PROXY_UPSTREAMS
+            value: "http://127.0.0.1:{{ .Values.http.port }}"
+
+          ports:
+            - containerPort: {{ .Values.http.oAuthProxyPort }}
+              name: http
+
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+              scheme: HTTP
+            timeoutSeconds: 10
+
+          resources:
+            limits:
+              cpu: 10m
+              memory: 30Mi
+        {{ end }}

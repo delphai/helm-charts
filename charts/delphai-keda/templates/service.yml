@@ -12,6 +12,11 @@ spec:
     - name: http
       port: {{ .Values.http.port }}
       targetPort: {{ .Values.http.port }}
+    {{ if and .Values.http.public .Values.http.publicWithOAuth }}
+    - name: oauth-proxy
+      port: {{ .Values.http.oAuthProxyPort }}
+      targetPort: {{ .Values.http.oAuthProxyPort }}
+    {{ end }}
 {{ end }}
 
 {{ if .Values.grpc.enabled }}
