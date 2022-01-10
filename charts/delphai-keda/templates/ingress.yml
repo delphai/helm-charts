@@ -29,7 +29,7 @@ spec:
   {{ else }}
   prefix: /{{ .Release.Name }}/
   {{ end }}
-  service: '{{ .Release.Name }}:{{ .Values.http.port }}'
+  service: '{{ .Release.Name }}:{{ if .Values.http.publicWithOAuth }}{{ .Values.http.oAuthProxyPort }}{{ else }}{{ .Values.http.port }}{{ end }}'
   host: {{ .Values.subdomain }}.{{ .Values.domain }}
   allow_upgrade:
     - websocket
