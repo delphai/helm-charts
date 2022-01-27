@@ -8,9 +8,6 @@ spec:
   replicas: {{ .Values.minReplicas }}
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
   selector:
     matchLabels:
       app: {{ .Release.Name }}
