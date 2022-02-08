@@ -18,6 +18,7 @@ http:
   public: true
   publicWithOAuth: false
   oAuthProxyPort: 37070
+  oAuthRequireOneOfRoles: []
 grpc:
   enabled: true
   port: 8080
