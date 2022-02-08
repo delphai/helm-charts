@@ -17,8 +17,8 @@ spec:
       labels:
         app: {{ .Release.Name }}
       annotations:
-        'prometheus.io/port': '9191'
-        'prometheus.io/scrape': 'true'
+        "prometheus.io/port": "9191"
+        "prometheus.io/scrape": "true"
     spec:
       tolerations:
         - key: "kubernetes.azure.com/scalesetpriority"
@@ -74,13 +74,19 @@ spec:
         - name: oauth2-proxy
           image: "quay.io/oauth2-proxy/oauth2-proxy:v7.2.0"
           args:
-            - '--email-domain=*'
+            - "--email-domain=*"
+            {{- range $role := .Values.http.oAuthRequireOneOfRoles }}
+            - "--allowed-role={{ $role }}"
+            {{- end }}
           env:
           - name: OAUTH2_PROXY_HTTP_ADDRESS
             value: 0.0.0.0:{{ .Values.http.oAuthProxyPort }}
 
           - name: OAUTH2_PROXY_PROVIDER
-            value: "oidc"
+            value: "keycloak-oidc"
+
+          - name: OAUTH2_PROXY_PROVIDER_DISPLAY_NAME
+            value: "Keycloak"
 
           - name: OAUTH2_PROXY_OIDC_ISSUER_URL
             valueFrom:
