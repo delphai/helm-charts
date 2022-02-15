@@ -31,6 +31,10 @@ spec:
           value: "gpu"
           effect: "NoSchedule"
         {{ end }}
+      {{ if .Values.gpu }}
+      nodeSelector:
+        node_type: "gpu"
+      {{ end }}
       imagePullSecrets:
         - name: acr-credentials
       automountServiceAccountToken: true
