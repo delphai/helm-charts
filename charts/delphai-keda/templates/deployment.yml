@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: {{ .Release.Name }}
-    
+
   template:
     metadata:
       labels:
@@ -40,7 +40,7 @@ spec:
       automountServiceAccountToken: true
       volumes:
         {{ if ne ( len .Values.fileShares) 0 }}
-          {{- range $fileShare := .Values.fileShares }}  
+          {{- range $fileShare := .Values.fileShares }}
         - name: {{ $fileShare }}
           azureFile:
             secretName: azure-storage-common
@@ -56,7 +56,7 @@ spec:
           name: {{ .Release.Name }}
           volumeMounts:
           {{ if ne ( len .Values.fileShares) 0 }}
-            {{- range $fileShare := .Values.fileShares }}   
+            {{- range $fileShare := .Values.fileShares }}
             - name: {{ $fileShare }}
               mountPath: /app/data/{{ $fileShare }}
             {{- end }}
@@ -68,6 +68,13 @@ spec:
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}
+            {{ if .Values.gpu }}
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "all"
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: "compute,utility"
+            {{ end }}
+
           ports:
             - name: http
               containerPort: {{ .Values.http.port }}
