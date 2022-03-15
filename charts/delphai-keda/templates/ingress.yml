@@ -7,7 +7,11 @@ metadata:
   name: {{ .Release.Name }}-http
   namespace: {{ .Release.Namespace }}
   annotations:
+    {{- if semverCompare ">=1.22-0" .Capabilities.KubeVersion.GitVersion -}}
+    external-dns.ambassador-service: emissary/emissary-ingress
+    {{- else -}}
     external-dns.ambassador-service: ambassador/ambassador
+    {{- end }}
 spec:
   hostname: '{{ .Values.subdomain }}.{{ .Values.domain }}'
   acmeProvider:
