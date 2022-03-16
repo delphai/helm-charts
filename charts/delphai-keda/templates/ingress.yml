@@ -8,7 +8,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     {{ if (lookup "v1" "Service" "emissary" "emissary-ingress") }}
-    external-dns.ambassador-service: emissary/emissary-ingress
+    external-dns.emissary-ingress-service: emissary/emissary-ingress
     {{ else if (lookup "v1" "Service" "ambassador" "ambassador") }}
     external-dns.ambassador-service: ambassador/ambassador
     {{ end }}
