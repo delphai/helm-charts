@@ -35,18 +35,18 @@ spec:
       nodeSelector:
         node_type: "gpu"
       {{ end }}
+      {{ if .Values.podAntiAffinity }}
       affinity:
-        {{ if .Values.podAntiAffinity }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
-            matchExpressions:
-            - key: app
-              operator: In
-              values:
-              - {{ .Release.Name }}
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - {{ .Release.Name }}
             topologyKey: "kubernetes.io/hostname"
-        {{ end }}
+      {{ end }}
       imagePullSecrets:
         - name: acr-credentials
       automountServiceAccountToken: true
