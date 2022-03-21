@@ -29,4 +29,4 @@ env: []
 gpu: false
 mountPath: /app/data
 fileShares: []
-podAntiAffinity: false
+onePodMaxPerNodePerApp: false
