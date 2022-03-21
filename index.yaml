@@ -102,6 +102,15 @@ entries:
     version: 0.1.0
   delphai-keda:
   - apiVersion: v2
+    created: "2022-03-21T15:33:34.390966115Z"
+    description: delphai service
+    digest: db90a1249f8a4cdb2a8e72afdb605b30a4d7646f31436c9ab4aa99c5db8252e5
+    name: delphai-keda
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-keda-0.2.4/delphai-keda-0.2.4.tgz
+    version: 0.2.4
+  - apiVersion: v2
     created: "2022-03-16T10:49:42.941516977Z"
     description: delphai service
     digest: b8992e7615287e6c5ecb5961eb0a143430f13af60ed48c582ea13bb2f51b8b8b
