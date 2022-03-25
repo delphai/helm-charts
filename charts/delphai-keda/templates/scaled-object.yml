@@ -14,7 +14,7 @@ spec:
   triggers:
   - type: prometheus
     metadata:
-      serverAddress: http://loki-prometheus-server.monitoring
+      serverAddress: http://prometheus-operated.monitoring
       metricName: delphai_requests_per_sec
       threshold: '{{ .Values.autoscaling.threshold }}'
       query: sum(rate(delphai_request_count_total{app="{{ .Release.Name }}"}[2m]))
