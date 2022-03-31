@@ -48,7 +48,7 @@ spec:
     credentials: true
     max_age: "86400"
   {{ end }}
-{{ end }}
+{{ end }}{{/* if and .Values.http.enabled .Values.http.public */}}
 
 {{ if and .Values.grpc.enabled .Values.grpc.public }}
 ---
@@ -111,7 +111,7 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
-{{ end }}
+{{ end }} {{/* range .Values.grpc.services */}}
 
 ---
 apiVersion: getambassador.io/v2
@@ -150,4 +150,4 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
-{{ end }}
+{{ end }}{{/* if and .Values.grpc.enabled .Values.grpc.public */}}
