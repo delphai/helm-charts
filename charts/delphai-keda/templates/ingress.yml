@@ -14,7 +14,7 @@ metadata:
     external-dns.ambassador-service: ambassador/ambassador
     {{ end }}
 spec:
-  hostname: '{{ .Values.subdomain }}.{{ .Values.domain }}'
+  hostname: "{{ .Values.subdomain }}.{{ .Values.domain }}"
   acmeProvider:
     authority: none
   requestPolicy:
@@ -35,8 +35,8 @@ spec:
   {{ else }}
   prefix: /{{ .Release.Name }}/
   {{ end }}
-  service: '{{ .Release.Name }}:{{ if .Values.http.publicWithOAuth }}{{ .Values.http.oAuthProxyPort }}{{ else }}{{ .Values.http.port }}{{ end }}'
-  host: {{ .Values.subdomain }}.{{ .Values.domain }}
+  service: "{{ .Release.Name }}:{{ if .Values.http.publicWithOAuth }}{{ .Values.http.oAuthProxyPort }}{{ else }}{{ .Values.http.port }}{{ end }}"
+  host: "{{ .Values.subdomain }}.{{ .Values.domain }}"
   allow_upgrade:
     - websocket
   timeout_ms: 60000
@@ -119,9 +119,9 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'false'
+    "external-dns.alpha.kubernetes.io/cloudflare-proxied": "false"
 spec:
-  hostname: '{{ .Release.Name }}.grpc.{{ .Values.domain }}'
+  hostname: "{{ .Release.Name }}.grpc.{{ .Values.domain }}"
   acmeProvider:
     authority: none
   requestPolicy:
@@ -138,10 +138,10 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
+  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80"
   prefix: /{{ . }}/
   rewrite: /{{ . }}/
-  service: '{{ $.Release.Name }}-grpc:80'
+  service: "{{ $.Release.Name }}-grpc:80"
   timeout_ms: 60000
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
@@ -160,10 +160,10 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: 'grpc.{{ $.Values.domain }}'
+  host: "grpc.{{ $.Values.domain }}"
   prefix: /{{ $.Release.Name }}/{{ . }}/
   rewrite: /{{ . }}/
-  service: '{{ $.Release.Name }}-grpc:80'
+  service: "{{ $.Release.Name }}-grpc:80"
   timeout_ms: 60000
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
@@ -183,10 +183,10 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
+  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80"
   prefix: /grpc.reflection.v1alpha.ServerReflection/
   rewrite: /grpc.reflection.v1alpha.ServerReflection/
-  service: '{{ $.Release.Name }}-grpc:80'
+  service: "{{ $.Release.Name }}-grpc:80"
   cors:
     origins: "*"
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
@@ -202,10 +202,10 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
+  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80"
   prefix: /grpc.health.v1.Health/
   rewrite: /grpc.health.v1.Health/
-  service: '{{ $.Release.Name }}-grpc:80'
+  service: "{{ $.Release.Name }}-grpc:80"
   cors:
     origins: "*"
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
