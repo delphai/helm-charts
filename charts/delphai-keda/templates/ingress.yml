@@ -136,7 +136,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80"
+  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}{{ if lookup "v1" "Service" "ambassador" "ambassador" }}:80{{ end }}"
   prefix: /{{ . }}/
   rewrite: ""
   service: "{{ $.Release.Name }}-grpc:80"
@@ -181,7 +181,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80"
+  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}{{ if lookup "v1" "Service" "ambassador" "ambassador" }}:80{{ end }}"
   prefix: /grpc.reflection.v1alpha.ServerReflection/
   rewrite: ""
   service: "{{ $.Release.Name }}-grpc:80"
@@ -200,7 +200,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80"
+  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}{{ if lookup "v1" "Service" "ambassador" "ambassador" }}:80{{ end }}"
   prefix: /grpc.health.v1.Health/
   rewrite: ""
   service: "{{ $.Release.Name }}-grpc:80"
