@@ -118,8 +118,6 @@ kind: Host
 metadata:
   name: {{ $.Release.Name }}
   namespace: {{ $.Release.Namespace }}
-  annotations:
-    "external-dns.alpha.kubernetes.io/cloudflare-proxied": "false"
 spec:
   hostname: "{{ $.Release.Name }}.grpc.{{ .Values.domain }}"
   acmeProvider:
