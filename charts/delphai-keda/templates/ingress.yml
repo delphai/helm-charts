@@ -1,5 +1,6 @@
 {{ if and .Values.http.enabled .Values.http.public }}
 {{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
+{{ if not (lookup "v1" "Service" "ambassador" "ambassador") }}
 ---
 apiVersion: getambassador.io/v2
 kind: Host
@@ -20,6 +21,7 @@ spec:
     insecure:
       action: Route
 {{ end }}
+{{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
 
 ---
 apiVersion: getambassador.io/v2
@@ -34,7 +36,9 @@ spec:
   prefix: /{{ .Release.Name }}/
   {{ end }}
   service: '{{ .Release.Name }}:{{ if .Values.http.publicWithOAuth }}{{ .Values.http.oAuthProxyPort }}{{ else }}{{ .Values.http.port }}{{ end }}'
+  {{ if not (lookup "v1" "Service" "ambassador" "ambassador") }}
   host: {{ .Values.subdomain }}.{{ .Values.domain }}
+  {{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
   allow_upgrade:
     - websocket
   timeout_ms: 60000
@@ -48,9 +52,10 @@ spec:
     credentials: true
     max_age: "86400"
   {{ end }}
-{{ end }}
+{{ end }}{{/* if and .Values.http.enabled .Values.http.public */}}
 
 {{ if and .Values.grpc.enabled .Values.grpc.public }}
+{{ if not (lookup "v1" "Service" "ambassador" "ambassador") }}
 ---
 apiVersion: getambassador.io/v2
 kind: Host
@@ -66,6 +71,7 @@ spec:
   requestPolicy:
     insecure:
       action: Route
+{{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
 
 {{ range .Values.grpc.services }}
 ---
@@ -111,7 +117,7 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
-{{ end }}
+{{ end }} {{/* range .Values.grpc.services */}}
 
 ---
 apiVersion: getambassador.io/v2
@@ -150,4 +156,4 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
-{{ end }}
+{{ end }}{{/* if and .Values.grpc.enabled .Values.grpc.public */}}
