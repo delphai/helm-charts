@@ -2,4 +2,4 @@ apiVersion: v2
 name: delphai-keda
 description: delphai service
 type: application
-version: 0.2.7
+version: 0.2.8
