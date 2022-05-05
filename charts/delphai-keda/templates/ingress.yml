@@ -1,12 +1,11 @@
 {{ if and .Values.http.enabled .Values.http.public }}
-{{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
 {{ if not (lookup "v1" "Service" "ambassador" "ambassador") }}
 ---
 apiVersion: getambassador.io/v2
 kind: Host
 metadata:
-  name: {{ .Release.Name }}-http
-  namespace: {{ .Release.Namespace }}
+  name: {{ $.Release.Name }}-http
+  namespace: {{ $.Release.Namespace }}
   annotations:
     {{ if (lookup "v1" "Service" "emissary" "emissary-ingress") }}
     external-dns.ambassador-service: emissary/emissary-ingress
@@ -14,29 +13,68 @@ metadata:
     external-dns.ambassador-service: ambassador/ambassador
     {{ end }}
 spec:
-  hostname: '{{ .Values.subdomain }}.{{ .Values.domain }}'
+  hostname: "{{ .Values.subdomain }}.{{ .Values.domain }}"
   acmeProvider:
     authority: none
   requestPolicy:
     insecure:
       action: Route
+{{ if eq .Values.delphaiEnvironment "staging" }}
+---
+apiVersion: getambassador.io/v2
+kind: Host
+metadata:
+  name: {{ $.Release.Name }}-http-live
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    {{ if (lookup "v1" "Service" "emissary" "emissary-ingress") }}
+    external-dns.ambassador-service: emissary/emissary-ingress
+    {{ else if (lookup "v1" "Service" "ambassador" "ambassador") }}
+    external-dns.ambassador-service: ambassador/ambassador
+    {{ end }}
+spec:
+  hostname: "{{ .Values.subdomain }}.delphai.live"
+  acmeProvider:
+    authority: none
+  requestPolicy:
+    insecure:
+      action: Route
+---
+apiVersion: getambassador.io/v2
+kind: Host
+metadata:
+  name: {{ $.Release.Name }}-http-com
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    {{ if (lookup "v1" "Service" "emissary" "emissary-ingress") }}
+    external-dns.ambassador-service: emissary/emissary-ingress
+    {{ else if (lookup "v1" "Service" "ambassador" "ambassador") }}
+    external-dns.ambassador-service: ambassador/ambassador
+    {{ end }}
+spec:
+  hostname: "{{ .Values.subdomain }}.delphai.com"
+  acmeProvider:
+    authority: none
+  requestPolicy:
+    insecure:
+      action: Route
+{{ end }} {{/* if eq .Values.delphaiEnvironment "staging" */}}
 {{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
-{{ end }} {{/* if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") */}}
 
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: {{ .Release.Name }}-http
-  namespace: {{ .Release.Namespace }}
+  name: {{ $.Release.Name }}-http
+  namespace: {{ $.Release.Namespace }}
 spec:
   {{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
   prefix: /
   {{ else }}
-  prefix: /{{ .Release.Name }}/
+  prefix: /{{ $.Release.Name }}/
   {{ end }}
-  service: '{{ .Release.Name }}:{{ if .Values.http.publicWithOAuth }}{{ .Values.http.oAuthProxyPort }}{{ else }}{{ .Values.http.port }}{{ end }}'
-  host: {{ .Values.subdomain }}.{{ .Values.domain }}
+  service: "{{ $.Release.Name }}:{{ if .Values.http.publicWithOAuth }}{{ .Values.http.oAuthProxyPort }}{{ else }}{{ .Values.http.port }}{{ end }}"
+  host: "{{ .Values.subdomain }}.{{ .Values.domain }}"
   allow_upgrade:
     - websocket
   timeout_ms: 60000
@@ -52,7 +90,7 @@ spec:
   {{ end }}
 
 
-{{ if (lookup "v1" "Service" "ambassador" "ambassador") }}
+{{ if eq .Values.delphaiEnvironment "staging" }}
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -107,7 +145,7 @@ spec:
     credentials: true
     max_age: "86400"
   {{ end }}
-{{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
+{{ end }} {{/* if eq .Values.delphaiEnvironment "staging" */}}
 {{ end }} {{/* if and .Values.http.enabled .Values.http.public */}}
 
 {{ if and .Values.grpc.enabled .Values.grpc.public }}
@@ -116,12 +154,24 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Host
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'false'
+  name: {{ $.Release.Name }}-grpc
+  namespace: {{ $.Release.Namespace }}
 spec:
-  hostname: '{{ .Release.Name }}.grpc.{{ .Values.domain }}'
+  hostname: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}"
+  acmeProvider:
+    authority: none
+  requestPolicy:
+    insecure:
+      action: Route
+
+---
+apiVersion: getambassador.io/v2
+kind: Host
+metadata:
+  name: {{ $.Release.Name }}-grpcweb
+  namespace: {{ $.Release.Namespace }}
+spec:
+  hostname: "grpc.{{ $.Values.domain }}"
   acmeProvider:
     authority: none
   requestPolicy:
@@ -138,10 +188,10 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
+  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}{{ if lookup "v1" "Service" "ambassador" "ambassador" }}:80{{ end }}"
   prefix: /{{ . }}/
-  rewrite: /{{ . }}/
-  service: '{{ $.Release.Name }}-grpc:80'
+  rewrite: ""
+  service: "{{ $.Release.Name }}-grpc:80"
   timeout_ms: 60000
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
@@ -156,14 +206,14 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: {{ $.Release.Name }}-grpc-web-{{ . | kebabcase | replace "." "-" }}
+  name: {{ $.Release.Name }}-grpcweb-{{ . | kebabcase | replace "." "-" }}
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: 'grpc.{{ $.Values.domain }}'
+  host: "grpc.{{ $.Values.domain }}"
   prefix: /{{ $.Release.Name }}/{{ . }}/
   rewrite: /{{ . }}/
-  service: '{{ $.Release.Name }}-grpc:80'
+  service: "{{ $.Release.Name }}-grpc:80"
   timeout_ms: 60000
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
@@ -183,10 +233,10 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
+  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}{{ if lookup "v1" "Service" "ambassador" "ambassador" }}:80{{ end }}"
   prefix: /grpc.reflection.v1alpha.ServerReflection/
-  rewrite: /grpc.reflection.v1alpha.ServerReflection/
-  service: '{{ $.Release.Name }}-grpc:80'
+  rewrite: ""
+  service: "{{ $.Release.Name }}-grpc:80"
   cors:
     origins: "*"
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
@@ -202,10 +252,10 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
-  host: '{{ $.Release.Name }}.grpc.{{ $.Values.domain }}:80'
+  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}{{ if lookup "v1" "Service" "ambassador" "ambassador" }}:80{{ end }}"
   prefix: /grpc.health.v1.Health/
-  rewrite: /grpc.health.v1.Health/
-  service: '{{ $.Release.Name }}-grpc:80'
+  rewrite: ""
+  service: "{{ $.Release.Name }}-grpc:80"
   cors:
     origins: "*"
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
