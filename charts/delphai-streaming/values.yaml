@@ -12,5 +12,5 @@ steps: []
 #     offsetResetPolicy: earliest
 #     lagThreshold: "50"
 streams:
-  brokers: kafka-kafka-bootstrap.kafka:9092
+  brokers: kafka.kafka.svc.cluster.local:9092
 env: {}
