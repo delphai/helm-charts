@@ -23,8 +23,6 @@ grpc:
   enabled: true
   port: 8080
   public: true
-  services:
-    - delphai.projects.Projects
 env: []
 gpu: false
 mountPath: /app/data

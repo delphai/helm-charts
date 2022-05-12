@@ -165,61 +165,20 @@ spec:
       action: Route
 {{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
 
-{{ range $.Values.grpc.services }}
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: {{ $.Release.Name }}-grpc-{{ . | kebabcase | replace "." "-" }}
+  name: {{ $.Release.Name }}-grpc
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
   host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}{{ if lookup "v1" "Service" "ambassador" "ambassador" }}:80{{ end }}"
-  prefix: /{{ . }}/
-  rewrite: ""
+  prefix: "/"
   service: "{{ $.Release.Name }}-grpc:80"
   timeout_ms: 60000
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
-  cors:
-    origins: "*"
-    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
-    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
-    credentials: true
-    max_age: "86400"
-{{ end }} {{/* range $.Values.grpc.services */}}
-
----
-apiVersion: getambassador.io/v2
-kind: Mapping
-metadata:
-  name: {{ $.Release.Name }}-grpc-reflection
-  namespace: {{ $.Release.Namespace }}
-spec:
-  grpc: true
-  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}{{ if lookup "v1" "Service" "ambassador" "ambassador" }}:80{{ end }}"
-  prefix: /grpc.reflection.v1alpha.ServerReflection/
-  rewrite: ""
-  service: "{{ $.Release.Name }}-grpc:80"
-  cors:
-    origins: "*"
-    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
-    headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
-    credentials: true
-    max_age: "86400"
-
----
-apiVersion: getambassador.io/v2
-kind: Mapping
-metadata:
-  name: {{ $.Release.Name }}-grpc-health
-  namespace: {{ $.Release.Namespace }}
-spec:
-  grpc: true
-  host: "{{ $.Release.Name }}.grpc.{{ $.Values.domain }}{{ if lookup "v1" "Service" "ambassador" "ambassador" }}:80{{ end }}"
-  prefix: /grpc.health.v1.Health/
-  rewrite: ""
-  service: "{{ $.Release.Name }}-grpc:80"
   cors:
     origins: "*"
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
