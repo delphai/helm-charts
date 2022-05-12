@@ -1,4 +1,4 @@
-{{ if and .Values.http.enabled .Values.http.public }}
+{{ if and $.Values.http.enabled $.Values.http.public }}
 {{ if not (lookup "v1" "Service" "ambassador" "ambassador") }}
 ---
 apiVersion: getambassador.io/v2
@@ -13,13 +13,13 @@ metadata:
     external-dns.ambassador-service: ambassador/ambassador
     {{ end }}
 spec:
-  hostname: "{{ .Values.subdomain }}.{{ .Values.domain }}"
+  hostname: "{{ $.Values.subdomain }}.{{ $.Values.domain }}"
   acmeProvider:
     authority: none
   requestPolicy:
     insecure:
       action: Route
-{{ if eq .Values.delphaiEnvironment "staging" }}
+{{ if eq $.Values.delphaiEnvironment "staging" }}
 ---
 apiVersion: getambassador.io/v2
 kind: Host
@@ -33,7 +33,7 @@ metadata:
     external-dns.ambassador-service: ambassador/ambassador
     {{ end }}
 spec:
-  hostname: "{{ .Values.subdomain }}.delphai.live"
+  hostname: "{{ $.Values.subdomain }}.delphai.live"
   acmeProvider:
     authority: none
   requestPolicy:
@@ -52,13 +52,13 @@ metadata:
     external-dns.ambassador-service: ambassador/ambassador
     {{ end }}
 spec:
-  hostname: "{{ .Values.subdomain }}.delphai.com"
+  hostname: "{{ $.Values.subdomain }}.delphai.com"
   acmeProvider:
     authority: none
   requestPolicy:
     insecure:
       action: Route
-{{ end }} {{/* if eq .Values.delphaiEnvironment "staging" */}}
+{{ end }} {{/* if eq $.Values.delphaiEnvironment "staging" */}}
 {{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
 
 ---
@@ -68,19 +68,19 @@ metadata:
   name: {{ $.Release.Name }}-http
   namespace: {{ $.Release.Namespace }}
 spec:
-  {{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
+  {{ if and (ne $.Values.subdomain "api") (ne $.Values.subdomain "ml") }}
   prefix: /
   {{ else }}
   prefix: /{{ $.Release.Name }}/
   {{ end }}
-  service: "{{ $.Release.Name }}:{{ if .Values.http.publicWithOAuth }}{{ .Values.http.oAuthProxyPort }}{{ else }}{{ .Values.http.port }}{{ end }}"
-  host: "{{ .Values.subdomain }}.{{ .Values.domain }}"
+  service: "{{ $.Release.Name }}:{{ if $.Values.http.publicWithOAuth }}{{ $.Values.http.oAuthProxyPort }}{{ else }}{{ $.Values.http.port }}{{ end }}"
+  host: "{{ $.Values.subdomain }}.{{ $.Values.domain }}"
   allow_upgrade:
     - websocket
   timeout_ms: 60000
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
-  {{ if or (eq .Values.subdomain "api") (eq .Values.subdomain "ml") }}
+  {{ if or (eq $.Values.subdomain "api") (eq $.Values.subdomain "ml") }}
   cors:
     origins: "*"
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
@@ -90,7 +90,7 @@ spec:
   {{ end }}
 
 
-{{ if eq .Values.delphaiEnvironment "staging" }}
+{{ if eq $.Values.delphaiEnvironment "staging" }}
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -98,19 +98,19 @@ metadata:
   name: {{ .Release.Name }}-http-live
   namespace: {{ .Release.Namespace }}
 spec:
-  {{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
+  {{ if and (ne $.Values.subdomain "api") (ne $.Values.subdomain "ml") }}
   prefix: /
   {{ else }}
   prefix: /{{ .Release.Name }}/
   {{ end }}
-  service: '{{ .Release.Name }}:{{ if .Values.http.publicWithOAuth }}{{ .Values.http.oAuthProxyPort }}{{ else }}{{ .Values.http.port }}{{ end }}'
-  host: {{ .Values.subdomain }}.delphai.live
+  service: '{{ .Release.Name }}:{{ if $.Values.http.publicWithOAuth }}{{ $.Values.http.oAuthProxyPort }}{{ else }}{{ $.Values.http.port }}{{ end }}'
+  host: {{ $.Values.subdomain }}.delphai.live
   allow_upgrade:
     - websocket
   timeout_ms: 60000
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
-  {{ if or (eq .Values.subdomain "api") (eq .Values.subdomain "ml") }}
+  {{ if or (eq $.Values.subdomain "api") (eq $.Values.subdomain "ml") }}
   cors:
     origins: "*"
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
@@ -125,19 +125,19 @@ metadata:
   name: {{ .Release.Name }}-http-com
   namespace: {{ .Release.Namespace }}
 spec:
-  {{ if and (ne .Values.subdomain "api") (ne .Values.subdomain "ml") }}
+  {{ if and (ne $.Values.subdomain "api") (ne $.Values.subdomain "ml") }}
   prefix: /
   {{ else }}
   prefix: /{{ .Release.Name }}/
   {{ end }}
-  service: '{{ .Release.Name }}:{{ if .Values.http.publicWithOAuth }}{{ .Values.http.oAuthProxyPort }}{{ else }}{{ .Values.http.port }}{{ end }}'
-  host: {{ .Values.subdomain }}.delphai.com
+  service: '{{ .Release.Name }}:{{ if $.Values.http.publicWithOAuth }}{{ $.Values.http.oAuthProxyPort }}{{ else }}{{ $.Values.http.port }}{{ end }}'
+  host: {{ $.Values.subdomain }}.delphai.com
   allow_upgrade:
     - websocket
   timeout_ms: 60000
   idle_timeout_ms: 500000
   connect_timeout_ms: 2000
-  {{ if or (eq .Values.subdomain "api") (eq .Values.subdomain "ml") }}
+  {{ if or (eq $.Values.subdomain "api") (eq $.Values.subdomain "ml") }}
   cors:
     origins: "*"
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH"
@@ -145,10 +145,10 @@ spec:
     credentials: true
     max_age: "86400"
   {{ end }}
-{{ end }} {{/* if eq .Values.delphaiEnvironment "staging" */}}
-{{ end }} {{/* if and .Values.http.enabled .Values.http.public */}}
+{{ end }} {{/* if eq $.Values.delphaiEnvironment "staging" */}}
+{{ end }} {{/* if and $.Values.http.enabled $.Values.http.public */}}
 
-{{ if and .Values.grpc.enabled .Values.grpc.public }}
+{{ if and $.Values.grpc.enabled $.Values.grpc.public }}
 {{ if not (lookup "v1" "Service" "ambassador" "ambassador") }}
 ---
 apiVersion: getambassador.io/v2
@@ -165,7 +165,7 @@ spec:
       action: Route
 {{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
 
-{{ range .Values.grpc.services }}
+{{ range $.Values.grpc.services }}
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -187,7 +187,7 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
-{{ end }} {{/* range .Values.grpc.services */}}
+{{ end }} {{/* range $.Values.grpc.services */}}
 
 ---
 apiVersion: getambassador.io/v2
@@ -226,4 +226,4 @@ spec:
     headers: "Origin, Content-Type, Accept, Authorization, X-Request-With, X-GENERAL-TOKEN, x-grpc-web,grpc-timeout"
     credentials: true
     max_age: "86400"
-{{ end }}{{/* if and .Values.grpc.enabled .Values.grpc.public */}}
+{{ end }}{{/* if and $.Values.grpc.enabled $.Values.grpc.public */}}
