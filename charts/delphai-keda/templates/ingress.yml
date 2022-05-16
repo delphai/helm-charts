@@ -11,14 +11,10 @@
 apiVersion: getambassador.io/v2
 kind: Host
 metadata:
-  name: {{ $.Release.Name }}-domain{{ $domain_index }}-http
+  name: {{ $.Release.Name }}-domain{{ $domain_index }}-http-subdomain
   namespace: {{ $.Release.Namespace }}
   annotations:
-    {{ if (lookup "v1" "Service" "emissary" "emissary-ingress") }}
     external-dns.ambassador-service: emissary/emissary-ingress
-    {{ else if (lookup "v1" "Service" "ambassador" "ambassador") }}
-    external-dns.ambassador-service: ambassador/ambassador
-    {{ end }}
 spec:
   hostname: "{{ $.Values.subdomain }}.{{ $domain }}"
   acmeProvider:
@@ -31,13 +27,13 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: {{ $.Release.Name }}-domain{{ $domain_index }}-http
+  name: {{ $.Release.Name }}-domain{{ $domain_index }}-http-subdomain
   namespace: {{ $.Release.Namespace }}
 spec:
-  {{ if and (ne $.Values.subdomain "api") (ne $.Values.subdomain "ml") }}
-  prefix: "/"
-  {{ else }}
+  {{ if or (eq $.Values.subdomain "api") (eq $.Values.subdomain "ml") }}
   prefix: "/{{ $.Release.Name }}/"
+  {{ else }}
+  prefix: "/"
   {{ end }}
   service: "{{ $.Release.Name }}:{{ if $.Values.http.publicWithOAuth }}{{ $.Values.http.oAuthProxyPort }}{{ else }}{{ $.Values.http.port }}{{ end }}"
   host: "{{ $.Values.subdomain }}.{{ $domain }}"
