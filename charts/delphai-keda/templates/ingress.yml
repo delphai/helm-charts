@@ -3,26 +3,25 @@
   {{ $domains = uniq (concat $domains (list "delphai.live" "delphai.com")) }}
 {{ end }}
 
-{{ range $domain_index, $domain := $domains }}
-
-{{ if and $.Values.http.enabled $.Values.http.public }}
-{{ if not (lookup "v1" "Service" "ambassador" "ambassador") }}
+{{ if or (and $.Values.http.enabled $.Values.http.public) (and $.Values.grpc.enabled $.Values.grpc.public) }}
 ---
 apiVersion: getambassador.io/v2
 kind: Host
 metadata:
-  name: {{ $.Release.Name }}-domain{{ $domain_index }}-http-subdomain
+  name: {{ $.Release.Name }}
   namespace: {{ $.Release.Namespace }}
-  annotations:
-    external-dns.ambassador-service: emissary/emissary-ingress
 spec:
-  hostname: "{{ $.Values.subdomain }}.{{ $domain }}"
+  hostname: "*"
   acmeProvider:
     authority: none
   requestPolicy:
     insecure:
       action: Route
-{{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
+{{ end }} {{/* if or (and $.Values.http.enabled $.Values.http.public) (and $.Values.grpc.enabled $.Values.grpc.public) */}}
+
+{{ range $domain_index, $domain := $domains }}
+
+{{ if and $.Values.http.enabled $.Values.http.public }}
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -53,22 +52,6 @@ spec:
 {{ end }} {{/* if and $.Values.http.enabled $.Values.http.public */}}
 
 {{ if and $.Values.grpc.enabled $.Values.grpc.public }}
-{{ if not (lookup "v1" "Service" "ambassador" "ambassador") }}
----
-apiVersion: getambassador.io/v2
-kind: Host
-metadata:
-  name: {{ $.Release.Name }}-domain{{ $domain_index }}-grpc
-  namespace: {{ $.Release.Namespace }}
-spec:
-  hostname: "{{ $.Release.Name }}.grpc.{{ $domain }}"
-  acmeProvider:
-    authority: none
-  requestPolicy:
-    insecure:
-      action: Route
-{{ end }} {{/* if not (lookup "v1" "Service" "ambassador" "ambassador") */}}
-
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
