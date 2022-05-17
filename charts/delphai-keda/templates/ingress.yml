@@ -49,6 +49,29 @@ spec:
     credentials: true
     max_age: "86400"
   {{ end }}
+
+{{ if eq $.Values.subdomain "api" }}
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: {{ $.Release.Name }}-domain{{ $domain_index }}-http-prefix
+  namespace: {{ $.Release.Namespace }}
+spec:
+  prefix: "/service/{{ $.Release.Name }}/"
+  service: "{{ $.Release.Name }}:{{ if $.Values.http.publicWithOAuth }}{{ $.Values.http.oAuthProxyPort }}{{ else }}{{ $.Values.http.port }}{{ end }}"
+{{ if eq $.Values.delphaiEnvironment "review" }}
+  host: "^app.*\\.{{ $domain }}$"
+  host_regex: true
+{{ else }}
+  host: "app.{{ $domain }}"
+{{ end }}
+  allow_upgrade:
+    - websocket
+  timeout_ms: 60000
+  idle_timeout_ms: 500000
+  connect_timeout_ms: 2000
+{{ end }} {{/* if eq $.Values.subdomain "api" */}}
 {{ end }} {{/* if and $.Values.http.enabled $.Values.http.public */}}
 
 {{ if and $.Values.grpc.enabled $.Values.grpc.public }}
