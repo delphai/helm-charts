@@ -78,7 +78,7 @@ spec:
               value: {{ .Values.delphaiEnvironment }}
             {{- range .Values.env }}
             - name: {{ .name }}
-              value: {{ .value }}
+              value: {{ .value | quote }}
             {{- end }}
             {{ if .Values.gpu }}
             - name: NVIDIA_VISIBLE_DEVICES
