@@ -1,9 +1,0 @@
-delphaiEnvironment: development
-image: image_sha
-httpPort: 7070
-grpcPort: 8080
-replicas: 3
-domain: delphai.black
-domains: ""
-mountPath: /app/data
-fileShares: []

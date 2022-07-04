@@ -1,7 +1,0 @@
-image: kennethreitz/httpbin
-httpPort: 7070
-domain: delphai.black
-delphaiEnvironment: ML
-concurrency: 10
-minScale: 1
-gpu: false

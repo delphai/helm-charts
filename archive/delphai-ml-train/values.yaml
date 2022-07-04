@@ -1,3 +1,0 @@
-image: kennethreitz/httpbin
-gpu_units: 1
-gpu: false
