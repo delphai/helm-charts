@@ -1,6 +1,0 @@
-image: kennethreitz/httpbin
-gatewayPort: 7070
-grpcPort: 8080
-isPublic: true
-domain: delphai.black
-delphaiEnvironment: development
