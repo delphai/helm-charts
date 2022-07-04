@@ -1,7 +1,4 @@
-{{ $domains := list (required "`domain` value is required" $.Values.domain) }}
-{{ if eq $.Values.delphaiEnvironment "staging" }}
-  {{ $domains = uniq (concat $domains (list "delphai.live" "delphai.com")) }}
-{{ end }}
+{{ $domain := required "`domain` value is required" $.Values.domain }}
 
 {{ if or (and $.Values.http.enabled $.Values.http.public) (and $.Values.grpc.enabled $.Values.grpc.public) }}
 ---
@@ -19,14 +16,12 @@ spec:
       action: Route
 {{ end }} {{/* if or (and $.Values.http.enabled $.Values.http.public) (and $.Values.grpc.enabled $.Values.grpc.public) */}}
 
-{{ range $domain_index, $domain := $domains }}
-
 {{ if and $.Values.http.enabled $.Values.http.public }}
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: {{ $.Release.Name }}-domain{{ $domain_index }}-http-subdomain
+  name: {{ $.Release.Name }}-http-subdomain
   namespace: {{ $.Release.Namespace }}
 spec:
   {{ if or (eq $.Values.subdomain "api") (eq $.Values.subdomain "ml") }}
@@ -55,7 +50,7 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: {{ $.Release.Name }}-domain{{ $domain_index }}-http-prefix
+  name: {{ $.Release.Name }}-http-prefix
   namespace: {{ $.Release.Namespace }}
 spec:
   prefix: "/service/{{ $.Release.Name }}/"
@@ -79,7 +74,7 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: {{ $.Release.Name }}-domain{{ $domain_index }}-grpc
+  name: {{ $.Release.Name }}-grpc
   namespace: {{ $.Release.Namespace }}
 spec:
   grpc: true
@@ -96,5 +91,3 @@ spec:
     credentials: true
     max_age: "86400"
 {{ end }}{{/* if and $.Values.grpc.enabled $.Values.grpc.public */}}
-
-{{ end }} {{/* range $domain_index, $domain := $domains */}}
