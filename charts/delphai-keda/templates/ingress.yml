@@ -1,4 +1,4 @@
-{{ $domains := list $.Values.domain }}
+{{ $domains := list (required "`domain` value is required" $.Values.domain) }}
 {{ if eq $.Values.delphaiEnvironment "staging" }}
   {{ $domains = uniq (concat $domains (list "delphai.live" "delphai.com")) }}
 {{ end }}
