@@ -61,7 +61,7 @@ spec:
           {{- end }}
         {{ end }}
       containers:
-        - image: {{ .Values.image }}
+        - image: {{ required "`image` value is required" .Values.image }}
           resources:
 {{ toYaml $.Values.resources | indent 12 }}
           imagePullPolicy: Always

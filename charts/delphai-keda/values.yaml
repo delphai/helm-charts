@@ -1,5 +1,5 @@
-image: delphai.azurecr.io/projects:latest
-domain: delphai.black
+image:      # "delphai.azurecr.io/..."
+domain:     # "delphai.black"
 minReplicas: 1
 delphaiEnvironment: development
 subdomain: api
