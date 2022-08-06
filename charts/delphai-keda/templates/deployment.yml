@@ -25,15 +25,9 @@ spec:
           operator: "Equal"
           value: "spot"
           effect: "NoSchedule"
-        {{ if .Values.gpu }}
-        - key: "sku"
-          operator: "Equal"
-          value: "gpu"
-          effect: "NoSchedule"
-        {{ end }}
       {{ if .Values.gpu }}
       nodeSelector:
-        node_type: "gpu"
+        gpu: "true"
       {{ end }}
       {{ if .Values.onePodMaxPerNodePerApp }}
       affinity:
