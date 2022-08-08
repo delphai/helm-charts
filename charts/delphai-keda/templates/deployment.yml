@@ -29,8 +29,8 @@ spec:
       nodeSelector:
         gpu: "true"
       {{ end }}
-      {{ if .Values.onePodMaxPerNodePerApp }}
       affinity:
+      {{ if .Values.onePodMaxPerNodePerApp }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
@@ -40,6 +40,17 @@ spec:
                     values:
                       - {{ .Release.Name }}
               topologyKey: kubernetes.io/hostname
+      {{ end }}
+      {{ if .Values.preferGpu }}
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: gpu
+                operator: In
+                values:
+                - "true"
       {{ end }}
       imagePullSecrets:
         - name: acr-credentials
