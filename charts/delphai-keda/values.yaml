@@ -28,6 +28,7 @@ gpu: false
 mountPath: /app/data
 fileShares: []
 onePodMaxPerNodePerApp: false
+preferGpu: false
 resources:
   requests:
     memory: 300Mi
