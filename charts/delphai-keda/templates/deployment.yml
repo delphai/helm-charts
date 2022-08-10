@@ -91,6 +91,24 @@ spec:
             - name: NVIDIA_DRIVER_CAPABILITIES
               value: "compute,utility"
             {{ end }}
+            {{ if .Values.mlflow }}
+            - name: MLFLOW_TRACKING_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-username
+                  key: mlflow-username
+            - name: MLFLOW_TRACKING_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-password
+                  key: mlflow-password
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-store-connection-string
+                  key: mlflow-store-connection-string
+            {{ end }}
+
 
           ports:
             - name: http
