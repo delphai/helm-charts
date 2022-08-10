@@ -29,6 +29,7 @@ mountPath: /app/data
 fileShares: []
 onePodMaxPerNodePerApp: false
 preferGpu: false
+mlflow: false
 resources:
   requests:
     memory: 300Mi
