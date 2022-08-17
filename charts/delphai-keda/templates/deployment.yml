@@ -107,6 +107,16 @@ spec:
                 secretKeyRef:
                   name: mlflow-store-connection-string
                   key: mlflow-store-connection-string
+            - name: ARTIFACT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-blob-wasbs
+                  key: mlflow-blob-wasbs
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: azure-storage-common
+                  key: connection-string
             {{ end }}
 
 
