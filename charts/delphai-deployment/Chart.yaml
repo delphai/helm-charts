@@ -1,0 +1,5 @@
+apiVersion: "v2"
+name: "delphai-deployment"
+version: "0.1.0"
+description: "Standard service deployment"
+type: "application"
