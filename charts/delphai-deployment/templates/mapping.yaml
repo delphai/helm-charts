@@ -1,0 +1,71 @@
+{{ if $.Values.ingress.enabled }}
+
+{{ include "delphai-deployment.ensureClusterValues" $ }}
+
+{{ $subdomain := tpl $.Values.ingress.subdomain $ }}
+{{ $urlPrefix := tpl $.Values.ingress.urlPrefix $ }}
+
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    helm.sh/release: "{{ $.Release.Name }}"
+    helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+
+spec:
+  host: "^{{ $subdomain }}\\.{{ $.clusterValues.baseDomain }}$"
+  host_regex: true
+
+  prefix: "{{ $urlPrefix }}"
+
+  {{ if $.Values.ingress.oAuth }}
+    {{- if not $.Values.ports.http.enabled -}}
+      {{- fail "You must enable http port to use OAuthProxy" -}}
+    {{- end -}}
+    {{- if not $.Values.ports.oauthproxy.enabled -}}
+      {{- fail "You must enable oauthproxy port to use OAuthProxy" -}}
+    {{- end -}}
+  service: "{{ $.Release.Name }}:{{ $.Values.ports.oauthproxy.port }}"
+  {{ else if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled }}
+  service: "{{ $.Release.Name }}:{{ $.Values.ports.http.port }}"
+  {{ else if or (eq $.Values.ports.httpgateway.enabled nil) $.Values.ports.httpgateway.enabled }}
+  service: "{{ $.Release.Name }}:{{ $.Values.ports.httpgateway.port }}"
+  {{ else }}
+  {{- fail "No HTTP ports found to publish" -}}
+  {{ end }}
+
+  allow_upgrade:
+    - websocket
+
+  timeout_ms: 60000
+  idle_timeout_ms: 500000
+
+{{ if $.Values.ingress.grpc }}
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+
+metadata:
+  name: {{ $.Release.Name }}-grpc
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    helm.sh/release: "{{ $.Release.Name }}"
+    helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+
+spec:
+  grpc: true
+  host: "{{ $.Release.Name }}.grpc.{{ $.clusterValues.baseDomain }}"
+  prefix: "/"
+  {{ if or (eq $.Values.ports.grpc.enabled nil) $.Values.ports.grpc.enabled }}
+  service: "{{ $.Release.Name }}:{{ $.Values.ports.grpc.port }}"
+  {{ else }}
+  {{- fail "GRPC port is disabled" -}}
+  {{ end }} {{/* if or (eq $.Values.ports.grpc.enabled nil) $.Values.ports.grpc.enabled */}}
+  timeout_ms: 60000
+  idle_timeout_ms: 500000
+{{ end }} {{/* if $.Values.ingress.grpc */}}
+{{ end }} {{/* if $.Values.ingress.enabled */}}

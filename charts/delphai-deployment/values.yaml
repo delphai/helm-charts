@@ -1,0 +1,120 @@
+image:      # delphaiwesteurope.azurecr.io/name@sha256:99257869693daa6a01dcb791309ac16bd1288bd5a096a3451dd6c19e2c5f3efd
+
+# Amount of pods
+replicas: 1
+
+# Enable debug mode
+debugMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
+
+# Declare resource usage
+resources:
+  requests:
+    memory: 300Mi
+    # cpu: 50m
+  limits:
+    memory: 2500Mi
+    # cpu: 100m
+
+# Run containainer before main
+initContainer:
+#   image: debian         # optional, uses main image by default
+#   command: ['sh']
+#   args: ['-c', 'echo "hello world"']
+#   env:
+#     FOO: "bar"
+
+scheduling:
+  # Allow to use spot machines
+  spot: true
+
+  # Define if GPU is `require`s or `prefer`red
+  gpu: ""
+  # See https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html#nvidia-require-cuda
+  cudaRequest: "cuda>=11.2 brand=tesla,driver>=418,driver<419"
+
+  # Do not run more than one pod of the same release per node
+  maxOneReleasePodPerNode: false
+
+  # Does the service handle requests (including indirect) from people
+  interactive: true
+  # (For non-interactive only) Set lower priority (e.g. for scrappers)
+  lowPriority: false
+
+volumes:
+  # Mount Azure File shares from `common` subscription
+  commonFileShares:
+    # share-name:
+    #   enabled: true                          # Optional
+    #   mountPath: /mnt/share-name
+    #   readOnly: true
+
+# Static environment variables
+env:
+#  FOO: "bar"
+
+# Import k8s ConfigMaps
+configMaps:
+#  config-map-name:
+#    enabled: true                             # Optional
+#    mount: /run/configmaps/parameters         # Optional
+#    env:                                      # Optional
+#      PARAMETER: key-in-configmap
+#    # For init container:
+#    initMount: /run/configmaps/parameters     # Optional
+#    initEnv:                                  # Optional
+#      PARAMETER: key-in-configmap
+
+# Import k8s Secrets
+secrets:
+#  secret-name:
+#    enabled: true                       # Optional
+#    mount: /run/secrets/password        # Optional
+#    env:                                # Optional
+#      PASSWORD: key-in-secret
+#    # For init container:
+#    initMount: /run/configmaps/parameters     # Optional
+#    initEnv:                                  # Optional
+#      PARAMETER: key-in-configmap
+
+  mongo-credentials:
+    env:
+      MONGO_CONNECTION_STRING: "connection-string"
+
+# Define ports exposed by the deployment (as k8s Service)
+ports:
+  http:
+    enabled: false
+    port: 8080
+
+  grpc:
+    enabled: false
+    port: 8080
+
+  httpgateway:
+    enabled: false
+    port: 7070
+
+  oauthproxy:
+    enabled: false
+    port: 37070
+
+# Enable Ingress
+ingress:
+  enabled: false
+
+  # Define subdomain (regex) for HTTP (Helm template)
+  subdomain: 'app{{ if eq $.clusterValues.environment "review" }}.*{{ end }}'
+  # Define pefix for HTTP (Helm template)
+  urlPrefix: "/service/{{ $.Release.Name }}/"
+
+  # Enable OAuth Proxy for HTTP
+  oAuth: false
+  oAuthRequireOneOfRoles: []
+
+  # Publish GRPC
+  grpc: false

@@ -1,0 +1,335 @@
+{{ include "delphai-deployment.ensureClusterValues" $ }}
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: "{{ $.Release.Name }}"
+  namespace: "{{ $.Release.Namespace }}"
+  labels:
+    helm.sh/release: "{{ $.Release.Name }}"
+    helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+
+spec:
+  replicas: {{ $.Values.replicas }}
+  selector:
+    matchLabels:
+      app: "{{ $.Release.Name }}"
+  template:
+    metadata:
+      labels:
+        helm.sh/release: "{{ $.Release.Name }}"
+        helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+        app: "{{ $.Release.Name }}"
+
+    spec:
+      tolerations:
+        - key: "kubernetes.azure.com/scalesetpriority"
+          operator: Equal
+          value: "spot"
+          effect: NoSchedule
+
+      {{ $schedulingNotSpot := not $.Values.scheduling.spot }}
+      {{ $schedulingRequireGPU := eq $.Values.scheduling.gpu "require" }}
+      {{ $schedulingPreferGPU := eq $.Values.scheduling.gpu "prefer" }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            {{ if or $schedulingNotSpot $schedulingRequireGPU }}
+            nodeSelectorTerms:
+            - matchExpressions:
+              {{ if $schedulingNotSpot }}
+              - key: "priority"
+                operator: In
+                values:
+                - "ondemand"
+              {{ end }} {{/* if $schedulingNotSpot */}}
+
+              {{ if $schedulingRequireGPU }}
+              - key: "gpu"
+                operator: In
+                values:
+                - "true"
+              {{ end }} {{/* if $schedulingRequireGPU */}}
+            {{ end }} {{/* if or $schedulingNotSpot $schedulingRequireGPU */}}
+
+          preferredDuringSchedulingIgnoredDuringExecution:
+            {{ if $schedulingPreferGPU }}
+            - weight: 1
+              preference:
+                matchExpressions:
+                - key: "gpu"
+                  operator: In
+                  values:
+                  - "true"
+            {{ end }} {{/* if $schedulingPreferGPU */}}
+
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          {{ if $.Values.scheduling.maxOneReleasePodPerNode }}
+            - labelSelector:
+                matchExpressions:
+                  - key: "release"
+                    operator: In
+                    values:
+                      - "{{ $.Release.Name }}"
+              topologyKey: "kubernetes.io/hostname"
+          {{ end }} {{/* if $.Values.scheduling.maxOneReleasePodPerNode */}}
+
+      {{ if or $schedulingNotSpot $schedulingRequireGPU $schedulingPreferGPU }}
+      priorityClassName: "selected-node"
+      {{ else if $.Values.scheduling.interactive }}
+      priorityClassName: "any-node-interactive"
+      {{ else if $.Values.scheduling.lowPriority }}
+      priorityClassName: "any-node-internal-low"
+      {{ else }}
+      priorityClassName: "any-node-internal"
+      {{ end }}
+
+      volumes:
+        {{ range $volumeName, $volume := $.Values.volumes.commonFileShares }}
+        {{ if or (eq $volume.enabled nil) $volume.enabled }}
+        - name: "azure-file-common-fileshare-{{ $volumeName }}"
+          csi:
+            driver: "file.csi.azure.com"
+            volumeAttributes:
+              secretName: "azure-storage-common"
+              shareName: "{{ $volumeName }}"
+        {{ end }} {{/* if or (eq $volume.enabled nil) $volume.enabled */}}
+        {{ end }} {{/* range $volume */}}
+
+        {{ range $configMapName, $configMap := $.Values.configMaps }}
+        {{ if and (or (eq $configMap.enabled nil) $configMap.enabled) (or $configMap.mount $configMap.initMount) }}
+        - name: "config-map-{{ $configMapName }}"
+          configMap:
+            name: {{ $configMapName | quote }}
+        {{ end }} {{/* if and (or (eq $configMap.enabled nil) $configMap.enabled) (or $configMap.mount $configMap.initMount) */}}
+        {{ end }} {{/* range $configMap */}}
+
+        {{ range $secretName, $secret := $.Values.secrets }}
+        {{ if and (or (eq $secret.enabled nil) $secret.enabled) (or $secret.mount $secret.initMount) }}
+        - name: "secret-{{ $secretName }}"
+          secret:
+            secretName: {{ $secretName | quote }}
+        {{ end }} {{/* if and (or (eq $secret.enabled nil) $secret.enabled) (or $secret.mount $secret.initMount) */}}
+        {{ end }} {{/* range $secret */}}
+
+      containers:
+        - name: "main"
+
+          image: {{ required "`image` value is required" $.Values.image | quote }}
+
+          {{ if $.Values.debugMode.enabled }}
+          command: {{ $.Values.debugMode.command | toYaml | nindent 10 }}
+          args: {{ $.Values.debugMode.args | toYaml | nindent 10 }}
+          {{ end }} {{/* if $.Values.debugMode.enabled */}}
+
+          resources: {{ toJson $.Values.resources }}
+
+          env:
+            - name: DELPHAI_ENVIRONMENT
+              value: {{ $.clusterValues.environment | quote }}
+
+            {{ if or $schedulingRequireGPU $schedulingPreferGPU }}
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "all"
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: "compute,utility"
+            - name: NVIDIA_REQUIRE_CUDA
+              value: {{ $.Values.scheduling.cudaRequest | quote  }}
+            {{ end }} {{/* if or $schedulingRequireGPU $schedulingPreferGPU */}}
+
+            {{ range $name, $value := $.Values.env }}
+            - name: {{ $name | quote }}
+              value: {{ $value | quote }}
+            {{ end }} {{/* range */}}
+
+            {{ range $configMapName, $configMap := $.Values.configMaps }}
+            {{ if or (eq $configMap.enabled nil) $configMap.enabled }}
+            {{ range $name, $key := $configMap.env }}
+            - name: {{ $name | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ $configMapName | quote }}
+                  key: {{ $key | quote }}
+            {{ end }} {{/* range env */}}
+            {{ end }} {{/* if or (eq $configMap.enabled nil) $configMap.enabled */}}
+            {{ end }} {{/* range $configMap */}}
+
+            {{ range $secretName, $secret := $.Values.secrets }}
+            {{ if or (eq $secret.enabled nil) $secret.enabled }}
+            {{ range $name, $key := $secret.env }}
+            - name: {{ $name | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName | quote }}
+                  key: {{ $key | quote }}
+            {{ end }} {{/* range env */}}
+            {{ end }} {{/* if or (eq $secret.enabled nil) $secret.enabled */}}
+            {{ end }} {{/* range $secret */}}
+
+          volumeMounts:
+            {{ range $volumeName, $volume := $.Values.volumes.commonFileShares }}
+            {{ if or (eq $volume.enabled nil) $volume.enabled }}
+            - name: "azure-file-common-fileshare-{{ $volumeName }}"
+              {{- omit $volume "enabled" | toYaml | nindent 14 }}
+            {{ end }} {{/* if or (eq $volume.enabled nil) $volume.enabled */}}
+            {{ end }} {{/* range $volume */}}
+
+            {{ range $configMapName, $configMap := $.Values.configMaps }}
+            {{ if and (or (eq $configMap.enabled nil) $configMap.enabled) $configMap.mount }}
+            - name: "config-map-{{ $configMapName }}"
+              mountPath: {{ $configMap.mount | quote }}
+            {{ end }} {{/* if and (or (eq $configMap.enabled nil) $configMap.enabled) $configMap.mount */}}
+            {{ end }} {{/* range $configMap */}}
+
+            {{ range $secretName, $secret := $.Values.secrets }}
+            {{ if and (or (eq $secret.enabled nil) $secret.enabled) $secret.mount }}
+            - name: "secret-{{ $secretName }}"
+              mountPath: {{ $secret.mount | quote }}
+            {{ end }} {{/* if and (or (eq $secret.enabled nil) $secret.enabled) $secret.mount */}}
+            {{ end }} {{/* range $secret */}}
+
+          ports:
+            {{ range $portName, $portConf := $.Values.ports }}
+            {{ if or (eq $portConf.enabled nil) $portConf.enabled }}
+            - name: {{ $portName | quote }}
+              containerPort: {{ $portConf.port }}
+            {{ end }} {{/* if or (eq $portConf.enabled nil) $portConf.enabled */}}
+            {{ end }} {{/* range ports */}}
+
+        {{ if and $.Values.ingress.enabled $.Values.ingress.oAuth }}
+        - name: oauth2-proxy
+          image: "quay.io/oauth2-proxy/oauth2-proxy:v7.2.0"
+          args:
+            - "--http-address=0.0.0.0:{{ $.Values.ports.oauthproxy.port }}"
+            - "--upstream=http://127.0.0.1:{{ $.Values.ports.http.port }}"
+
+            - "--email-domain=*"
+            - "--provider=keycloak-oidc"
+            - "--provider-display-name=Keycloak"
+            - "--skip-auth-route=^/favicon\\.ico$"
+
+            {{ range $role := $.Values.ingress.oAuthRequireOneOfRoles }}
+            - "--allowed-role={{ $role }}"
+            {{ end }}  {{/* range */}}
+
+          env:
+          - name: OAUTH2_PROXY_OIDC_ISSUER_URL
+            valueFrom:
+              secretKeyRef:
+                name: "oauth2-proxy"
+                key: "oidc-issuer-url"
+
+          - name: OAUTH2_PROXY_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: "oauth2-proxy"
+                key: "client-id"
+
+          - name: OAUTH2_PROXY_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: "oauth2-proxy"
+                key: "client-secret"
+
+          - name: OAUTH2_PROXY_SCOPE
+            valueFrom:
+              secretKeyRef:
+                name: "oauth2-proxy"
+                key: "scope"
+
+          - name: OAUTH2_PROXY_COOKIE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: "oauth2-proxy"
+                key: "cookie-secret"
+
+          ports:
+            - name: "http"
+              containerPort: {{ $.Values.ports.oauthproxy.port }}
+
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              port: "http"
+              path: "/ping"
+            timeoutSeconds: 10
+
+          resources:
+            limits:
+              cpu: "10m"
+              memory: "30Mi"
+        {{ end }} {{/* if $.Values.ingress.oAuth */}}
+
+      {{ if $.Values.initContainer }}
+      initContainers:
+        - name: "init"
+
+          image: {{ (coalesce $.Values.initContainer.image $.Values.image) | quote }}
+
+          {{ if $.Values.initContainer.command }}
+          command: {{ $.Values.initContainer.command | toYaml | nindent 10 }}
+          {{ end }} {{/* if $.Values.initContainer.command */}}
+
+          {{ if $.Values.initContainer.args }}
+          args: {{ $.Values.initContainer.args | toYaml | nindent 10 }}
+          {{ end }} {{/* if $.Values.initContainer.args */}}
+
+          resources: {{ toJson $.Values.resources }}
+
+          env:
+            - name: DELPHAI_ENVIRONMENT
+              value: {{ $.clusterValues.environment | quote }}
+
+            {{ range $name, $value := $.Values.initContainer.env }}
+            - name: {{ $name | quote }}
+              value: {{ $value | quote }}
+            {{ end }} {{/* range */}}
+
+            {{ range $configMapName, $configMap := $.Values.configMaps }}
+            {{ if or (eq $configMap.enabled nil) $configMap.enabled }}
+            {{ range $name, $key := $configMap.initEnv }}
+            - name: {{ $name | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ $configMapName | quote }}
+                  key: {{ $key | quote }}
+            {{ end }} {{/* range initEnv */}}
+            {{ end }} {{/* if or (eq $configMap.enabled nil) $configMap.enabled */}}
+            {{ end }} {{/* range $configMap */}}
+
+            {{ range $secretName, $secret := $.Values.secrets }}
+            {{ if or (eq $secret.enabled nil) $secret.enabled }}
+            {{ range $name, $key := $secret.initEnv }}
+            - name: {{ $name | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName | quote }}
+                  key: {{ $key | quote }}
+            {{ end }} {{/* range initEnv */}}
+            {{ end }} {{/* if or (eq $secret.enabled nil) $secret.enabled */}}
+            {{ end }} {{/* range $secret */}}
+
+          volumeMounts:
+            {{ range $volumeName, $volume := $.Values.volumes.commonFileShares }}
+            {{ if or (eq $volume.enabled nil) $volume.enabled }}
+            - name: "azure-file-common-fileshare-{{ $volumeName }}"
+              {{- omit $volume "enabled" | toYaml | nindent 14 }}
+            {{ end }} {{/* if or (eq $volume.enabled nil) $volume.enabled */}}
+            {{ end }} {{/* range $volume */}}
+
+            {{ range $configMapName, $configMap := $.Values.configMaps }}
+            {{ if and (or (eq $configMap.enabled nil) $configMap.enabled) $configMap.initMount }}
+            - name: "config-map-{{ $configMapName }}"
+              mountPath: {{ $configMap.initMount | quote }}
+            {{ end }} {{/* if and (or (eq $configMap.enabled nil) $configMap.enabled) $configMap.initMount */}}
+            {{ end }} {{/* range $configMap */}}
+
+            {{ range $secretName, $secret := $.Values.secrets }}
+            {{ if and (or (eq $secret.enabled nil) $secret.enabled) $secret.initMount }}
+            - name: "secret-{{ $secretName }}"
+              mountPath: {{ $secret.initMount | quote }}
+            {{ end }} {{/* if and (or (eq $secret.enabled nil) $secret.enabled) $secret.initMount */}}
+            {{ end }} {{/* range $secret */}}
+      {{ end }} {{/* if $.Values.initContainer */}}

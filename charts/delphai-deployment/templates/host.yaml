@@ -1,0 +1,20 @@
+{{ if $.Values.ingress.enabled }}
+---
+apiVersion: getambassador.io/v2
+kind: Host
+
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    helm.sh/release: "{{ $.Release.Name }}"
+    helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+
+spec:
+  hostname: "*"
+  acmeProvider:
+    authority: none
+  requestPolicy:
+    insecure:
+      action: Route
+{{ end }} {{/* $.Values.ingress.enabled */}}
