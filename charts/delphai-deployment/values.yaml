@@ -118,3 +118,35 @@ ingress:
 
   # Publish GRPC
   grpc: false
+
+redis:
+  enabled: false
+
+  architecture: standalone
+
+  auth:
+    enabled: false
+
+  master:
+    resources:
+      requests:
+         cpu: 10m
+         memory: 100Mi
+
+    ## @param master.tolerations Tolerations for Redis&reg; master pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations:
+      - key: "kubernetes.azure.com/scalesetpriority"
+        operator: Equal
+        value: "spot"
+        effect: NoSchedule
+
+    persistence:
+      ## @param master.persistence.enabled Enable persistence on Redis&reg; master nodes using Persistent Volume Claims
+      ##
+      enabled: false
+
+      ## @param master.persistence.size Persistent Volume size
+      ##
+      size: 1Gi

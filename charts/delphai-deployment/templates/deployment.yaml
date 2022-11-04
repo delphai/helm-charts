@@ -130,6 +130,11 @@ spec:
             - name: DELPHAI_ENVIRONMENT
               value: {{ $.clusterValues.environment | quote }}
 
+            {{ if $.Values.redis.enabled }}
+            - name: REDIS_HOST
+              value: "{{ $.Release.Name }}-redis-master.{{ $.Release.Namespace }}"
+            {{ end }}
+
             {{ if or $schedulingRequireGPU $schedulingPreferGPU }}
             - name: NVIDIA_VISIBLE_DEVICES
               value: "all"
