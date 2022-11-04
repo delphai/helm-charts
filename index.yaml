@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   delphai-deployment:
   - apiVersion: v2
+    created: "2022-11-04T09:03:01.486576482Z"
+    description: Standard service deployment
+    digest: 1d40900153f9f7b490b5a20d4dae61779f1b8a0913ceda7bb6fd99c63024a915
+    name: delphai-deployment
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-deployment-0.1.2/delphai-deployment-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     created: "2022-11-01T13:26:52.581654177Z"
     description: Standard service deployment
     digest: 9ec07770fc14aa64cd499b92c0fd9150350a09e612c74add318e4932ca76969d
