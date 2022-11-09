@@ -2,6 +2,20 @@ apiVersion: v1
 entries:
   delphai-deployment:
   - apiVersion: v2
+    created: "2022-11-09T10:08:13.403872713Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    description: Standard service deployment
+    digest: 4c71bc336ef4711177e70486a50464cebf485bfd0c0f0222eb49e4b77b3de377
+    name: delphai-deployment
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-deployment-0.2.1/delphai-deployment-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
     created: "2022-11-04T15:03:29.701935377Z"
     dependencies:
     - condition: redis.enabled
@@ -134,6 +148,15 @@ entries:
     - https://github.com/delphai/helm-charts/releases/download/delphai-job-0.1.0/delphai-job-0.1.0.tgz
     version: 0.1.0
   delphai-keda:
+  - apiVersion: v2
+    created: "2022-11-09T10:08:13.581313585Z"
+    description: delphai service
+    digest: 97d72c9932615f8ed1b1622ca2e00acd094d02ef96c121b317a217f31b7ce6de
+    name: delphai-keda
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-keda-0.2.22/delphai-keda-0.2.22.tgz
+    version: 0.2.22
   - apiVersion: v2
     created: "2022-11-01T13:13:26.811280356Z"
     description: delphai service
