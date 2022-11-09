@@ -262,7 +262,7 @@ spec:
             timeoutSeconds: 10
 
           resources:
-            limits:
+            requests:
               cpu: "10m"
               memory: "30Mi"
         {{ end }} {{/* if $.Values.ingress.oAuth */}}
