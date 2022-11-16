@@ -34,7 +34,7 @@ spec:
               - name: AZURE_STORAGE_CONNECTION_STRING
                 valueFrom:
                   secretKeyRef:
-                    name: azure-storage
+                    name: azure-storage-production
                     key: connection-string
 
   pollingInterval: {{ .Values.autoscaling.pollingInterval }}
