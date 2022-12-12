@@ -9,7 +9,9 @@ metadata:
   name: "{{ $.Release.Name }}"
   namespace: "{{ $.Release.Namespace }}"
   labels:
-    helm.sh/release: "{{ $.Release.Name }}"
+    app.kubernetes.io/managed-by: {{ $.Release.Service | quote }}
+    app.kubernetes.io/instance: {{ $.Release.Name | quote }}
+    helm.sh/release: {{ $.Release.Name | quote }}
     helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
 spec:
   selector:
@@ -31,7 +33,9 @@ metadata:
   name: "{{ $.Release.Name }}-grpc"
   namespace: "{{ $.Release.Namespace }}"
   labels:
-    helm.sh/release: "{{ $.Release.Name }}"
+    app.kubernetes.io/managed-by: {{ $.Release.Service | quote }}
+    app.kubernetes.io/instance: {{ $.Release.Name | quote }}
+    helm.sh/release: {{ $.Release.Name | quote }}
     helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
 spec:
   selector:

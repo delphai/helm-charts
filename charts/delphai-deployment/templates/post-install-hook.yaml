@@ -1,0 +1,51 @@
+{{ if and $.Values.ingress.enabled $.Values.ingress.purgeCloudflareCache }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ $.Release.Namespace }}-{{ $.Release.Name }}-purge-cloudflare-cache"
+  namespace: "default"
+  labels:
+    app.kubernetes.io/managed-by: {{ $.Release.Service | quote }}
+    app.kubernetes.io/instance: {{ $.Release.Name | quote }}
+    helm.sh/release: {{ $.Release.Name | quote }}
+    helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+  annotations:
+    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-delete-policy": "hook-succeeded"
+spec:
+  template:
+    metadata:
+      name: "{{ .Release.Name }}"
+      labels:
+        app.kubernetes.io/managed-by: {{ $.Release.Service | quote }}
+        app.kubernetes.io/instance: {{ $.Release.Name | quote }}
+        helm.sh/release: {{ $.Release.Name | quote }}
+        helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: purge-cloudflare-cache
+        image: "alpine:3"
+        env:
+          - name: CLOUDFLARE_ZONE
+            valueFrom:
+              configMapKeyRef:
+                name: cluster-values
+                key: baseDomainCloudflareZone
+          - name: CLOUDFLARE_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: cluster-secrets
+                key: cloudflarePurgeCacheToken
+        command:
+        - /bin/sh
+        - -c
+        - |
+          wget \
+            --quiet \
+            --header "Content-Type: application/json" \
+            --header "Authorization: Bearer ${CLOUDFLARE_TOKEN}" \
+            --post-data '{"purge_everything":true}' \
+            --output-document - \
+            "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache"
+{{ end }} {{/* if and $.Values.ingress.enabled $.Values.ingress.purgeCloudflareCache */}}
