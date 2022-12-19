@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ $.Release.Namespace }}-{{ $.Release.Name }}-purge-cloudflare-cache"
+  name: "purge-cloudflare-cache-{{ randAlphaNum 8 | lower }}"
   namespace: "default"
   labels:
     app.kubernetes.io/managed-by: {{ $.Release.Service | quote }}
