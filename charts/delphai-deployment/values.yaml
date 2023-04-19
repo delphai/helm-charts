@@ -34,8 +34,6 @@ scheduling:
 
   # Define if GPU is `require`s or `prefer`red
   gpu: ""
-  # See https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html#nvidia-require-cuda
-  cudaRequest: "cuda>=11.2 brand=tesla,driver>=418,driver<419"
 
   # Do not run more than one pod of the same release per node
   maxOneReleasePodPerNode: false
