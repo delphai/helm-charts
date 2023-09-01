@@ -202,11 +202,41 @@ spec:
 
           ports:
             {{ range $portName, $portConf := $.Values.ports }}
+            {{ if ne $portName "oauthproxy" }}
             {{ if or (eq $portConf.enabled nil) $portConf.enabled }}
             - name: {{ $portName | quote }}
               containerPort: {{ $portConf.port }}
             {{ end }} {{/* if or (eq $portConf.enabled nil) $portConf.enabled */}}
+            {{ end }} {{/* if ne $portName "oauthproxy" */}}
             {{ end }} {{/* range ports */}}
+
+          {{ if or (eq $.Values.readinessProbe.enabled nil) $.Values.readinessProbe.enabled }}
+          {{ $readinessProbePortName := $.Values.readinessProbe.portName }}
+          {{ if eq $readinessProbePortName "" }}
+          {{ if $.Values.ports.httpgateway.enabled }}
+          {{ $readinessProbePortName = "httpgateway" }}
+          {{ else if $.Values.ports.http.enabled }}
+          {{ $readinessProbePortName = "http" }}
+          {{ else if $.Values.ports.grpc.enabled }}
+          {{ $readinessProbePortName = "grpc" }}
+          {{ end }} {{/* if $.Values.ports.httpgateway.enabled */}}
+          {{ end }} {{/* if eq $readinessProbePortName nil */}}
+
+          {{ if ne $readinessProbePortName "" }}
+          readinessProbe:
+            {{ if eq $readinessProbePortName "grpc" }}
+            grpc:
+            {{ else }}
+            tcpSocket:
+            {{ end }} {{/* if eq $readinessProbePortName "grpc" */}}
+              port: {{ (index $.Values.ports $readinessProbePortName).port }}
+            initialDelaySeconds: {{ $.Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $.Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ $.Values.readinessProbe.timeoutSeconds }}
+          {{ else }}
+          {{ fail "Cannot enable readinessProbe without open ports." }}
+          {{ end }} {{/* if ne $readinessProbePortName nil */}}
+          {{ end }} {{/* if or (eq $.Values.readinessProbe.enabled nil) $.Values.readinessProbe.enabled */}}
 
           {{ if or $schedulingRequireGPU $schedulingPreferGPU }}
           securityContext:
@@ -270,6 +300,11 @@ spec:
               port: "http"
               path: "/ping"
             timeoutSeconds: 10
+          
+          readinessProbe:
+            httpGet:
+              path: "/ping"
+              port: "http"
 
           resources:
             requests:
