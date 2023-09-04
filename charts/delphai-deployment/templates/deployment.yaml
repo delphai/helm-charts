@@ -212,30 +212,28 @@ spec:
 
           {{ if or (eq $.Values.readinessProbe.enabled nil) $.Values.readinessProbe.enabled }}
           {{ $readinessProbePortName := $.Values.readinessProbe.portName }}
+          {{ if not (has $readinessProbePortName (list "" "http" "httpgateway")) }}
+          {{ fail "readinessProbe.portName must be one of ('', 'http', 'httpgateway')." }}
+          {{ end }} {{/* if not (has $readinessProbePortName (list "" "http" "httpgateway")) */}}
+
           {{ if eq $readinessProbePortName "" }}
-          {{ if $.Values.ports.httpgateway.enabled }}
+          {{ if or (eq $.Values.ports.httpgateway.enabled nil) $.Values.ports.httpgateway.enabled }}
           {{ $readinessProbePortName = "httpgateway" }}
-          {{ else if $.Values.ports.http.enabled }}
+          {{ else if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled }}
           {{ $readinessProbePortName = "http" }}
-          {{ else if $.Values.ports.grpc.enabled }}
-          {{ $readinessProbePortName = "grpc" }}
-          {{ end }} {{/* if $.Values.ports.httpgateway.enabled */}}
-          {{ end }} {{/* if eq $readinessProbePortName nil */}}
+          {{ end }} {{/* if */}}
+          {{ else if not (index $.Values.ports $readinessProbePortName).enabled}}
+          {{ fail "readinessProbe.portName must correspond to an enabled port." }}
+          {{ end }} {{/* if eq $readinessProbePortName "" */}}
 
           {{ if ne $readinessProbePortName "" }}
           readinessProbe:
-            {{ if eq $readinessProbePortName "grpc" }}
-            grpc:
-            {{ else }}
             tcpSocket:
-            {{ end }} {{/* if eq $readinessProbePortName "grpc" */}}
-              port: {{ (index $.Values.ports $readinessProbePortName).port }}
+              port: {{ $readinessProbePortName }}
             initialDelaySeconds: {{ $.Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ $.Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ $.Values.readinessProbe.timeoutSeconds }}
-          {{ else }}
-          {{ fail "Cannot enable readinessProbe without open ports." }}
-          {{ end }} {{/* if ne $readinessProbePortName nil */}}
+          {{ end }} {{/* if ne $readinessProbePortName "" */}}
           {{ end }} {{/* if or (eq $.Values.readinessProbe.enabled nil) $.Values.readinessProbe.enabled */}}
 
           {{ if or $schedulingRequireGPU $schedulingPreferGPU }}
@@ -305,6 +303,7 @@ spec:
             httpGet:
               path: "/ping"
               port: "http"
+            timeoutSeconds: 5
 
           resources:
             requests:

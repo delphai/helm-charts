@@ -102,10 +102,10 @@ ports:
     port: 37070
 
 # Enable readiness probe
-# Will by default probe one of httpgateway/http/grpc ports, whichever is enabled in this order of precedence
+# Will by default probe one of httpgateway/http ports, whichever is enabled in this order of precedence
 readinessProbe:
   enabled: true
-  # Override probed port (name must be defined under `ports`)
+  # Override probed port (name must be one of httpgateway/http)
   portName: ""
 
   # Seconds to wait to start probe after main container initialization
