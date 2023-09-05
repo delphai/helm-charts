@@ -211,20 +211,24 @@ spec:
             {{ end }} {{/* range ports */}}
 
           {{ if or (eq $.Values.readinessProbe.enabled nil) $.Values.readinessProbe.enabled }}
-          {{ $readinessProbePortName := $.Values.readinessProbe.portName }}
-          {{ if not (has $readinessProbePortName (list "" "http" "httpgateway")) }}
-          {{ fail "readinessProbe.portName must be one of ('', 'http', 'httpgateway')." }}
-          {{ end }} {{/* if not (has $readinessProbePortName (list "" "http" "httpgateway")) */}}
 
-          {{ if eq $readinessProbePortName "" }}
-          {{ if or (eq $.Values.ports.httpgateway.enabled nil) $.Values.ports.httpgateway.enabled }}
-          {{ $readinessProbePortName = "httpgateway" }}
-          {{ else if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled }}
-          {{ $readinessProbePortName = "http" }}
+          {{/* readinessProbe.portName input validation/open port discovery */}}
+          {{ $readinessProbePortName := $.Values.readinessProbe.portName }}
+          {{ if eq $readinessProbePortName "oauthproxy" }}
+            {{ fail "readinessProbe.portName must not be 'oauthproxy'." }}
+          {{ else if eq $readinessProbePortName "" }}
+            {{ range $portName, $portConf := $.Values.ports }}
+            {{ if eq $portName "oauthproxy" }}
+              {{ continue }}
+            {{ end }} {{/* if eq $portName "oauthproxy" */}}
+            {{ if or (eq $portConf.enabled nil) $portConf.enabled }}
+              {{ $readinessProbePortName = $portName }}
+              {{ break }} {{/* range $portName, $portConf := $.Values.ports */}}
+            {{ end }} {{/* if or (eq $portConf.enabled nil) $portConf.enabled */}}
+            {{ end }} {{/* range $portName, $portConf := $.Values.ports */}}
+          {{ else if not (index $.Values.ports $readinessProbePortName).enabled }}
+            {{ fail "readinessProbe.portName must correspond to an enabled port." }}
           {{ end }} {{/* if */}}
-          {{ else if not (index $.Values.ports $readinessProbePortName).enabled}}
-          {{ fail "readinessProbe.portName must correspond to an enabled port." }}
-          {{ end }} {{/* if eq $readinessProbePortName "" */}}
 
           {{ if ne $readinessProbePortName "" }}
           readinessProbe:
