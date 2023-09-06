@@ -234,9 +234,7 @@ spec:
           readinessProbe:
             tcpSocket:
               port: {{ $readinessProbePortName }}
-            initialDelaySeconds: {{ $.Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ $.Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ $.Values.readinessProbe.timeoutSeconds }}
+            {{- omit $.Values.readinessProbe "enabled" "portName" | toYaml | nindent 14 }}
           {{ end }} {{/* if ne $readinessProbePortName "" */}}
           {{ end }} {{/* if or (eq $.Values.readinessProbe.enabled nil) $.Values.readinessProbe.enabled */}}
 
