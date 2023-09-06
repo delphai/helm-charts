@@ -202,11 +202,41 @@ spec:
 
           ports:
             {{ range $portName, $portConf := $.Values.ports }}
+            {{ if ne $portName "oauthproxy" }}
             {{ if or (eq $portConf.enabled nil) $portConf.enabled }}
             - name: {{ $portName | quote }}
               containerPort: {{ $portConf.port }}
             {{ end }} {{/* if or (eq $portConf.enabled nil) $portConf.enabled */}}
+            {{ end }} {{/* if ne $portName "oauthproxy" */}}
             {{ end }} {{/* range ports */}}
+
+          {{ if or (eq $.Values.readinessProbe.enabled nil) $.Values.readinessProbe.enabled }}
+
+          {{/* readinessProbe.portName input validation/open port discovery */}}
+          {{ $readinessProbePortName := $.Values.readinessProbe.portName }}
+          {{ if eq $readinessProbePortName "oauthproxy" }}
+            {{ fail "readinessProbe.portName must not be 'oauthproxy'." }}
+          {{ else if eq $readinessProbePortName "" }}
+            {{ range $portName, $portConf := $.Values.ports }}
+            {{ if eq $portName "oauthproxy" }}
+              {{ continue }}
+            {{ end }} {{/* if eq $portName "oauthproxy" */}}
+            {{ if or (eq $portConf.enabled nil) $portConf.enabled }}
+              {{ $readinessProbePortName = $portName }}
+              {{ break }} {{/* range $portName, $portConf := $.Values.ports */}}
+            {{ end }} {{/* if or (eq $portConf.enabled nil) $portConf.enabled */}}
+            {{ end }} {{/* range $portName, $portConf := $.Values.ports */}}
+          {{ else if not (index $.Values.ports $readinessProbePortName).enabled }}
+            {{ fail "readinessProbe.portName must correspond to an enabled port." }}
+          {{ end }} {{/* if */}}
+
+          {{ if ne $readinessProbePortName "" }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ $readinessProbePortName }}
+            {{- omit $.Values.readinessProbe "enabled" "portName" | toYaml | nindent 12 }}
+          {{ end }} {{/* if ne $readinessProbePortName "" */}}
+          {{ end }} {{/* if or (eq $.Values.readinessProbe.enabled nil) $.Values.readinessProbe.enabled */}}
 
           {{ if or $schedulingRequireGPU $schedulingPreferGPU }}
           securityContext:
@@ -270,6 +300,12 @@ spec:
               port: "http"
               path: "/ping"
             timeoutSeconds: 10
+          
+          readinessProbe:
+            httpGet:
+              path: "/ping"
+              port: "http"
+            timeoutSeconds: 5
 
           resources:
             requests:

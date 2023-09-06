@@ -101,6 +101,20 @@ ports:
     enabled: false
     port: 37070
 
+# Enable readiness probe
+# Will by default probe one of the enabled ports, unless overriden in portName
+readinessProbe:
+  enabled: true
+  # Define probed port explicitly (must not be `oauthproxy`)
+  portName: ""
+
+  # Seconds to wait to start probe after main container initialization
+  initialDelaySeconds: 0
+  # Probe frequency
+  periodSeconds: 10
+  # Probe timeout (probe failed if response not received in time)
+  timeoutSeconds: 1
+
 # Enable Ingress
 ingress:
   enabled: false
