@@ -178,6 +178,17 @@ spec:
             {{ end }} {{/* if or (eq $secret.enabled nil) $secret.enabled */}}
             {{ end }} {{/* range $secret */}}
 
+            - name: "MONGO_CONNECTION_STRING"
+              valueFrom:
+                secretKeyRef:
+                  {{ if $.Values.mongo.enabled }} {{/* TODO add 'or (eq $.Values.mongo.enabled nil)' */}}
+                  name: {{ $.Values.mongo.connectionString.secretName | quote }}
+                  key: {{ $.Values.mongo.connectionString.secretKey | quote }}
+                  {{ else }} {{/* TODO remove */}}
+                  name: "mongo-credentials"
+                  key: "connection-string"
+                  {{ end }} {{/* if */}}
+
           volumeMounts:
             {{ range $volumeName, $volume := $.Values.volumes.commonFileShares }}
             {{ if or (eq $volume.enabled nil) $volume.enabled }}
