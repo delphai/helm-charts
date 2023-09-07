@@ -68,6 +68,7 @@ configMaps:
 #      PARAMETER: key-in-configmap
 
 # Import k8s Secrets
+# <secret-name>.env key may not be MONGO_CONNECTION_STRING
 secrets:
 #  secret-name:
 #    enabled: true                       # Optional
