@@ -73,7 +73,7 @@ spec:
           {{ if $.Values.scheduling.maxOneReleasePodPerNode }}
             - labelSelector:
                 matchExpressions:
-                  - key: "release"
+                  - key: "helm.sh/release"
                     operator: In
                     values:
                       - "{{ $.Release.Name }}"
