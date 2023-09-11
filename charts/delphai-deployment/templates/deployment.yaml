@@ -149,17 +149,6 @@ spec:
               value: "compute,utility"
             {{ end }} {{/* if or $schedulingRequireGPU $schedulingPreferGPU */}}
 
-            - name: "MONGO_CONNECTION_STRING"
-              valueFrom:
-                secretKeyRef:
-                  {{ if $.Values.mongo.enabled }} {{/* TODO add 'or (eq $.Values.mongo.enabled nil)' */}}
-                  name: {{ $.Values.mongo.connectionString.secretName | quote }}
-                  key: {{ $.Values.mongo.connectionString.secretKey | quote }}
-                  {{ else }} {{/* TODO remove */}}
-                  name: "mongo-credentials"
-                  key: "connection-string"
-                  {{ end }} {{/* if */}}
-
             {{ range $name, $value := $.Values.env }}
             - name: {{ $name | quote }}
               value: {{ $value | quote }}
@@ -180,9 +169,6 @@ spec:
             {{ range $secretName, $secret := $.Values.secrets }}
             {{ if or (eq $secret.enabled nil) $secret.enabled }}
             {{ range $name, $key := $secret.env }}
-            {{ if eq $name "MONGO_CONNECTION_STRING" }}
-            {{ fail "MongoDB connection configuration has moved to the 'mongo' key." }}
-            {{ end }} {{/* if */}}
             - name: {{ $name | quote }}
               valueFrom:
                 secretKeyRef:

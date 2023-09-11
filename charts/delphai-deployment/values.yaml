@@ -68,7 +68,6 @@ configMaps:
 #      PARAMETER: key-in-configmap
 
 # Import k8s Secrets
-# <secret-name>.env key may not be MONGO_CONNECTION_STRING
 secrets:
 #  secret-name:
 #    enabled: true                       # Optional
@@ -80,15 +79,10 @@ secrets:
 #    initEnv:                                  # Optional
 #      PARAMETER: key-in-configmap
 
-# Enable MongoDB access
-mongo:
-  enabled: false
-
-  connectionString:
-    # Secret name where connection string is stored
-    secretName: "mongodb-credentials"
-    # Secret key where connection string is stored
-    secretKey: "connection-string"
+  mongo-credentials:
+    enabled: false
+    env:
+      MONGO_CONNECTION_STRING: "connection-string"
 
 # Define ports exposed by the deployment (as k8s Service)
 ports:
