@@ -80,6 +80,7 @@ secrets:
 #      PARAMETER: key-in-configmap
 
   mongo-credentials:
+    enabled: false
     env:
       MONGO_CONNECTION_STRING: "connection-string"
 
