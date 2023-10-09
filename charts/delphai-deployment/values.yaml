@@ -144,6 +144,17 @@ redis:
     enabled: false
 
   master:
+    ## @param master.disableCommands Array with Redis&reg; commands to disable on master nodes
+    ## Commands will be completely disabled by renaming each to an empty string.
+    ## ref: https://redis.io/topics/security#disabling-of-specific-commands
+    ##
+    disableCommands: []
+
+    ## Redis&reg; master resource requests and limits
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param master.resources.limits The resources limits for the Redis&reg; master containers
+    ## @param master.resources.requests The requested resources for the Redis&reg; master containers
+    ##
     resources:
       requests:
          cpu: 10m

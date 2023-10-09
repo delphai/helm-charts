@@ -1,6 +1,6 @@
 apiVersion: "v2"
 name: "delphai-deployment"
-version: "0.2.10"
+version: "0.2.11"
 description: "Standard service deployment"
 type: "application"
 dependencies:
