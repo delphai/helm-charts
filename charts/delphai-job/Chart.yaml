@@ -1,6 +1,0 @@
-apiVersion: v2
-name: delphai-job
-description: delphai job
-type: application
-version: 0.1.9
-appVersion: "1.16.0"
