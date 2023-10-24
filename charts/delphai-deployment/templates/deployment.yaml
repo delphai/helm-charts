@@ -142,13 +142,6 @@ spec:
               value: "{{ $.Release.Name }}-redis-master.{{ $.Release.Namespace }}"
             {{ end }}
 
-            {{ if or $schedulingRequireGPU $schedulingPreferGPU }}
-            - name: NVIDIA_VISIBLE_DEVICES
-              value: "all"
-            - name: NVIDIA_DRIVER_CAPABILITIES
-              value: "compute,utility"
-            {{ end }} {{/* if or $schedulingRequireGPU $schedulingPreferGPU */}}
-
             {{ range $name, $value := $.Values.env }}
             - name: {{ $name | quote }}
               value: {{ $value | quote }}
