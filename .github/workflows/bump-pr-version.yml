@@ -15,7 +15,7 @@ jobs:
       comparison-result: ${{ steps.comparison.outputs.comparison-result }}
     steps:
       - name: Install dependencies
-        run: snap install yq
+        run: sudo snap install yq
 
       - name: Checkout PR base
         uses: actions/checkout@v4
