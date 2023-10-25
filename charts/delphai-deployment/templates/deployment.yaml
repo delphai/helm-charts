@@ -131,7 +131,14 @@ spec:
           args: {{ $.Values.debugMode.args | toYaml | nindent 10 }}
           {{ end }} {{/* if and $.Values.debugMode.enabled $.Values.debugMode.args */}}
 
-          resources: {{ toJson $.Values.resources }}
+          resources:
+            requests: {{ toJson $.Values.resources.requests }}
+            limits:
+              {{ if or $schedulingRequireGPU $schedulingPreferGPU }}
+              nvidia.com/gpu: 1
+              {{ end }} {{/* if or $schedulingRequireGPU $schedulingPreferGPU */}}
+              {{ $.Values.resources.limits | toYaml | nindent 14 }}
+
 
           env:
             - name: DELPHAI_ENVIRONMENT
