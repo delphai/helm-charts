@@ -45,7 +45,7 @@ jobs:
     if: ${{ !(needs.compare.outputs.comparison-result == '>') }}
     steps:
       - name: Install dependencies
-        run: pip install pybump
+        run: sudo snap install yq
 
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -53,15 +53,12 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
       
-      - name: Set chart version to base and bump patch
+      - name: Bump base version and set to chart
         run: |
-          pybump set \
-          --file ./charts/delphai-deployment/Chart.yaml \
-          --set-version ${{ needs.compare.outputs.base-version }}
-
-          pybump bump \
-          --file ./charts/delphai-deployment/Chart.yaml \
-          --level patch
+          yq -i '.version = \
+          "$(echo ${{ needs.compare.outputs.base-version }} | \
+            awk -F. '/[0-9]+\./{$NF++;print}' OFS=.)"'
+          ./charts/delphai-deployment/Chart.yaml
       
       - name: Commit and push changes
         run: |
