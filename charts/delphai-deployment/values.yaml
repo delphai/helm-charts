@@ -1,6 +1,6 @@
 image:      # delphaiwesteurope.azurecr.io/name@sha256:99257869693daa6a01dcb791309ac16bd1288bd5a096a3451dd6c19e2c5f3efd
 
-# Amount of pods
+# Amount of pod
 replicas: 1
 
 # Enable debug mode
