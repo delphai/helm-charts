@@ -1,0 +1,68 @@
+name: Bump PR chart version
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'charts/delphai-deployment/**'
+
+jobs:
+  compare:
+    name: Compare PR base and head versions
+    runs-on: ubuntu-latest
+    outputs:
+      base-version: ${{ steps.base-version.outputs.version}}
+      comparison-result: ${{ steps.comparison.outputs.comparison-result }}
+    steps:
+      - name: Install dependencies
+        run: sudo snap install yq
+
+      - name: Checkout PR base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Get base version
+        id: base-version
+        run: echo "version=$(yq '.version' ./charts/delphai-deployment/Chart.yaml)" >> $GITHUB_OUTPUT
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+      - name: Get head version
+        id: head-version
+        run: echo "version=$(yq '.version' ./charts/delphai-deployment/Chart.yaml)" >> $GITHUB_OUTPUT
+
+      - name: Compare versions
+        uses: madhead/semver-utils@latest
+        id: comparison
+        with:
+          version: ${{ steps.head-version.outputs.version }}
+          compare-to: ${{ steps.base-version.outputs.version }}
+          lenient: false
+  bump:
+    name: Bump PR head version if not bigger than base
+    runs-on: ubuntu-latest
+    needs: compare
+    if: ${{ !(needs.compare.outputs.comparison-result == '>') }}
+    steps:
+      - name: Install dependencies
+        run: sudo snap install yq
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+      
+      - name: Bump base version and set to chart
+        run: |
+          yq -i ".version=\"$(
+            echo ${{ needs.compare.outputs.base-version }} | \
+            awk -F. '/[0-9]+\./{$NF++;print}' OFS=.)\"" \
+          ./charts/delphai-deployment/Chart.yaml
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -am "[skip ci] chore: bump version"
+          git push
