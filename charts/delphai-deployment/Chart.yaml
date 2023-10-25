@@ -1,10 +1,10 @@
 apiVersion: "v2"
 name: "delphai-deployment"
-version: "0.2.10"
+version: "0.0.1"
 description: Standard service deployment
 type: application
 dependencies:
-- condition: redis.enabled
-  name: redis
-  repository: https://charts.bitnami.com/bitnami
-  version: 17.x.x
+  - condition: redis.enabled
+    name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 17.x.x

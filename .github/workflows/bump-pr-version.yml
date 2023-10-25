@@ -55,14 +55,14 @@ jobs:
       
       - name: Bump base version and set to chart
         run: |
-          yq -i '.version = \
-          "$(echo ${{ needs.compare.outputs.base-version }} | \
-            awk -F. '/[0-9]+\./{$NF++;print}' OFS=.)"'
+          yq -i ".version=\"$(
+            echo ${{ needs.compare.outputs.base-version }} | \
+            awk -F. '/[0-9]+\./{$NF++;print}' OFS=.)\"" \
           ./charts/delphai-deployment/Chart.yaml
       
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -am "chore: bump version"
+          git commit -am "[skip ci] chore: bump version"
           git push
