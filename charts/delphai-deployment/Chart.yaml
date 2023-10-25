@@ -1,8 +1,8 @@
-apiVersion: "v2"
-name: "delphai-deployment"
-version: "0.2.12"
-description: "Standard service deployment"
-type: "application"
+apiVersion: v2
+name: delphai-deployment
+version: 0.2.13
+description: Standard service deployment
+type: application
 dependencies:
 - condition: redis.enabled
   name: redis
