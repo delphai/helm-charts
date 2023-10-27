@@ -1,0 +1,37 @@
+name: Check PR version increment
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'charts/delphai-deployment/**'
+
+jobs:
+  compare:
+    name: Compare PR base and head versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Get base version
+        id: base-version
+        run: echo "version=$(yq '.version' ./charts/delphai-deployment/Chart.yaml)" >> $GITHUB_OUTPUT
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+      - name: Get head version
+        id: head-version
+        run: echo "version=$(yq '.version' ./charts/delphai-deployment/Chart.yaml)" >> $GITHUB_OUTPUT
+
+      - name: Compare versions
+        uses: madhead/semver-utils@latest
+        id: comparison
+        with:
+          version: ${{ steps.head-version.outputs.version }}
+          compare-to: ${{ steps.base-version.outputs.version }}
+          lenient: false
+
+      - name: Validate comparison
+        run: '[[ ">" == "${{ steps.comparison.outputs.comparison-result }}" ]]'
