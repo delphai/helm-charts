@@ -26,7 +26,7 @@ jobs:
         run: echo "version=$(yq '.version' ./charts/delphai-deployment/Chart.yaml)" >> $GITHUB_OUTPUT
 
       - name: Compare versions
-        uses: madhead/semver-utils@latest
+        uses: madhead/semver-utils@v3.1.0
         id: comparison
         with:
           version: ${{ steps.head-version.outputs.version }}
