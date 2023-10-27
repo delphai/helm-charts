@@ -3,7 +3,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: "{{ $.Release.Name }}-pod-monitor"
+  name: {{ $.Release.Name | quote }}
   labels:
     release: kube-prometheus-stack
 spec:
