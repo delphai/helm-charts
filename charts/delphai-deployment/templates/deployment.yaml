@@ -210,6 +210,13 @@ spec:
             {{ end }} {{/* if ne $portName "oauthproxy" */}}
             {{ end }} {{/* range ports */}}
 
+            {{ if $.Values.monitoring.enabled }}
+            {{ range $endpoints := .Values.monitoring.podMetricsEndpoints }}
+            - name: "{{ $endpoints.targetPort }}-metrics"
+              containerPort: {{ $endpoints.targetPort }}
+            {{ end }} {{/* range podMetricsEndpoints */}}      
+            {{ end }} {{/* if $.Values.monitoring.enabled */}}
+
           {{ if or (eq $.Values.readinessProbe.enabled nil) $.Values.readinessProbe.enabled }}
 
           {{/* readinessProbe.portName input validation/open port discovery */}}

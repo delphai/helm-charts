@@ -177,3 +177,9 @@ redis:
       ## @param master.persistence.size Persistent Volume size
       ##
       size: 1Gi
+
+monitoring:
+  enabled: false
+  podMetricsEndpoints:
+    - targetPort: 9191
+      interval: 30s
