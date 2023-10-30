@@ -1,0 +1,14 @@
+{{ if $.Values.monitoring.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ $.Release.Name | quote }}
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      helm.sh/release: {{ $.Release.Name | quote }}
+  podMetricsEndpoints: {{ $.Values.monitoring.podMetricsEndpoints | toYaml | nindent 4 }}
+{{ end }} {{/* if $.Values.monitoring.enabled */}}
