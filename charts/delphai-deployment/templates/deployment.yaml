@@ -262,7 +262,7 @@ spec:
             - "--provider-display-name=Keycloak"
             - "--pass-access-token"
             - "--skip-auth-route=^/favicon\\.ico$"
-            - "--cookie-expire=1d"
+            - "--cookie-expire=24h"
 
             {{ range $role := $.Values.ingress.oAuthRequireOneOfRoles }}
             - "--allowed-role={{ $role }}"
