@@ -160,6 +160,10 @@ redis:
          cpu: 10m
          memory: 100Mi
 
+    ## @param master.kind Use either Deployment or StatefulSet (default)
+    ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+    kind: Deployment
+
     ## @param master.tolerations Tolerations for Redis&reg; master pods assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
