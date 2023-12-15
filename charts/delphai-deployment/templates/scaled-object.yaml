@@ -1,0 +1,22 @@
+{{ if $.Values.rabbitmq.enabled }}
+
+{{ $rabbitmqSecret := (lookup "v1" "Secret" .Release.Namespace "rabbitmq") }}
+
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  namespace: {{ $.Release.Namespace | quote }}
+  name: {{ $.Release.Name | quote }}
+spec:
+  minReplicaCount: 1
+  scaleTargetRef:
+    name: {{ $.Release.Name | quote }}
+  triggers:
+  - type: rabbitmq
+    metadata:
+      host: {{ index $rabbitmqSecret.data "connection-string" | b64dec }}
+      queueName: {{ $.Values.rabbitmq.queueName | quote }}
+      mode: QueueLength
+      value: {{ $.Values.rabbitmq.scaleOnQueueLength | quote}}
+
+{{ end }} {{/* if $.Values.rabbitmq.enabled */}}
