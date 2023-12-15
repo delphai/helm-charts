@@ -135,6 +135,15 @@ ingress:
   # Run Cloudflare purge_cache after deployment
   purgeCloudflareCache: false
 
+rabbitmq:
+  enable: false
+  
+  # The name of the RabbitMQ queue that this service consumes
+  queueName: "service.{{ $.Release.Namespace }}"
+
+  # Message backlog length to trigger autoscaling
+  scaleOnQueueLength: 20
+
 redis:
   enabled: false
 
