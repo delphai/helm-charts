@@ -1,4 +1,5 @@
 {{ if $.Values.rabbitmq.enabled }}
+{{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
 
 apiVersion: keda.sh/v1alpha1
 kind: TriggerAuthentication
@@ -11,4 +12,5 @@ spec:
       name: rabbitmq
       key: connection-string
 
+{{ end }} {{/* if index $.Values.buildMetadata.labels "com.delphai.image.release" */}}
 {{ end }} {{/* if $.Values.rabbitmq.enabled */}}
