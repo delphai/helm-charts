@@ -84,6 +84,11 @@ secrets:
     env:
       MONGO_CONNECTION_STRING: "connection-string"
 
+  rabbitmq:
+    enabled: false
+    env:
+      RABBITMQ_CONNECTION_STRING: "connection-string"
+
 # Define ports exposed by the deployment (as k8s Service)
 ports:
   http:
