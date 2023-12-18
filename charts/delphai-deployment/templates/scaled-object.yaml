@@ -1,7 +1,5 @@
 {{ if $.Values.rabbitmq.enabled }}
 
-{{ $rabbitmqSecret := (lookup "v1" "Secret" .Release.Namespace "rabbitmq") }}
-
 {{ $queueName := tpl $.Values.rabbitmq.queueName $ }}
 
 apiVersion: keda.sh/v1alpha1
@@ -16,9 +14,10 @@ spec:
   triggers:
   - type: rabbitmq
     metadata:
-      host: {{ index $rabbitmqSecret.data "connection-string" | b64dec }}
       queueName: {{ $queueName | quote }}
       mode: QueueLength
       value: {{ $.Values.rabbitmq.scaleOnQueueLength | quote}}
+    authenticationRef:
+      name: "rabbitmq-connection-string-{{ $.Release.Name }}"
 
 {{ end }} {{/* if $.Values.rabbitmq.enabled */}}
