@@ -1,0 +1,14 @@
+{{ if $.Values.rabbitmq.enabled }}
+
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: "rabbitmq-connection-string-{{ $.Release.Name }}"
+  namespace: {{ $.Release.Namespace | quote }}
+spec:
+  secretTargetRef:
+    - parameter: host
+      name: rabbitmq
+      key: connection-string
+
+{{ end }} {{/* if $.Values.rabbitmq.enabled */}}
