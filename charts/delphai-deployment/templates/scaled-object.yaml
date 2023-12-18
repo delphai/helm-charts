@@ -2,6 +2,8 @@
 
 {{ $rabbitmqSecret := (lookup "v1" "Secret" .Release.Namespace "rabbitmq") }}
 
+{{ $queueName := tpl $.Values.rabbitmq.queueName $ }}
+
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
@@ -15,7 +17,7 @@ spec:
   - type: rabbitmq
     metadata:
       host: {{ index $rabbitmqSecret.data "connection-string" | b64dec }}
-      queueName: {{ $.Values.rabbitmq.queueName | quote }}
+      queueName: {{ $queueName | quote }}
       mode: QueueLength
       value: {{ $.Values.rabbitmq.scaleOnQueueLength | quote}}
 
