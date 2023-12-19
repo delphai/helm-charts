@@ -143,6 +143,8 @@ ingress:
 rabbitmq:
   enable: false
   
+  maxReplicaCount: 16
+
   # The name of the RabbitMQ queue that this service consumes
   queueName: "service.{{ $.Release.Namespace }}"
 

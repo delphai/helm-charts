@@ -10,6 +10,7 @@ metadata:
   name: {{ $.Release.Name | quote }}
 spec:
   minReplicaCount: 1
+  maxReplicaCount: {{ $.Values.rabbitmq.maxReplicaCount }}
   scaleTargetRef:
     name: {{ $.Release.Name | quote }}
   triggers:
