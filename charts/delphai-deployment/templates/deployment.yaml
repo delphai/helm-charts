@@ -13,9 +13,9 @@ metadata:
     helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
 
 spec:
-  {{ if not $.Values.rabbitmq.enabled }}
+  {{ if not $.Values.autoscaling.enabled }}
   replicas: {{ $.Values.replicas }}
-  {{ end }} {{/* if not $.Values.rabbitmq.enabled */}}
+  {{ end }} {{/* if not $.Values.autoscaling.enabled */}}
   selector:
     matchLabels:
       app: "{{ $.Release.Name }}"

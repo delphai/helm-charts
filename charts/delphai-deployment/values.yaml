@@ -140,7 +140,7 @@ ingress:
   # Run Cloudflare purge_cache after deployment
   purgeCloudflareCache: false
 
-rabbitmq:
+autoscaling:
   enable: false
   
   maxReplicaCount: 16

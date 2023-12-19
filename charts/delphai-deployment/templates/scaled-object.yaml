@@ -1,7 +1,7 @@
-{{ if $.Values.rabbitmq.enabled }}
+{{ if $.Values.autoscaling.enabled }}
 {{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
 
-{{ $queueName := tpl $.Values.rabbitmq.queueName $ }}
+{{ $queueName := tpl $.Values.autoscaling.queueName $ }}
 
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
@@ -10,7 +10,7 @@ metadata:
   name: {{ $.Release.Name | quote }}
 spec:
   minReplicaCount: 1
-  maxReplicaCount: {{ $.Values.rabbitmq.maxReplicaCount }}
+  maxReplicaCount: {{ $.Values.autoscaling.maxReplicaCount }}
   scaleTargetRef:
     name: {{ $.Release.Name | quote }}
   triggers:
@@ -18,8 +18,8 @@ spec:
     metadata:
       queueName: {{ $queueName | quote }}
       mode: QueueLength
-      value: {{ $.Values.rabbitmq.scaleOnQueueLength | quote}}
+      value: {{ $.Values.autoscaling.scaleOnQueueLength | quote}}
       hostFromEnv: "RABBITMQ_CONNECTION_STRING"
 
 {{ end }} {{/* if index $.Values.buildMetadata.labels "com.delphai.image.release" */}}
-{{ end }} {{/* if $.Values.rabbitmq.enabled */}}
+{{ end }} {{/* if $.Values.autoscaling.enabled */}}
