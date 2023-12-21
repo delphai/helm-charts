@@ -1,7 +1,7 @@
-{{ if $.Values.autoscaling.enabled }}
-{{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
+{{ $enabled := or $.Values.autoscaling.rabbitmq.enabled }}
 
-{{ $queueName := tpl $.Values.autoscaling.queueName $ }}
+{{ if $enabled }}
+{{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
 
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
@@ -13,13 +13,16 @@ spec:
   maxReplicaCount: {{ $.Values.autoscaling.maxReplicaCount }}
   scaleTargetRef:
     name: {{ $.Release.Name | quote }}
+
   triggers:
+  {{ if $.Values.autoscaling.rabbitmq.enabled }}
   - type: rabbitmq
     metadata:
-      queueName: {{ $queueName | quote }}
-      mode: QueueLength
-      value: {{ $.Values.autoscaling.scaleOnQueueLength | quote}}
       hostFromEnv: "RABBITMQ_CONNECTION_STRING"
+      queueName: {{ tpl $.Values.autoscaling.rabbitmq.queueName $ | quote }}
+      mode: QueueLength
+      value: {{ $.Values.autoscaling.rabbitmq.value | quote}}
+  {{ end }} {{/* if $.Values.autoscaling.rabbitmq.enabled */}}
 
 {{ end }} {{/* if index $.Values.buildMetadata.labels "com.delphai.image.release" */}}
-{{ end }} {{/* if $.Values.autoscaling.enabled */}}
+{{ end }} {{/* if $enabled */}}

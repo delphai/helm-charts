@@ -43,6 +43,18 @@ scheduling:
   # (For non-interactive only) Set lower priority (e.g. for scrappers)
   lowPriority: false
 
+autoscaling:
+  maxReplicaCount: 16
+
+  rabbitmq:
+    enabled: false
+
+    # The name of the RabbitMQ queue that this service consumes
+    queueName: "service.{{ $.Release.Namespace }}"
+
+    # Message backlog length to trigger autoscaling
+    value: 20
+
 volumes:
   # Mount Azure File shares from `common` subscription
   commonFileShares:
@@ -107,6 +119,12 @@ ports:
     enabled: false
     port: 37070
 
+monitoring:
+  enabled: false
+  podMetricsEndpoints:
+    - targetPort: 9191
+      interval: 30s
+
 # Enable readiness probe
 # Will by default probe one of the enabled ports, unless overriden in portName
 readinessProbe:
@@ -139,17 +157,6 @@ ingress:
 
   # Run Cloudflare purge_cache after deployment
   purgeCloudflareCache: false
-
-autoscaling:
-  enable: false
-  
-  maxReplicaCount: 16
-
-  # The name of the RabbitMQ queue that this service consumes
-  queueName: "service.{{ $.Release.Namespace }}"
-
-  # Message backlog length to trigger autoscaling
-  scaleOnQueueLength: 20
 
 redis:
   enabled: false
@@ -197,9 +204,3 @@ redis:
       ## @param master.persistence.size Persistent Volume size
       ##
       size: 1Gi
-
-monitoring:
-  enabled: false
-  podMetricsEndpoints:
-    - targetPort: 9191
-      interval: 30s
