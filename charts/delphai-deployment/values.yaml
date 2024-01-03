@@ -96,7 +96,7 @@ secrets:
     env:
       MONGO_CONNECTION_STRING: "connection-string"
 
-  rabbitmq:
+  rabbitmq-credentials:
     enabled: false
     env:
       RABBITMQ_CONNECTION_STRING: "connection-string"
