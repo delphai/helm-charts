@@ -14,7 +14,11 @@ metadata:
 
 spec:
   {{ if not $.Values.autoscaling.enabled }}
-  replicas: {{ $.Values.replicas }}
+  {{ if eq (lookup "v1" "ConfigMap" "default" "cluster-values").data.environment "review" }}
+  replicas: 1
+  {{ else }}
+  replicas : {{ $.Values.replicas }}
+  {{ end }} {{/* if eq (lookup "v1" "ConfigMap" "default" "cluster-values").data.environment "review" */}}
   {{ end }} {{/* if not $.Values.autoscaling.enabled */}}
   selector:
     matchLabels:
