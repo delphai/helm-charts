@@ -14,7 +14,7 @@ metadata:
 
 spec:
   {{ if not $.Values.autoscaling.enabled }}
-  {{ if eq (lookup "v1" "ConfigMap" "default" "cluster-values").data.environment "review" }}
+  {{ if eq $.clusterValues.environment "review" }}
   replicas: 1
   {{ else }}
   replicas : {{ $.Values.replicas }}
