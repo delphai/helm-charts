@@ -14,7 +14,11 @@ metadata:
 
 spec:
   {{ if not $.Values.autoscaling.enabled }}
-  replicas: {{ $.Values.replicas }}
+  {{ if eq $.clusterValues.environment "review" }}
+  replicas: 1
+  {{ else }}
+  replicas : {{ $.Values.replicas }}
+  {{ end }} {{/* if eq $.clusterValues.environment "review" */}}
   {{ end }} {{/* if not $.Values.autoscaling.enabled */}}
   selector:
     matchLabels:
