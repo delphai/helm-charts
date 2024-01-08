@@ -18,7 +18,7 @@ spec:
   replicas: 1
   {{ else }}
   replicas : {{ $.Values.replicas }}
-  {{ end }} {{/* if eq (lookup "v1" "ConfigMap" "default" "cluster-values").data.environment "review" */}}
+  {{ end }} {{/* if eq $.clusterValues.environment "review" */}}
   {{ end }} {{/* if not $.Values.autoscaling.enabled */}}
   selector:
     matchLabels:
