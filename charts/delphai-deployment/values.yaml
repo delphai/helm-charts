@@ -53,7 +53,7 @@ autoscaling:
     queueName: "service.{{ $.Release.Namespace }}"
 
     # Message backlog length to trigger autoscaling
-    value: 20
+    value: 100
 
 volumes:
   # Mount Azure File shares from `common` subscription
