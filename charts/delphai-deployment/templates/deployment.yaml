@@ -155,6 +155,9 @@ spec:
               value: "{{ $.Release.Name }}-redis-master.{{ $.Release.Namespace }}"
             {{ end }}
 
+            - name: OIDC_BASE_URL
+              value: "https://auth.{{ $.clusterValues.baseDomain }}/auth/realms/delphai"
+
             {{ range $name, $value := $.Values.env }}
             - name: {{ $name | quote }}
               value: {{ $value | quote }}
