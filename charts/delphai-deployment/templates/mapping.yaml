@@ -63,10 +63,11 @@ metadata:
 spec:
   host: "api.{{ $.clusterValues.baseDomain }}"
   {{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
-  prefix: "{{ $.Values.ingress.publicApiPrefix }}"
+  prefix: {{ $.Values.ingress.publicApiPrefix | quote }}
   {{ else }}
-  prefix: "/{{ $.Release.Name }}{{ $.Values.ingress.publicApiPrefix }}"
+  prefix: {{ printf "/%s%s" $.Release.Name $.Values.ingress.publicApiPrefix | quote }}
   {{ end }} {{/* if index $.Values.buildMetadata.labels "com.delphai.image.release" */}}
+  prefix_regex: true
   
   {{ if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled }}
   service: "{{ $.Release.Name }}:{{ $.Values.ports.http.port }}"
@@ -78,6 +79,7 @@ spec:
 
   timeout_ms: 60000
   idle_timeout_ms: 500000
+
 {{ end }} {{/* if $.Values.ingress.publicApiEnabled */}}
 
 {{ if $.Values.ingress.grpc }}

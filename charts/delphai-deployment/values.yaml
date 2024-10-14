@@ -151,7 +151,7 @@ ingress:
 
   # Enable exposing public client-facing API
   publicApiEnabled: false
-  # Define a prefix for the public client-facing API
+  # Define a prefix (regex) for the public client-facing API
   publicApiPrefix: null
 
   # Enable OAuth Proxy for HTTP
