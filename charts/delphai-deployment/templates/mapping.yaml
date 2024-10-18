@@ -46,7 +46,7 @@ spec:
   timeout_ms: 60000
   idle_timeout_ms: 500000
 
-{{ if $.Values.ingress.publicApiEnabled }}
+{{ if $.Values.ingress.publicApiPrefix }}
 ---    
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -80,7 +80,7 @@ spec:
   timeout_ms: 60000
   idle_timeout_ms: 500000
 
-{{ end }} {{/* if $.Values.ingress.publicApiEnabled */}}
+{{ end }} {{/* if $.Values.ingress.publicApiPrefix */}}
 
 {{ if $.Values.ingress.grpc }}
 ---
