@@ -71,6 +71,7 @@ metadata:
 
 spec:
   host: "api.{{ $.clusterValues.baseDomain }}"
+
   {{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
   prefix: {{ $.Values.ingress.publicApiPrefix | quote }}
   {{ else }}
