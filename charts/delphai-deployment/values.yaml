@@ -144,10 +144,13 @@ readinessProbe:
 ingress:
   enabled: false
 
-  # Define subdomain (regex) for HTTP (Helm template)
+  # Define subdomain (regex) for HTTP (evaluated as a Helm template)
   subdomain: 'app{{ if eq $.clusterValues.environment "review" }}.*{{ end }}'
-  # Define pefix for HTTP (Helm template)
+  # Define a prefix for HTTP (evaluated as a Helm template)
   urlPrefix: "/service/{{ $.Release.Name }}/"
+
+  # Define a prefix (regex) for optionally exposing public client-facing API
+  # publicApiPrefix: "/v1/api/example/?"
 
   # Enable OAuth Proxy for HTTP
   oAuth: false
@@ -156,7 +159,7 @@ ingress:
   # Publish GRPC
   grpc: false
 
-  # Run Cloudflare purge_cache after deployment
+  # Run Cloudflare purge_cache on deployment
   purgeCloudflareCache: false
 
 redis:
