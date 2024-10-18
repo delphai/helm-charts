@@ -5,6 +5,10 @@
 {{ $subdomain := tpl $.Values.ingress.subdomain $ }}
 {{ $urlPrefix := tpl $.Values.ingress.urlPrefix $ }}
 
+{{ if not (hasPrefix "/" $urlPrefix) }}
+{{- fail "The HTTP prefix must start with a slash" }}
+{{ end }} {{/* not (hasPrefix "/" $urlPrefix) */}}
+
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -47,6 +51,11 @@ spec:
   idle_timeout_ms: 500000
 
 {{ if $.Values.ingress.publicApiPrefix }}
+
+{{ if not (hasPrefix "/" $.Values.ingress.publicApiPrefix) }}
+{{- fail "The public API prefix must start with a slash" }}
+{{ end }} {{/* not (hasPrefix "/" $.Values.ingress.publicApiPrefix) */}}
+
 ---    
 apiVersion: getambassador.io/v2
 kind: Mapping
