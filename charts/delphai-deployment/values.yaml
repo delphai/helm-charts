@@ -150,7 +150,8 @@ ingress:
   urlPrefix: "/service/{{ $.Release.Name }}/"
 
   # Define a prefix (regex) for optionally exposing public client-facing API
-  # Note: the trailing slash is treated as optional.
+  # Note: The prefix string must start and end with a slash. The trailing slash
+  # is treated as optional.
   # publicApiPrefix: "/v1/api/example/"
 
   # Enable OAuth Proxy for HTTP
