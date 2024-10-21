@@ -59,6 +59,19 @@ spec:
 {{- fail "The public API prefix must start and end with a slash" }}
 {{ end }}
 
+{{ $publicApiPrefix := print
+  ( ternary
+    ""
+    ( print "/" $.Release.Name )
+    ( index $.Values.buildMetadata.labels "com.delphai.image.release" )
+  )
+  ( substr
+    0
+    (sub ( len $.Values.ingress.publicApiPrefix ) 1 | int )
+    $.Values.ingress.publicApiPrefix
+  )
+}}
+
 ---    
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -75,13 +88,12 @@ metadata:
 spec:
   host: "api.{{ $.clusterValues.baseDomain }}"
 
-  {{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
-  prefix: {{ printf "%s(/|$)" ( substr 0 (sub ( len $.Values.ingress.publicApiPrefix ) 1 | int ) $.Values.ingress.publicApiPrefix ) | quote }}
-  {{ else }}
-  prefix: {{ printf "/%s%s(/|$)" $.Release.Name ( substr 0 (sub ( len $.Values.ingress.publicApiPrefix ) 1 | int ) $.Values.ingress.publicApiPrefix ) | quote }}
-  {{ end }} {{/* if index $.Values.buildMetadata.labels "com.delphai.image.release" */}}
+  prefix: "{{ $publicApiPrefix }}(/.*|$)"
   prefix_regex: true
-  
+  regex_rewrite:
+    pattern: "{{ $publicApiPrefix }}/?(.*)"
+    substitution: /\1
+
   {{ if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled }}
   service: "{{ $.Release.Name }}:{{ $.Values.ports.http.port }}"
   {{ else if or (eq $.Values.ports.httpgateway.enabled nil) $.Values.ports.httpgateway.enabled }}
