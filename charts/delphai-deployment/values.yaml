@@ -159,7 +159,7 @@ ingress:
   # Publish GRPC
   grpc: false
 
-  # Run Cloudflare purge_cache on deployment
+  # Run Cloudflare purge_cache after deployment
   purgeCloudflareCache: false
 
 redis:
