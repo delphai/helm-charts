@@ -65,11 +65,7 @@ spec:
     ( print "/" $.Release.Name )
     ( index $.Values.buildMetadata.labels "com.delphai.image.release" )
   )
-  ( substr
-    0
-    (sub ( len $.Values.ingress.publicApiPrefix ) 1 | int )
-    $.Values.ingress.publicApiPrefix
-  )
+  ( trimSuffix "/" $.Values.ingress.publicApiPrefix )
 }}
 
 ---    
