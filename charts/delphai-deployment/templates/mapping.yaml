@@ -52,9 +52,12 @@ spec:
 
 {{ if $.Values.ingress.publicApiPrefix }}
 
-{{ if not (hasPrefix "/" $.Values.ingress.publicApiPrefix) }}
-{{- fail "The public API prefix must start with a slash" }}
-{{ end }} {{/* not (hasPrefix "/" $.Values.ingress.publicApiPrefix) */}}
+{{ if or
+  (not (hasPrefix "/" $.Values.ingress.publicApiPrefix))
+  (not (hasSuffix "/" $.Values.ingress.publicApiPrefix))
+}}
+{{- fail "The public API prefix must start and end with a slash" }}
+{{ end }}
 
 ---    
 apiVersion: getambassador.io/v2
@@ -73,9 +76,9 @@ spec:
   host: "api.{{ $.clusterValues.baseDomain }}"
 
   {{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
-  prefix: {{ $.Values.ingress.publicApiPrefix | quote }}
+  prefix: {{ printf "%s(/|$)" ( substr 0 (sub ( len $.Values.ingress.publicApiPrefix ) 1 | int ) $.Values.ingress.publicApiPrefix ) | quote }}
   {{ else }}
-  prefix: {{ printf "/%s%s" $.Release.Name $.Values.ingress.publicApiPrefix | quote }}
+  prefix: {{ printf "/%s%s(/|$)" $.Release.Name ( substr 0 (sub ( len $.Values.ingress.publicApiPrefix ) 1 | int ) $.Values.ingress.publicApiPrefix ) | quote }}
   {{ end }} {{/* if index $.Values.buildMetadata.labels "com.delphai.image.release" */}}
   prefix_regex: true
   
