@@ -5,6 +5,11 @@
 {{ $subdomain := tpl $.Values.ingress.subdomain $ }}
 {{ $urlPrefix := tpl $.Values.ingress.urlPrefix $ }}
 
+{{ $branchPrefix := "" }}
+{{ if not (index $.Values.buildMetadata.labels "com.delphai.image.release") }}
+  {{ $branchPrefix = print "/" $.Release.Name }}
+{{ end }} {{/* if not (index $.Values.buildMetadata.labels "com.delphai.image.release") */}}
+
 {{ if not (hasPrefix "/" $urlPrefix) }}
 {{- fail "The HTTP prefix must start with a slash" }}
 {{ end }} {{/* not (hasPrefix "/" $urlPrefix) */}}
@@ -59,14 +64,7 @@ spec:
 {{- fail "The public API prefix must start and end with a slash" }}
 {{ end }}
 
-{{ $publicApiPrefix := print
-  ( ternary
-    ""
-    ( print "/" $.Release.Name )
-    ( index $.Values.buildMetadata.labels "com.delphai.image.release" )
-  )
-  ( trimSuffix "/" $.Values.ingress.publicApiPrefix )
-}}
+{{ $publicApiPrefix := ( trimAll "/" $.Values.ingress.publicApiPrefix ) }}
 
 ---    
 apiVersion: getambassador.io/v2
@@ -84,10 +82,10 @@ metadata:
 spec:
   host: "api.{{ $.clusterValues.baseDomain }}"
 
-  prefix: "{{ $publicApiPrefix }}(/.*|$)"
+  prefix: "{{ $branchPrefix }}/{{ $publicApiPrefix }}(/.*|$)"
   prefix_regex: true
   regex_rewrite:
-    pattern: "{{ $publicApiPrefix }}/?(.*)"
+    pattern: "{{ $branchPrefix }}/{{ $publicApiPrefix }}/?(.*)"
     substitution: /\1
 
   {{ if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled }}
