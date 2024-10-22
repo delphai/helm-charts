@@ -5,6 +5,15 @@
 {{ $subdomain := tpl $.Values.ingress.subdomain $ }}
 {{ $urlPrefix := tpl $.Values.ingress.urlPrefix $ }}
 
+{{ $branchPrefix := "" }}
+{{ if not (index $.Values.buildMetadata.labels "com.delphai.image.release") }}
+  {{ $branchPrefix = print "/" $.Release.Name }}
+{{ end }} {{/* if not (index $.Values.buildMetadata.labels "com.delphai.image.release") */}}
+
+{{ if not (hasPrefix "/" $urlPrefix) }}
+{{- fail "The HTTP prefix must start with a slash" }}
+{{ end }} {{/* not (hasPrefix "/" $urlPrefix) */}}
+
 ---
 apiVersion: getambassador.io/v2
 kind: Mapping
@@ -38,13 +47,59 @@ spec:
   service: "{{ $.Release.Name }}:{{ $.Values.ports.httpgateway.port }}"
   {{ else }}
   {{- fail "No HTTP ports found to publish" -}}
-  {{ end }}
+  {{ end }} {{/* if $.Values.ingress.oAuth */}}
 
   allow_upgrade:
     - websocket
 
   timeout_ms: 60000
   idle_timeout_ms: 500000
+
+{{ if $.Values.ingress.publicApiPrefix }}
+
+{{ if or
+  (not (hasPrefix "/" $.Values.ingress.publicApiPrefix))
+  (not (hasSuffix "/" $.Values.ingress.publicApiPrefix))
+}}
+{{- fail "The public API prefix must start and end with a slash" }}
+{{ end }}
+
+{{ $publicApiPrefix := ( trimAll "/" $.Values.ingress.publicApiPrefix ) }}
+
+---    
+apiVersion: getambassador.io/v2
+kind: Mapping
+
+metadata:
+  name: {{ $.Release.Name }}-api
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ $.Release.Service | quote }}
+    app.kubernetes.io/instance: {{ $.Release.Name | quote }}
+    helm.sh/release: {{ $.Release.Name | quote }}
+    helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+
+spec:
+  host: "api.{{ $.clusterValues.baseDomain }}"
+
+  prefix: "{{ $branchPrefix }}/{{ $publicApiPrefix }}(/.*|$)"
+  prefix_regex: true
+  regex_rewrite:
+    pattern: "{{ $branchPrefix }}/{{ $publicApiPrefix }}/?(.*)"
+    substitution: /\1
+
+  {{ if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled }}
+  service: "{{ $.Release.Name }}:{{ $.Values.ports.http.port }}"
+  {{ else if or (eq $.Values.ports.httpgateway.enabled nil) $.Values.ports.httpgateway.enabled }}
+  service: "{{ $.Release.Name }}:{{ $.Values.ports.httpgateway.port }}"
+  {{ else }}
+  {{- fail "No HTTP ports found to publish as a public API" -}}
+  {{ end }} {{/* if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled */}}
+
+  timeout_ms: 60000
+  idle_timeout_ms: 500000
+
+{{ end }} {{/* if $.Values.ingress.publicApiPrefix */}}
 
 {{ if $.Values.ingress.grpc }}
 ---

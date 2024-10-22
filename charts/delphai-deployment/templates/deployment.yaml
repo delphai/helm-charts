@@ -150,6 +150,9 @@ spec:
             - name: DELPHAI_ENVIRONMENT
               value: {{ $.clusterValues.environment | quote }}
 
+            - name: CLUSTER_API_DOMAIN
+              value: "api.{{ $.clusterValues.baseDomain }}"
+
             {{ if $.Values.redis.enabled }}
             - name: REDIS_HOST
               value: "{{ $.Release.Name }}-redis-master.{{ $.Release.Namespace }}"
