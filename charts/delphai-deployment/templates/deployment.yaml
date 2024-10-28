@@ -153,6 +153,9 @@ spec:
             - name: CLUSTER_API_DOMAIN
               value: "api.{{ $.clusterValues.baseDomain }}"
 
+            - name: API_LOGGER_ENDPOINT
+              value: "http://api-logger.api-logger.svc:8000/request"
+
             {{ if $.Values.redis.enabled }}
             - name: REDIS_HOST
               value: "{{ $.Release.Name }}-redis-master.{{ $.Release.Namespace }}"
