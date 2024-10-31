@@ -6,6 +6,13 @@
 {{- $urlPrefix := tpl $.Values.ingress.urlPrefix $ -}}
 This service exposes following endpoint(s):
  * HTTPS: https://{{ $subdomain | replace ".*" "" }}.{{ $.clusterValues.baseDomain }}{{ $urlPrefix | default "/" }}
+{{- if $.Values.ingress.publicApiPrefix }}
+{{- $branchPrefix := "" }}
+{{- if not (index $.Values.buildMetadata.labels "com.delphai.image.release") }}
+{{- $branchPrefix = print "/" $.Release.Name }}
+{{- end }} {{/* if not (index $.Values.buildMetadata.labels "com.delphai.image.release") */}}
+ * Public API: https://api.{{ $.clusterValues.baseDomain }}{{ $branchPrefix }}{{ $.Values.ingress.publicApiPrefix }}
+{{- end }} {{/* if $.Values.ingress.publicApiPrefix */}}
 {{- if $.Values.ingress.grpc }}
  * GRPC: {{ $.Release.Name }}.grpc.{{ $.clusterValues.baseDomain }}:80
 {{- end -}} {{- /* if $.Values.ingress.grpc */ -}}
