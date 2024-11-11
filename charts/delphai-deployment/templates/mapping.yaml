@@ -102,11 +102,7 @@ spec:
     - Accept
     - Authorization
     - Content-Type
-    - grpc-timeout
     - Origin
-    - X-GENERAL-TOKEN
-    - x-grpc-web
-    - X-Request-With
     max_age: "86400"
     methods: GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH
     origins: "https://docs.{{ $.clusterValues.baseDomain }}"
