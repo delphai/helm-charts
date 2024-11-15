@@ -96,6 +96,17 @@ spec:
   {{- fail "No HTTP ports found to publish as a public API" -}}
   {{ end }} {{/* if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled */}}
 
+  cors:
+    credentials: true
+    headers:
+    - Accept
+    - Authorization
+    - Content-Type
+    - Origin
+    max_age: "86400"
+    methods: GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH
+    origins: "https://docs.{{ $.clusterValues.baseDomain }}"
+
   timeout_ms: 60000
   idle_timeout_ms: 500000
 
