@@ -13,7 +13,4 @@ This service exposes following endpoint(s):
 {{- end }} {{/* if not (index $.Values.buildMetadata.labels "com.delphai.image.release") */}}
  * Public API: https://api.{{ $.clusterValues.baseDomain }}{{ $branchPrefix }}{{ $.Values.ingress.publicApiPrefix }}
 {{- end }} {{/* if $.Values.ingress.publicApiPrefix */}}
-{{- if $.Values.ingress.grpc }}
- * GRPC: {{ $.Release.Name }}.grpc.{{ $.clusterValues.baseDomain }}:80
-{{- end -}} {{- /* if $.Values.ingress.grpc */ -}}
 {{- end -}} {{- /* if $.Values.ingress.enabled */ -}}
