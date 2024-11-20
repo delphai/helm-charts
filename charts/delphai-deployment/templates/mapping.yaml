@@ -105,7 +105,11 @@ spec:
     - Origin
     max_age: "86400"
     methods: GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH
-    origins: "https://docs.{{ $.clusterValues.baseDomain }}"
+    origins:
+    - "https://docs.{{ $.clusterValues.baseDomain }}"
+    - "https://intappinc.sharepoint.com"
+    - "https://onedrive.live.com"
+    - "https://madiscovergmbh.sharepoint.com"
 
   timeout_ms: 60000
   idle_timeout_ms: 500000
