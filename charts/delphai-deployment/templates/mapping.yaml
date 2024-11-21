@@ -103,14 +103,11 @@ spec:
     - Authorization
     - Content-Type
     - Origin
-    max_age: "86400"
+    max_age: "3600"
     methods: GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH
     origins:
     - "https://docs.{{ $.clusterValues.baseDomain }}"
-    - "https://intappinc.sharepoint.com"
-    - "https://onedrive.live.com"
-    - "https://madiscovergmbh.sharepoint.com"
-
+    - "https://delphaiexceladdinreview.z6.web.core.windows.net"     # https://portal.azure.com/#@delphai.dev/resource/subscriptions/6e9861b7-fa0e-4e09-84e8-51dbd5982a68/resourceGroups/excel-add-in/providers/Microsoft.Storage/storageAccounts/delphaiexceladdinreview/storagebrowser
   timeout_ms: 60000
   idle_timeout_ms: 500000
 
