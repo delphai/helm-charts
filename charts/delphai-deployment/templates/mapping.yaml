@@ -112,31 +112,4 @@ spec:
   idle_timeout_ms: 500000
 
 {{ end }} {{/* if $.Values.ingress.publicApiPrefix */}}
-
-{{ if $.Values.ingress.grpc }}
----
-apiVersion: getambassador.io/v2
-kind: Mapping
-
-metadata:
-  name: {{ $.Release.Name }}-grpc
-  namespace: {{ $.Release.Namespace }}
-  labels:
-    app.kubernetes.io/managed-by: {{ $.Release.Service | quote }}
-    app.kubernetes.io/instance: {{ $.Release.Name | quote }}
-    helm.sh/release: {{ $.Release.Name | quote }}
-    helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
-
-spec:
-  grpc: true
-  host: "{{ $.Release.Name }}.grpc.{{ $.clusterValues.baseDomain }}"
-  prefix: "/"
-  {{ if or (eq $.Values.ports.grpc.enabled nil) $.Values.ports.grpc.enabled }}
-  service: "{{ $.Release.Name }}:{{ $.Values.ports.grpc.port }}"
-  {{ else }}
-  {{- fail "GRPC port is disabled" -}}
-  {{ end }} {{/* if or (eq $.Values.ports.grpc.enabled nil) $.Values.ports.grpc.enabled */}}
-  timeout_ms: 60000
-  idle_timeout_ms: 500000
-{{ end }} {{/* if $.Values.ingress.grpc */}}
 {{ end }} {{/* if $.Values.ingress.enabled */}}
