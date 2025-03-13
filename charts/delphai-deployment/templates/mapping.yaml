@@ -52,9 +52,6 @@ spec:
   allow_upgrade:
     - websocket
 
-  timeout_ms: 60000
-  idle_timeout_ms: 500000
-
 {{ if $.Values.ingress.publicApiPrefix }}
 
 {{ if or
@@ -108,8 +105,5 @@ spec:
     origins:
     - "https://docs.{{ $.clusterValues.baseDomain }}"
     - "https://delphaiexceladdinreview.z6.web.core.windows.net"     # https://portal.azure.com/#@delphai.dev/resource/subscriptions/6e9861b7-fa0e-4e09-84e8-51dbd5982a68/resourceGroups/excel-add-in/providers/Microsoft.Storage/storageAccounts/delphaiexceladdinreview/storagebrowser
-  timeout_ms: 60000
-  idle_timeout_ms: 500000
-
 {{ end }} {{/* if $.Values.ingress.publicApiPrefix */}}
 {{ end }} {{/* if $.Values.ingress.enabled */}}
