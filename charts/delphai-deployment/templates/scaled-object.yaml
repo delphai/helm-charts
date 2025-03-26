@@ -24,5 +24,28 @@ spec:
       value: {{ $.Values.autoscaling.rabbitmq.value | quote}}
   {{ end }} {{/* if $.Values.autoscaling.rabbitmq.enabled */}}
 
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 300
+          policies:
+          - type: Percent
+            value: 10
+            periodSeconds: 15
+          - type: Pods
+            value: 10
+            periodSeconds: 15
+        scaleUp:
+          stabilizationWindowSeconds: 0
+          policies:
+          - type: Percent
+            value: 200
+            periodSeconds: 15
+          - type: Pods
+            value: 10
+            periodSeconds: 15
+          selectPolicy: Max
+
 {{ end }} {{/* if index $.Values.buildMetadata.labels "com.delphai.image.release" */}}
 {{ end }} {{/* if $enabled */}}
