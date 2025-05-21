@@ -14,11 +14,10 @@ debugMode:
 # Declare resource usage
 resources:
   requests:
-    memory: 300Mi
-    # cpu: 50m
+    memory: "300Mi"
+    cpu: "300m"
   limits:
-    memory: 2500Mi
-    # cpu: 100m
+    memory: "2500Mi"
 
 # Run containainer before main
 initContainer:
