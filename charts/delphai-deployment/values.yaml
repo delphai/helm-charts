@@ -42,6 +42,9 @@ scheduling:
   # (For non-interactive only) Set lower priority (e.g. for scrappers)
   lowPriority: false
 
+  # Enable for scraper services that do a lot of outbound network traffic to scrape websites
+  scraper: false
+
 autoscaling:
   minReplicaCount: 1
   maxReplicaCount: 16
