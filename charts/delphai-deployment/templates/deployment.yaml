@@ -2,7 +2,6 @@
 ---
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: "{{ $.Release.Name }}"
   namespace: "{{ $.Release.Namespace }}"
@@ -31,6 +30,9 @@ spec:
         helm.sh/release: {{ $.Release.Name | quote }}
         helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
         app: "{{ $.Release.Name }}"
+        {{- if $.Values.scheduling.scraper }}
+        delphai.com/scraper: "true"
+        {{- end }} {{/* if $.Values.scheduling.scraper */}}
 
     spec:
       tolerations:
@@ -85,6 +87,20 @@ spec:
                       - "{{ $.Release.Name }}"
               topologyKey: "kubernetes.io/hostname"
           {{ end }} {{/* if $.Values.scheduling.maxOneReleasePodPerNode */}}
+
+          preferredDuringSchedulingIgnoredDuringExecution:
+          {{ if $.Values.scheduling.scraper }}
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: "delphai.com/scraper"
+                      operator: In
+                      values:
+                        - "true"
+                topologyKey: "kubernetes.io/hostname"
+                namespaceSelector: {}
+          {{ end }} {{/* if $.Values.scheduling.scraper */}}
 
       {{ if or $schedulingNotSpot $schedulingRequireGPU $schedulingPreferGPU }}
       priorityClassName: "selected-node"
