@@ -1,0 +1,20 @@
+{{ if ne $.clusterValues.environment "review" }}
+{{ if $.Values.scheduling.interactive }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: "{{ $.Release.Name }}-pdb"
+  namespace: "{{ $.Release.Namespace }}"
+  labels:
+    app.kubernetes.io/managed-by: {{ $.Release.Service | quote }}
+    app.kubernetes.io/instance: {{ $.Release.Name | quote }}
+    helm.sh/release: {{ $.Release.Name | quote }}
+    helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: "{{ $.Release.Name }}"
+{{ end }} {{/* if $.Values.scheduling.interactive */}}
+{{ end }} {{/* if ne $.clusterValues.environment "review" */}}
