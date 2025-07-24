@@ -1,4 +1,4 @@
-{{ if ne $.clusterValues.environment "review" }}
+{{ if eq $.clusterValues.environment "production" }}
 {{ if $.Values.scheduling.interactive }}
 ---
 apiVersion: policy/v1
@@ -17,4 +17,4 @@ spec:
     matchLabels:
       app: "{{ $.Release.Name }}"
 {{ end }} {{/* if $.Values.scheduling.interactive */}}
-{{ end }} {{/* if ne $.clusterValues.environment "review" */}}
+{{ end }} {{/* if eq $.clusterValues.environment "production" */}}

@@ -1,13 +1,13 @@
 {{ include "delphai-deployment.ensureClusterValues" $ }}
 
 {{ $replicaCount := 1 }}
-{{ if ne $.clusterValues.environment "review" }}
+{{ if eq $.clusterValues.environment "production" }}
 {{ if $.Values.scheduling.interactive }}
 {{ $replicaCount = max 2 $.Values.replicas }}
 {{ else }}
 {{ $replicaCount = $.Values.replicas }}
 {{ end }} {{/* if $.Values.scheduling.interactive */}}
-{{ end }} {{/* if ne $.clusterValues.environment "review" */}}
+{{ end }} {{/* if eq $.clusterValues.environment "production" */}}
 
 ---
 apiVersion: apps/v1

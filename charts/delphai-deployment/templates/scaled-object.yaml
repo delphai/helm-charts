@@ -10,11 +10,11 @@ metadata:
   namespace: {{ $.Release.Namespace | quote }}
   name: {{ $.Release.Name | quote }}
 spec:
-  {{if and ( $.Values.scheduling.interactive ) ( ne $.clusterValues.environment "review" ) }}
+  {{ if and ( eq $.clusterValues.environment "production" ) ( $.Values.scheduling.interactive ) }}
   minReplicaCount: {{ max 2 $.Values.autoscaling.minReplicaCount }}
   {{ else }}
   minReplicaCount: {{ $.Values.autoscaling.minReplicaCount }}
-  {{ end }} {{/* if $.Values.scheduling.interactive */}}
+  {{ end }} {{/* if and ( eq $.clusterValues.environment "production" ) ( $.Values.scheduling.interactive ) */}}
   maxReplicaCount: {{ $.Values.autoscaling.maxReplicaCount }}
   scaleTargetRef:
     name: {{ $.Release.Name | quote }}
