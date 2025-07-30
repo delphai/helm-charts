@@ -37,9 +37,19 @@ scheduling:
   # Do not run more than one pod of the same release per node
   maxOneReleasePodPerNode: false
 
-  # Does the service handle requests (including indirect) from people
-  interactive: true
-  # (For non-interactive only) Set lower priority (e.g. for scrappers)
+  # Does the service handle requests (including indirect) from people or from public API?
+  #
+  # Examples for when to set to `true`:
+  # - in microservices that are called by the dashboard GUI
+  # - in microservices that serve public APIs
+  # - in microservices that are called by other microservices that have `scheduling.interactive` set to `true`
+  # Examples for when to set to `false`:
+  # - in scrapers
+  # - in pipelines
+  # - in microservices that are only called by the pipelines
+  interactive: false
+
+  # (For non-interactive only) Set lower priority (e.g. for scrapers)
   lowPriority: false
 
   # Enable for scraper services that do a lot of outbound network traffic to scrape websites
