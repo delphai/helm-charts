@@ -176,6 +176,10 @@ ingress:
 redis:
   enabled: false
 
+  image:
+    registry: delphaiwesteurope.azurecr.io
+    repository: redis
+
   architecture: standalone
 
   auth:
