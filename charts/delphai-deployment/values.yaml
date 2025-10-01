@@ -172,6 +172,68 @@ ingress:
 
   # Run Cloudflare purge_cache after deployment
   purgeCloudflareCache: false
+  
+  # CronJobs that execute periodic admin tasks for the service.
+  # 
+  # Each CronJob sends a HTTP POST request to the service's internal HTTP endpoint
+  # or executes a custom command.
+  # 
+  # See https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-syntax
+  # for details on the schedule format.
+  #
+  # cronjobs:
+  #   example-http-api-post:
+  #     schedule: "8 15 * * *"
+  #     image: delphaiwesteurope.azurecr.io/alpine:3
+  #     env:
+  #      - name: REQUEST_PATH
+  #        value: "/trigger-example-action"
+  #
+  #   example-http-api-post-body:
+  #     schedule: "8 15 * * *"
+  #     image: delphaiwesteurope.azurecr.io/alpine:3
+  #     env:
+  #     - name: REQUEST_PATH
+  #       value: "/trigger-example-action"
+  #     # Optionally provide HTTP POST body (otherwise it defaults to empty string)
+  #     - name: REQUEST_BODY
+  #       value: |
+  #         {
+  #           "source": "cronjob",
+  #           "message": "Hello, World!"
+  #         }
+  #
+  #   example-custom-api-post:
+  #     schedule: "8 15 * * *"
+  #     image: delphaiwesteurope.azurecr.io/alpine:3
+  #     env:
+  #     # Optionally override SERVICE_ENDPOINT (otherwise it defaults to the service's internal HTTP endpoint)
+  #     - name: SERVICE_ENDPOINT
+  #       value: "https://example.com"
+  #     - name: REQUEST_PATH
+  #       value: "/"
+  #
+  #   example-python-script:
+  #     schedule: "8 15 * * *"
+  #     # A CronJob command can also run a custom script instead of sending an HTTP request.
+  #     # Note: It can use the service's main container image. The service venv is available.
+  #     command: /app/.venv/bin/python
+  #     args:
+  #     - -c
+  #     - |
+  #       print("Hello, World!")
+  #     # Optionally provide environment variables
+  #     env:
+  #     - name: EXAMPLE_VAR
+  #       value: "42"
+  #
+  #   example-custom-command:
+  #     schedule: "8 15 * * *"
+  #     image: delphaiwesteurope.azurecr.io/alpine:3
+  #     command: /bin/echo
+  #     args:
+  #     - Hello
+  #     - World!
 
 redis:
   enabled: false
