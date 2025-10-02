@@ -15,7 +15,7 @@ spec:
         spec:
           restartPolicy: OnFailure
           containers:
-          - name: main
+          - name: cronjob-{{ $cronjobName }}
             image: {{ or $cronjob.image $.Values.image | quote }}
 
             env:
