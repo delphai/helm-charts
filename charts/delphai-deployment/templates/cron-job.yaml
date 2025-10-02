@@ -5,18 +5,19 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ printf "%s-%s" $.Release.Name $cronjobName | trunc 52 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" $.Release.Name $cronjobName | quote }}
   namespace: {{ $.Release.Namespace | quote }}
 spec:
   schedule: {{ $cronjob.schedule | quote }}
+  concurrencyPolicy: Replace
   jobTemplate:
     spec:
       template:
         spec:
           restartPolicy: OnFailure
           containers:
-          - name: cronjob-{{ $cronjobName }}
-            image: {{ or $cronjob.image $.Values.image | quote }}
+          - name: {{ printf "cronjob-%s" $cronjobName | quote }}
+            image: {{ $cronjob.image | default $.Values.image | quote }}
 
             env:
             {{ if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled }}
@@ -33,11 +34,7 @@ spec:
 
             {{ if $cronjob.command }}
             command:
-            - {{ $cronjob.command }}
-            {{ if $cronjob.args }}
-            args:
-            {{ $cronjob.args | toYaml | nindent 12}}
-            {{ end }} {{/* if $cronjob.args */}}
+            {{ $cronjob.command | toYaml | nindent 12}}
             {{ else }}
             command:
             - /bin/sh
@@ -56,8 +53,15 @@ spec:
                 --output-document - \
                 --header "Content-Type: application/json" \
                 --post-data "${REQUEST_BODY}" \
-                "${SERVICE_ENDPOINT}/${REQUEST_PATH#/}"
+                "${SERVICE_ENDPOINT}/${REQUEST_PATH#/}" \
+                "$@"
+            - dummy_command_name
             {{ end }} {{/* if $cronjob.command */}}
+
+            {{ if $cronjob.args }}
+            args:
+            {{ $cronjob.args | toYaml | nindent 12}}
+            {{ end }} {{/* if $cronjob.args */}}
 
 {{ end }} {{/* range cronjobs */}}
 
