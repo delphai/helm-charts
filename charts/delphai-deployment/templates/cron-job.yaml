@@ -1,0 +1,68 @@
+{{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
+
+{{ range $cronjobName, $cronjob := $.Values.cronjobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ printf "%s-%s" $.Release.Name $cronjobName | quote }}
+  namespace: {{ $.Release.Namespace | quote }}
+spec:
+  schedule: {{ $cronjob.schedule | quote }}
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: {{ printf "cronjob-%s" $cronjobName | quote }}
+            image: {{ $cronjob.image | default $.Values.image | quote }}
+
+            env:
+            {{ if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled }}
+            - name: SERVICE_ENDPOINT
+              value: {{ printf "http://%s.%s.svc:%d" $.Release.Name $.Release.Namespace (int $.Values.ports.http.port) | quote }}
+            {{ else if or (eq $.Values.ports.httpgateway.enabled nil) $.Values.ports.httpgateway.enabled }}
+            - name: SERVICE_ENDPOINT
+              value: {{ printf "http://%s.%s.svc:%d" $.Release.Name $.Release.Namespace (int $.Values.ports.httpgateway.port) | quote }}
+            {{ end }} {{/* if or (eq $.Values.ports.http.enabled nil) $.Values.ports.http.enabled */}}
+
+            {{ if $cronjob.env }}
+            {{ $cronjob.env | toYaml | nindent 12 }}
+            {{ end }} {{/* if $cronjob.env */}}
+
+            {{ if $cronjob.command }}
+            command:
+            {{ $cronjob.command | toYaml | nindent 12}}
+            {{ else }}
+            command:
+            - /bin/sh
+            - -ec
+            - |
+              if [ -z "$SERVICE_ENDPOINT" ]
+              then
+                echo 'Error: $SERVICE_ENDPOINT is undefined'
+                exit 1
+              fi
+
+              set -x
+
+              wget \
+                --quiet \
+                --output-document - \
+                --header "Content-Type: application/json" \
+                --post-data "${REQUEST_BODY}" \
+                "${SERVICE_ENDPOINT}/${REQUEST_PATH#/}" \
+                "$@"
+            - dummy_command_name
+            {{ end }} {{/* if $cronjob.command */}}
+
+            {{ if $cronjob.args }}
+            args:
+            {{ $cronjob.args | toYaml | nindent 12}}
+            {{ end }} {{/* if $cronjob.args */}}
+
+{{ end }} {{/* range cronjobs */}}
+
+{{ end }} {{/* if index $.Values.buildMetadata.labels "com.delphai.image.release" */}}
