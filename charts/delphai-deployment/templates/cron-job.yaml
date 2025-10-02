@@ -1,5 +1,3 @@
-{{ if index $.Values.buildMetadata.labels "com.delphai.image.release" }}
-
 {{ range $cronjobName, $cronjob := $.Values.cronjobs }}
 ---
 apiVersion: batch/v1
@@ -10,6 +8,7 @@ metadata:
 spec:
   schedule: {{ $cronjob.schedule | quote }}
   concurrencyPolicy: Replace
+  suspend: {{ index $.Values.buildMetadata.labels "com.delphai.image.release" | not }}
   jobTemplate:
     spec:
       template:
@@ -64,5 +63,3 @@ spec:
             {{ end }} {{/* if $cronjob.args */}}
 
 {{ end }} {{/* range cronjobs */}}
-
-{{ end }} {{/* if index $.Values.buildMetadata.labels "com.delphai.image.release" */}}
