@@ -235,6 +235,16 @@ ingress:
 #     args:
 #     - Hello
 #     - World!
+#
+#   example-runs-on-both-envs:
+#     schedule: "8 15 * * *"
+#     environments:
+#       - review
+#       - production
+#     image: delphaiwesteurope.azurecr.io/alpine:3
+#     env:
+#      - name: REQUEST_PATH
+#        value: "/trigger-example-action"
 
 redis:
   enabled: false
