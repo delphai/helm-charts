@@ -8,7 +8,13 @@ metadata:
 spec:
   schedule: {{ $cronjob.schedule | quote }}
   concurrencyPolicy: Replace
-  suspend: {{ index $.Values.buildMetadata.labels "com.delphai.image.release" | not }}
+  suspend: {{
+    and
+      (index $.Values.buildMetadata.labels "com.delphai.image.release")
+      (has $.clusterValues.environment ($cronjob.environments | default (list "production")))
+    | not
+}}
+
   jobTemplate:
     spec:
       template:
