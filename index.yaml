@@ -2,6 +2,20 @@ apiVersion: v1
 entries:
   delphai-deployment:
   - apiVersion: v2
+    created: "2026-03-27T15:59:28.027315491Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    description: Standard service deployment
+    digest: 3ec0d87d0c957f0f3740bd9817631ca706e2505f4d4cc5594a9a93370cc538c7
+    name: delphai-deployment
+    type: application
+    urls:
+    - https://github.com/delphai/helm-charts/releases/download/delphai-deployment-0.10.3/delphai-deployment-0.10.3.tgz
+    version: 0.10.3
+  - apiVersion: v2
     created: "2025-10-08T14:57:16.044867897Z"
     dependencies:
     - condition: redis.enabled
