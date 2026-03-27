@@ -197,6 +197,10 @@ spec:
             - name: OIDC_BASE_URL
               value: "https://auth.{{ $.clusterValues.baseDomain }}/auth/realms/delphai"
 
+            # Disable progress bars by default
+            - name: TQDM_DISABLE
+              value: "1"
+
             {{ range $name, $value := $.Values.env }}
             - name: {{ $name | quote }}
               value: {{ $value | quote }}
