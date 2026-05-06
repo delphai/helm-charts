@@ -189,6 +189,15 @@ spec:
             - name: API_LOGGER_ENDPOINT
               value: "http://api-logger.api-logger.svc:8000/request"
 
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: "tempo"
+                  key: "tempo-connection-string"
+
+            - name: OTEL_EXPERIMENTAL_RESOURCE_DETECTORS
+              value: "host"
+
             {{ if $.Values.redis.enabled }}
             - name: REDIS_HOST
               value: "{{ $.Release.Name }}-redis-master.{{ $.Release.Namespace }}"
@@ -393,6 +402,21 @@ spec:
           env:
             - name: DELPHAI_ENVIRONMENT
               value: {{ $.clusterValues.environment | quote }}
+
+            - name: CLUSTER_API_DOMAIN
+              value: "api.{{ $.clusterValues.baseDomain }}"
+
+            - name: API_LOGGER_ENDPOINT
+              value: "http://api-logger.api-logger.svc:8000/request"
+
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: "tempo"
+                  key: "tempo-connection-string"
+
+            - name: OTEL_EXPERIMENTAL_RESOURCE_DETECTORS
+              value: "host"
 
             {{ range $name, $value := $.Values.initContainer.env }}
             - name: {{ $name | quote }}
